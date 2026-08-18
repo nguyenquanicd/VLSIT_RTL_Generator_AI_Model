@@ -1,0 +1,165 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FinalConfig",
+  "description": "Output của Phase 2 (config_ui). Input cho Phase 3 (rtl_generator, sva_generator).",
+  "type": "object",
+  "required": ["metadata", "parameters", "constraints", "style_constraints", "feature_matrix"],
+  "properties": {
+
+    "metadata": {
+      "type": "object",
+      "required": ["ip_name", "spec_revision", "phase", "gate_status", "gate_2_approved"],
+      "properties": {
+        "ip_name":           { "type": "string", "example": "rv32im_core" },
+        "spec_revision":     { "type": "string", "example": "0.2" },
+        "phase":             { "type": "integer", "const": 2 },
+        "gate_status":       { "type": "string", "enum": ["pending", "approved"] },
+        "gate_2_approved":   { "type": "boolean" },
+        "approved_at":       { "type": ["string", "null"], "description": "ISO 8601 timestamp khi người dùng ký Gate 2" }
+      }
+    },
+
+    "parameters": {
+      "type": "object",
+      "description": "Map tên parameter → giá trị và metadata. Key là tên parameter (PR_*).",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["value", "default", "type", "changed_from_default", "confirmed_by_user"],
+        "properties": {
+          "value":                { "type": "string", "description": "Giá trị người dùng đã chọn" },
+          "default":              { "type": "string", "description": "Giá trị default trong spec" },
+          "type":                 { "type": "string", "description": "Kiểu SV" },
+          "changed_from_default": { "type": "boolean" },
+          "confirmed_by_user":    { "type": "boolean" },
+          "locked":               { "type": "boolean", "description": "true nếu parameter bị khoá (không override được)" },
+          "req_ids_affected":     { "type": "array", "items": { "type": "string" } },
+          "feature_ids_affected": { "type": "array", "items": { "type": "string" } },
+          "change_reason":        { "type": ["string", "null"], "description": "Lý do người dùng đổi so với default (nếu có)" }
+        }
+      },
+      "examples": [
+        {
+          "PR_BOOT_ADDR": {
+            "value": "32'h8000_0000",
+            "default": "32'h8000_0000",
+            "type": "logic [31:0]",
+            "changed_from_default": false,
+            "confirmed_by_user": true,
+            "locked": false,
+            "req_ids_affected": [],
+            "feature_ids_affected": ["F01", "F05"],
+            "change_reason": null
+          }
+        }
+      ]
+    },
+
+    "constraints": {
+      "type": "object",
+      "description": "Kết quả kiểm tra 5 ràng buộc elaboration từ spec §2.2.",
+      "properties": {
+        "C1": {
+          "type": "object",
+          "properties": {
+            "rule":   { "type": "string", "const": "PR_BOOT_ADDR[1:0] == 2'b00" },
+            "pass":   { "type": "boolean" },
+            "detail": { "type": "string" }
+          }
+        },
+        "C2": {
+          "type": "object",
+          "properties": {
+            "rule":   { "type": "string", "const": "PR_MTVEC_RESET[1:0] == 2'b00" },
+            "pass":   { "type": "boolean" },
+            "detail": { "type": "string" }
+          }
+        },
+        "C3": {
+          "type": "object",
+          "properties": {
+            "rule":   { "type": "string", "const": "PR_IRQ_EN == 1 → PR_CSR_EN == 1" },
+            "pass":   { "type": "boolean" },
+            "detail": { "type": "string" }
+          }
+        },
+        "C4": {
+          "type": "object",
+          "properties": {
+            "rule":   { "type": "string", "const": "PR_MTVEC_VEC_EN == 1 → PR_CSR_EN == 1" },
+            "pass":   { "type": "boolean" },
+            "detail": { "type": "string" }
+          }
+        },
+        "C5": {
+          "type": "object",
+          "properties": {
+            "rule":   { "type": "string", "const": "PR_COUNTER_EN == 1 → PR_CSR_EN == 1" },
+            "pass":   { "type": "boolean" },
+            "detail": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "style_constraints": {
+      "type": "object",
+      "required": ["source_file", "lint_rules"],
+      "properties": {
+        "source_file": {
+          "type": ["string", "null"],
+          "description": "Đường dẫn file quy tắc RTL gốc, thường 'rtl_rule.md'"
+        },
+        "natural_language_additions": {
+          "type": "array",
+          "description": "Các constraint người dùng cung cấp bằng ngôn ngữ tự nhiên",
+          "items": { "type": "string" }
+        },
+        "lint_rules": {
+          "type": "array",
+          "description": "Danh sách lint rule đã được chuẩn hoá từ natural language",
+          "items": {
+            "type": "object",
+            "required": ["id", "source", "rule"],
+            "properties": {
+              "id":     { "type": "string", "description": "Mã rule, ví dụ 'STYLE-001'" },
+              "source": { "type": "string", "enum": ["rtl_rule.md", "user_addition"] },
+              "rule":   { "type": "string", "description": "Mô tả rule ngắn gọn" },
+              "original_nl": { "type": ["string", "null"], "description": "Câu ngôn ngữ tự nhiên gốc nếu là user_addition" }
+            }
+          }
+        }
+      }
+    },
+
+    "feature_matrix": {
+      "type": "object",
+      "description": "Trạng thái enable/disable của mỗi feature F01–F19.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["enabled", "mandatory"],
+        "properties": {
+          "enabled":            { "type": "boolean" },
+          "mandatory":          { "type": "boolean", "description": "true nếu feature luôn build (✅ trong spec)" },
+          "parameters_driving": { "type": "array", "items": { "type": "string" }, "description": "Parameter nào quyết định enable/disable" },
+          "req_ids":            { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "examples": [
+        {
+          "F02": {
+            "enabled": true,
+            "mandatory": true,
+            "parameters_driving": ["PR_M_EXT_EN"],
+            "req_ids": ["REQ-002"]
+          },
+          "F16": {
+            "enabled": true,
+            "mandatory": false,
+            "parameters_driving": ["PR_COUNTER_EN"],
+            "req_ids": ["REQ-016"]
+          }
+        }
+      ]
+    }
+  }
+}

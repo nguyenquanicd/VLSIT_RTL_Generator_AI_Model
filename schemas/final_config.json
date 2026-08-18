@@ -1,0 +1,210 @@
+{
+  "metadata": {
+    "ip_name": "rv32im_core",
+    "spec_revision": "0.2",
+    "phase": 2,
+    "gate_status": "approved",
+    "gate_2_approved": true,
+    "approved_at": "2026-08-17T23:25:38+07:00"
+  },
+  "parameters": {
+    "PR_BOOT_ADDR": {
+      "value": "32'h8000_0000",
+      "default": "32'h8000_0000",
+      "type": "logic [31:0]",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F01", "F05"],
+      "change_reason": null
+    },
+    "PR_MTVEC_RESET": {
+      "value": "32'h0000_0000",
+      "default": "32'h0000_0000",
+      "type": "logic [31:0]",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F11"],
+      "change_reason": null
+    },
+    "PR_HART_ID": {
+      "value": "32'h0",
+      "default": "32'h0",
+      "type": "logic [31:0]",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F11"],
+      "change_reason": null
+    },
+    "PR_M_EXT_EN": {
+      "value": "1",
+      "default": "1",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F02"],
+      "change_reason": null
+    },
+    "PR_MULT_IMPL": {
+      "value": "0",
+      "default": "0",
+      "type": "int unsigned",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F17"],
+      "change_reason": null
+    },
+    "PR_DIV_IMPL": {
+      "value": "0",
+      "default": "0",
+      "type": "int unsigned",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": true,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F17"],
+      "change_reason": null
+    },
+    "PR_CSR_EN": {
+      "value": "1",
+      "default": "1",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F03", "F11", "F15"],
+      "change_reason": null
+    },
+    "PR_IRQ_EN": {
+      "value": "1",
+      "default": "1",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F14"],
+      "change_reason": null
+    },
+    "PR_COUNTER_EN": {
+      "value": "1",
+      "default": "1",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F16"],
+      "change_reason": null
+    },
+    "PR_MTVEC_VEC_EN": {
+      "value": "0",
+      "default": "0",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F19"],
+      "change_reason": null
+    },
+    "PR_FWD_EN": {
+      "value": "1",
+      "default": "1",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F06"],
+      "change_reason": null
+    },
+    "PR_RF_RESET_EN": {
+      "value": "1",
+      "default": "1",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F09"],
+      "change_reason": null
+    },
+    "PR_RF_IMPL": {
+      "value": "0",
+      "default": "0",
+      "type": "int unsigned",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F09"],
+      "change_reason": null
+    },
+    "PR_TRACE_EN": {
+      "value": "0",
+      "default": "0",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F18"],
+      "change_reason": null
+    },
+    "PR_BUS_OUTSTANDING": {
+      "value": "1",
+      "default": "1",
+      "type": "int unsigned",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": true,
+      "req_ids_affected": [],
+      "feature_ids_affected": ["F10"],
+      "change_reason": null
+    }
+  },
+  "constraints": {
+    "C1": { "rule": "PR_BOOT_ADDR[1:0] == 2'b00",          "pass": true, "detail": "0x80000000 % 4 = 0" },
+    "C2": { "rule": "PR_MTVEC_RESET[1:0] == 2'b00",        "pass": true, "detail": "0x00000000 % 4 = 0" },
+    "C3": { "rule": "PR_IRQ_EN == 1 → PR_CSR_EN == 1",     "pass": true, "detail": "1 → 1" },
+    "C4": { "rule": "PR_MTVEC_VEC_EN == 1 → PR_CSR_EN == 1","pass": true, "detail": "0 → không áp dụng" },
+    "C5": { "rule": "PR_COUNTER_EN == 1 → PR_CSR_EN == 1", "pass": true, "detail": "1 → 1" }
+  },
+  "style_constraints": {
+    "source_file": "rtl_rule.md",
+    "natural_language_additions": [],
+    "lint_rules": []
+  },
+  "feature_matrix": {
+    "F01": { "enabled": true,  "mandatory": true,  "parameters_driving": [],                "req_ids": [] },
+    "F02": { "enabled": true,  "mandatory": true,  "parameters_driving": ["PR_M_EXT_EN"],   "req_ids": [] },
+    "F03": { "enabled": true,  "mandatory": true,  "parameters_driving": ["PR_CSR_EN"],     "req_ids": [] },
+    "F04": { "enabled": true,  "mandatory": true,  "parameters_driving": [],                "req_ids": [] },
+    "F05": { "enabled": true,  "mandatory": true,  "parameters_driving": [],                "req_ids": [] },
+    "F06": { "enabled": true,  "mandatory": true,  "parameters_driving": ["PR_FWD_EN"],     "req_ids": [] },
+    "F07": { "enabled": true,  "mandatory": true,  "parameters_driving": [],                "req_ids": [] },
+    "F08": { "enabled": true,  "mandatory": true,  "parameters_driving": [],                "req_ids": [] },
+    "F09": { "enabled": true,  "mandatory": true,  "parameters_driving": ["PR_RF_IMPL", "PR_RF_RESET_EN"], "req_ids": [] },
+    "F10": { "enabled": true,  "mandatory": true,  "parameters_driving": ["PR_BUS_OUTSTANDING"], "req_ids": [] },
+    "F11": { "enabled": true,  "mandatory": true,  "parameters_driving": ["PR_CSR_EN"],     "req_ids": [] },
+    "F12": { "enabled": true,  "mandatory": true,  "parameters_driving": [],                "req_ids": [] },
+    "F13": { "enabled": true,  "mandatory": true,  "parameters_driving": [],                "req_ids": [] },
+    "F14": { "enabled": true,  "mandatory": true,  "parameters_driving": ["PR_IRQ_EN"],     "req_ids": [] },
+    "F15": { "enabled": true,  "mandatory": true,  "parameters_driving": ["PR_CSR_EN"],     "req_ids": [] },
+    "F16": { "enabled": true,  "mandatory": false, "parameters_driving": ["PR_COUNTER_EN"], "req_ids": [] },
+    "F17": { "enabled": true,  "mandatory": true,  "parameters_driving": ["PR_MULT_IMPL", "PR_DIV_IMPL"], "req_ids": [] },
+    "F18": { "enabled": false, "mandatory": false, "parameters_driving": ["PR_TRACE_EN"],   "req_ids": [] },
+    "F19": { "enabled": false, "mandatory": false, "parameters_driving": ["PR_MTVEC_VEC_EN"],"req_ids": [] }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RTM",
+  "description": "Requirement Traceability Matrix — tài liệu sống cập nhật qua Phase 3/4/5. Mỗi REQ-ID phải đủ 6 điều kiện trước khi signed_off=true.",
+  "type": "object",
+  "required": ["metadata", "requirements"],
+  "properties": {
+
+    "metadata": {
+      "type": "object",
+      "required": ["ip_name", "spec_revision", "gate_3_approved", "gate_5_approved"],
+      "properties": {
+        "ip_name":          { "type": "string" },
+        "spec_revision":    { "type": "string" },
+        "gate_3_approved":  { "type": "boolean", "description": "Gate 3: Property Review ký bởi người dùng" },
+        "gate_3_at":        { "type": ["string", "null"] },
+        "gate_5_approved":  { "type": "boolean", "description": "Gate 5: RTM Dashboard ký bởi người dùng" },
+        "gate_5_at":        { "type": ["string", "null"] },
+        "last_updated":     { "type": ["string", "null"] }
+      }
+    },
+
+    "requirements": {
+      "type": "array",
+      "description": "Danh sách requirement, mỗi item là một REQ-ID với 6 trường sign-off.",
+      "items": {
+        "type": "object",
+        "required": ["req_id", "text", "category",
+                     "rtl_traced", "sva_traced", "tc_traced",
+                     "sim_pass", "mutation_score", "signed_off"],
+        "properties": {
+
+          "req_id":   { "type": "string", "pattern": "^REQ-[0-9]{3,}$" },
+          "text":     { "type": "string", "description": "Nội dung requirement" },
+          "category": { "type": "string", "enum": ["functional", "timing", "interface", "constraint"] },
+          "feature_id": { "type": "string", "description": "Feature ID nguồn gốc, ví dụ F02" },
+
+          "rtl_traced": {
+            "type": "boolean",
+            "description": "Điều kiện 1: Có ít nhất 1 block RTL tag REQ-ID này"
+          },
+          "rtl_files": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Đường dẫn file RTL chứa tag // REQ-ID này"
+          },
+          "rtl_lines": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "Số dòng trong file RTL có tag"
+          },
+
+          "sva_traced": {
+            "type": "boolean",
+            "description": "Điều kiện 2: Có ít nhất 1 assertion người dùng đã xác nhận ở Gate 3"
+          },
+          "sva_assertions": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Label của các assertion đã confirmed, ví dụ ['a_pc_aligned']"
+          },
+          "sva_files": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "File SVA chứa assertion"
+          },
+
+          "tc_traced": {
+            "type": "boolean",
+            "description": "Điều kiện 3: Có ít nhất 1 TC người dùng đã chọn ở Gate 4"
+          },
+          "tc_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Danh sách TC-ID cover REQ-ID này"
+          },
+
+          "sim_pass": {
+            "type": "boolean",
+            "description": "Điều kiện 4: Tất cả TC cover REQ-ID này đều pass, không SVA violation"
+          },
+          "sim_tc_results": {
+            "type": "object",
+            "description": "Map TC-ID → 'pass'|'fail'|'timeout'",
+            "additionalProperties": {
+              "type": "string",
+              "enum": ["pass", "fail", "timeout", "skipped"]
+            }
+          },
+          "sva_violation_count": {
+            "type": "integer",
+            "description": "Số SVA violation phát sinh trong sim cho REQ-ID này"
+          },
+
+          "mutation_score": {
+            "description": "Điều kiện 5: ≥ 0.85 hoặc 'N/A' nếu không có mutation nào generate được",
+            "oneOf": [
+              { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+              { "type": "string", "enum": ["N/A", "pending"] }
+            ]
+          },
+          "mutation_detail": {
+            "type": "object",
+            "properties": {
+              "total":    { "type": "integer" },
+              "killed":   { "type": "integer" },
+              "survived": { "type": "integer" },
+              "compile_error": { "type": "integer", "description": "Mutants bị bỏ qua vì compile fail" }
+            }
+          },
+
+          "signed_off": {
+            "type": "boolean",
+            "description": "Điều kiện 6: Người dùng ký tay trong RTM Dashboard (Gate 5). LLM không được set trường này."
+          },
+          "sign_off_note": {
+            "type": ["string", "null"],
+            "description": "Ghi chú của người dùng khi ký hoặc từ chối"
+          },
+          "sign_off_at": {
+            "type": ["string", "null"],
+            "description": "Timestamp ISO 8601 khi người dùng ký"
+          },
+
+          "eligible_for_signoff": {
+            "type": "boolean",
+            "description": "Computed field: true nếu cả 5 điều kiện đầu đều pass. Không phải do user set."
+          }
+        }
+      }
+    },
+
+    "gap_report": {
+      "type": "object",
+      "description": "Tóm tắt các lỗ hổng cần bổ sung",
+      "properties": {
+        "req_ids_no_rtl":  { "type": "array", "items": { "type": "string" } },
+        "req_ids_no_sva":  { "type": "array", "items": { "type": "string" } },
+        "req_ids_no_tc":   { "type": "array", "items": { "type": "string" } },
+        "req_ids_sim_fail":{ "type": "array", "items": { "type": "string" } },
+        "req_ids_low_mut": { "type": "array", "items": { "type": "string" } },
+        "req_ids_unsigned":{ "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

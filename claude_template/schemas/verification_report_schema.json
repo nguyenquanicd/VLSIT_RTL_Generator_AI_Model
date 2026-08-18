@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VerificationReport",
+  "description": "Output tổng hợp của Phase 5 (verification). Ghi lại kết quả sim, mutation, và trạng thái Gate 5.",
+  "type": "object",
+  "required": ["metadata", "sim_summary", "mutation_summary", "rtm_summary"],
+  "properties": {
+
+    "metadata": {
+      "type": "object",
+      "required": ["ip_name", "phase", "gate_5_approved"],
+      "properties": {
+        "ip_name":         { "type": "string" },
+        "spec_revision":   { "type": "string" },
+        "phase":           { "type": "integer", "const": 5 },
+        "gate_5_approved": { "type": "boolean" },
+        "approved_at":     { "type": ["string", "null"] }
+      }
+    },
+
+    "tool_versions": {
+      "type": "object",
+      "properties": {
+        "vcs":     { "type": "string", "description": "VCS version, ví dụ 'X-2025.06'" },
+        "yosys":   { "type": "string", "description": "Yosys version" },
+        "pdk":     { "type": "string", "description": "PDK đã dùng, ví dụ 'GF180MCU TT 25C 1.8V'" },
+        "riscv_gcc": { "type": "string", "description": "RISC-V GCC version dùng compile test firmware" }
+      }
+    },
+
+    "sim_summary": {
+      "type": "object",
+      "required": ["total_tc", "pass", "fail", "timeout", "sva_violations"],
+      "properties": {
+        "total_tc":       { "type": "integer" },
+        "pass":           { "type": "integer" },
+        "fail":           { "type": "integer" },
+        "timeout":        { "type": "integer" },
+        "sva_violations": { "type": "integer", "description": "Tổng SVA violation trong tất cả TC" },
+        "tc_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "tc_id":     { "type": "string" },
+              "name":      { "type": "string" },
+              "status":    { "type": "string", "enum": ["pass", "fail", "timeout", "skipped"] },
+              "cycles":    { "type": ["integer", "null"], "description": "Số clock cycle chạy" },
+              "sva_violations": { "type": "integer" },
+              "log_file":  { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "mutation_summary": {
+      "type": "object",
+      "required": ["total_req_ids", "above_threshold", "below_threshold", "na"],
+      "properties": {
+        "threshold":        { "type": "number", "const": 0.85 },
+        "total_req_ids":    { "type": "integer" },
+        "above_threshold":  { "type": "integer", "description": "REQ-IDs có mutation_score ≥ 0.85" },
+        "below_threshold":  { "type": "integer", "description": "REQ-IDs có mutation_score < 0.85" },
+        "na":               { "type": "integer", "description": "REQ-IDs không generate được mutation" },
+        "total_mutations":  { "type": "integer" },
+        "total_killed":     { "type": "integer" },
+        "global_score":     { "type": "number", "description": "Overall kill rate (informational)" },
+        "per_req_id": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "req_id":  { "type": "string" },
+              "total":   { "type": "integer" },
+              "killed":  { "type": "integer" },
+              "score":   { "oneOf": [{ "type": "number" }, { "type": "string", "enum": ["N/A"] }] },
+              "pass":    { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+
+    "rtm_summary": {
+      "type": "object",
+      "required": ["total_req_ids", "signed_off", "pending", "locked"],
+      "properties": {
+        "total_req_ids": { "type": "integer" },
+        "signed_off":    { "type": "integer", "description": "REQ-IDs đã ký đủ 6 điều kiện" },
+        "pending":       { "type": "integer", "description": "Đủ điều kiện nhưng chưa ký" },
+        "locked":        { "type": "integer", "description": "Chưa đủ điều kiện — không thể ký" },
+        "sign_off_pct":  { "type": "number", "description": "signed_off / total * 100" },
+        "gap_report": {
+          "type": "object",
+          "description": "Tóm tắt gap cần bổ sung để đạt full sign-off",
+          "properties": {
+            "no_rtl":  { "type": "array", "items": { "type": "string" } },
+            "no_sva":  { "type": "array", "items": { "type": "string" } },
+            "no_tc":   { "type": "array", "items": { "type": "string" } },
+            "sim_fail":{ "type": "array", "items": { "type": "string" } },
+            "low_mut": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+
+    "synth_sign_off": {
+      "type": "object",
+      "description": "Kết quả synthesis từ Phase 3 (Yosys + GF180MCU) — copy vào đây để có đủ trong 1 report",
+      "properties": {
+        "status":      { "type": "string", "enum": ["pass", "fail", "not_run"] },
+        "cell_count":  { "type": ["integer", "null"] },
+        "area_um2":    { "type": ["number", "null"] },
+        "pdk":         { "type": "string" },
+        "corner":      { "type": "string", "description": "Liberty corner đã dùng, ví dụ 'tt_025C_1v80'" }
+      }
+    }
+  }
+}
