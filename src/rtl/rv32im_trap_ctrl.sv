@@ -1,7 +1,7 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-TRAP
 module rv32im_trap_ctrl
+  import rv32im_pkg::*;
 #(
   parameter bit PR_IRQ_EN       = 1,
   parameter bit PR_MTVEC_VEC_EN = 0
@@ -17,8 +17,10 @@ module rv32im_trap_ctrl
   input  logic        i_mem_outstanding,
   input  logic        i_sys_mret,
   input  logic        i_sys_fencei,
-  // CSR state
+  // CSR state (i_mtvec[1] unused: MODE only supports direct/vectored, bit1 always 0)
+  /* verilator lint_off UNUSEDSIGNAL */
   input  logic [31:0] i_mtvec,
+  /* verilator lint_on UNUSEDSIGNAL */
   input  logic [31:0] i_mepc,
   input  logic        i_mstatus_mie,
   input  logic [2:0]  i_irq_pending,  // {MEI, MTI, MSI}

@@ -1,0 +1,9 @@
+{"vcs1":{"timestamp_begin":1787238887.359007675, "rt":1.41, "ut":0.43, "st":0.65}}
+{"vcselab":{"timestamp_begin":1787238888.862546074, "rt":0.32, "ut":0.15, "st":0.08}}
+{"link":{"timestamp_begin":1787238889.260501921, "rt":0.19, "ut":0.12, "st":0.02}}
+{"SNPS_VCS_INTERNAL_ROOT_START_TIME": 1787238887.016726442}
+{"VCS_COMP_START_TIME": 1787238887.016726442}
+{"VCS_COMP_END_TIME": 1787238889.542856032}
+{"VCS_USER_OPTIONS": "-sverilog -full64 -timescale=1ns/1ps -f /home/ltthinh/CLAUDE_PRO/src/tb/filelist_tb.f +incdir+/home/ltthinh/CLAUDE_PRO/src/tb -top rv32im_tb_top -o /home/ltthinh/CLAUDE_PRO/sim/rv32im_tb +define+SIMULATION"}
+{"vcs1": {"peak_mem": 372500}}
+{"vcselab": {"peak_mem": 171588}}

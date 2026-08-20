@@ -1,0 +1,37 @@
+Chronologic VCS simulator copyright 1991-2025
+Contains Synopsys proprietary information.
+Compiler version X-2025.06_Full64; Runtime version X-2025.06_Full64;  Aug 20 22:21 2026
+=== rv32im_core Testbench Start ===
+[PASS] TC-001 reset_boot_addr
+[PASS] TC-002 rv32i_alu_ops
+[PASS] TC-003 rv32i_lui_auipc
+[PASS] TC-004 load_instructions
+[PASS] TC-005 store_instructions
+[PASS] TC-006 branch_not_taken
+[PASS] TC-007 branch_taken_penalty
+[PASS] TC-008 jal_jalr
+[PASS] TC-009 fence_i_refetch
+[PASS] TC-010 load_use_hazard
+[PASS] TC-011 ex_forwarding
+[PASS] TC-012 mem_forwarding
+[PASS] TC-013 x0_hardwired_zero
+[PASS] TC-014 rv32m_multiply
+[PASS] TC-015 rv32m_divide_special
+[PASS] TC-016 csr_read_write
+[PASS] TC-017 ecall_ebreak_exception
+[PASS] TC-018 illegal_instruction
+[PASS] TC-019 misaligned_access
+[PASS] TC-020 machine_interrupt
+[PASS] TC-021 mret_behavior
+[INFO] TC-022: mcycle delta=8 cycles
+[PASS] TC-022 mcycle_minstret_counter
+[PASS] TC-023 bus_protocol_handshake
+[PASS] TC-024 precise_exception_commit
+=== Testbench Complete. Total errors: 0 ===
+[ALL PASS]
+$finish called from file "/home/ltthinh/CLAUDE_PRO/src/tb/rv32im_tb_top.sv", line 251.
+$finish at simulation time              7215000
+           V C S   S i m u l a t i o n   R e p o r t 
+Time: 7215000 ps
+CPU Time:      0.150 seconds;       Data structure size:   0.0Mb
+Thu Aug 20 22:21:43 2026

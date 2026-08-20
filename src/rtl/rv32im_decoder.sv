@@ -1,7 +1,7 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-DECODE
 module rv32im_decoder
+  import rv32im_pkg::*;
 #(
   parameter bit PR_M_EXT_EN = 1,
   parameter bit PR_CSR_EN   = 1

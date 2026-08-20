@@ -1,7 +1,7 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-MEM
 module rv32im_mem_stage
+  import rv32im_pkg::*;
 #(
   parameter bit PR_CSR_EN   = 1,
   parameter bit PR_TRACE_EN = 0
@@ -84,7 +84,9 @@ module rv32im_mem_stage
   // LSU: address + byte-enable + store data + load data
   logic [31:0] w_lsu_addr, w_lsu_wdata, w_load_data;
   logic [3:0]  w_lsu_be;
-  logic        w_lsu_misaligned;
+  /* verilator lint_off UNUSEDSIGNAL */
+  logic        w_lsu_misaligned; // misalignment already caught at EX stage
+  /* verilator lint_on UNUSEDSIGNAL */
 
   rv32im_lsu u_lsu (
     .i_addr          (i_exmem.alu_result),
@@ -196,7 +198,9 @@ module rv32im_mem_stage
         reg_memwb.valid   <= i_exmem.valid;
         reg_memwb.pc      <= i_exmem.pc;
         reg_memwb.rd_addr <= i_exmem.rd_addr;
-        reg_memwb.rd_wen  <= i_exmem.rd_wen;
+        // Gate rd_wen on valid: bubble instructions (valid=0) from IF-stage
+        // bubble-insertion must not write the register file or fire the trace.
+        reg_memwb.rd_wen  <= i_exmem.valid && i_exmem.rd_wen;
         reg_memwb.wb_data <= w_wb_data;
         reg_memwb.instr   <= i_exmem.instr;
       end

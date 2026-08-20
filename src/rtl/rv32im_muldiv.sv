@@ -1,11 +1,13 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-MULDIV
 module rv32im_muldiv
+  import rv32im_pkg::*;
 #(
   parameter bit          PR_M_EXT_EN  = 1,
   parameter int unsigned PR_MULT_IMPL = 0,
-  parameter int unsigned PR_DIV_IMPL  = 0
+  /* verilator lint_off UNUSEDPARAM */
+  parameter int unsigned PR_DIV_IMPL  = 0   // reserved for iterative-count variant
+  /* verilator lint_on UNUSEDPARAM */
 )(
   input  logic               i_clk_core,
   input  logic               i_resetn_core,

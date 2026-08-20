@@ -1,7 +1,7 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-REGFILE
 module rv32im_regfile
+  import rv32im_pkg::*;
 #(
   parameter bit          PR_RF_RESET_EN = 1,
   parameter int unsigned PR_RF_IMPL    = 0

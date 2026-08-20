@@ -1,12 +1,14 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-LSU
 module rv32im_lsu
+  import rv32im_pkg::*;
 (
   input  logic [31:0]   i_addr,
   input  logic [31:0]   i_store_data,
   input  mem_size_t     i_mem_size,
-  input  logic          i_mem_we,
+  /* verilator lint_off UNUSEDSIGNAL */
+  input  logic          i_mem_we,  // direction exposed for transparency; BE encodes it implicitly
+  /* verilator lint_on UNUSEDSIGNAL */
   input  logic          i_mem_unsigned,
   input  logic [31:0]   i_rsp_rdata,
   // Bus outputs

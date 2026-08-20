@@ -1,9 +1,11 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-IMM
 module rv32im_imm_gen
+  import rv32im_pkg::*;
 (
-  input  logic [31:0]   i_instr,
+  /* verilator lint_off UNUSEDSIGNAL */
+  input  logic [31:0]   i_instr,   // [6:0] opcode not needed for immediate extraction
+  /* verilator lint_on UNUSEDSIGNAL */
   input  imm_sel_t      i_imm_sel,
   output logic [31:0]   o_imm
 );

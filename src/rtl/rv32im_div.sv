@@ -1,7 +1,7 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-DIV  Non-restoring radix-2 divider, 34 cycles. Special cases exit in 1 cycle.
 module rv32im_div
+  import rv32im_pkg::*;
 (
   input  logic               i_clk_core,
   input  logic               i_resetn_core,
@@ -20,7 +20,9 @@ module rv32im_div
   state_t       reg_state;
   logic [5:0]   reg_cnt;       // 0..33
   logic [31:0]  reg_q;         // quotient bits accumulated
-  logic [32:0]  reg_rem;       // partial remainder (33-bit signed)
+  /* verilator lint_off UNUSEDSIGNAL */
+  logic [32:0]  reg_rem;       // sign bit [32] used only during S_RUN for trial subtract
+  /* verilator lint_on UNUSEDSIGNAL */
   logic [31:0]  reg_divisor;   // absolute divisor
   logic         reg_neg_q;
   logic         reg_neg_r;

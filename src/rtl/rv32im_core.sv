@@ -1,7 +1,7 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-CORE TOP structural
 module rv32im_core
+  import rv32im_pkg::*;
 #(
   parameter logic [31:0] PR_BOOT_ADDR      = 32'h8000_0000,
   parameter logic [31:0] PR_MTVEC_RESET    = 32'h0000_0000,
@@ -17,7 +17,9 @@ module rv32im_core
   parameter bit          PR_RF_RESET_EN    = 1,
   parameter int unsigned PR_RF_IMPL        = 0,
   parameter bit          PR_TRACE_EN       = 0,
+  /* verilator lint_off UNUSEDPARAM */
   parameter int unsigned PR_BUS_OUTSTANDING = 1
+  /* verilator lint_on UNUSEDPARAM */
 )(
   input  logic        i_clk_core,
   input  logic        i_resetn_core,
@@ -69,7 +71,9 @@ module rv32im_core
   ifid_t  w_ifid;
   idex_t  w_idex;
   exmem_t w_exmem;
+  /* verilator lint_off UNUSEDSIGNAL */
   memwb_t w_memwb;
+  /* verilator lint_on UNUSEDSIGNAL */
 
   // ---- Hazard / forwarding ----
   fwd_sel_t w_fwd_a_sel, w_fwd_b_sel;
@@ -117,6 +121,7 @@ module rv32im_core
 
   // ---- Regfile wires ----
   logic [4:0]  w_rs1_addr, w_rs2_addr;
+  logic        w_id_rs1_used, w_id_rs2_used;
   logic [31:0] w_rs1_data, w_rs2_data;
   logic        w_instr_retire;
 
@@ -156,6 +161,8 @@ module rv32im_core
     .i_rs2_data   (w_rs2_data),
     .o_rs1_addr   (w_rs1_addr),
     .o_rs2_addr   (w_rs2_addr),
+    .o_rs1_used   (w_id_rs1_used),
+    .o_rs2_used   (w_id_rs2_used),
     .o_idex       (w_idex)
   );
 
@@ -309,8 +316,8 @@ module rv32im_core
   ) u_hazard_ctrl (
     .i_id_rs1_addr      (w_rs1_addr),
     .i_id_rs2_addr      (w_rs2_addr),
-    .i_id_rs1_used      (w_idex.valid ? 1'b1 : 1'b0), // use decoded rs_used from idex
-    .i_id_rs2_used      (w_idex.valid ? 1'b1 : 1'b0),
+    .i_id_rs1_used      (w_id_rs1_used),
+    .i_id_rs2_used      (w_id_rs2_used),
     .i_idex_valid       (w_idex.valid),
     .i_idex_rs1_addr    (w_idex.rs1_addr),
     .i_idex_rs2_addr    (w_idex.rs2_addr),

@@ -1,7 +1,7 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-HAZARD
 module rv32im_hazard_ctrl
+  import rv32im_pkg::*;
 #(
   parameter bit PR_FWD_EN = 1
 )(
@@ -15,13 +15,17 @@ module rv32im_hazard_ctrl
   input  logic [4:0]    i_idex_rs1_addr,
   input  logic [4:0]    i_idex_rs2_addr,
   input  logic [4:0]    i_idex_rd_addr,
-  input  logic          i_idex_rd_wen,
+  /* verilator lint_off UNUSEDSIGNAL */
+  input  logic          i_idex_rd_wen,   // kept for interface completeness
+  /* verilator lint_on UNUSEDSIGNAL */
   input  logic          i_idex_mem_req,
   input  logic          i_idex_mem_we,
   // MEM (EX/MEM register)
   input  logic [4:0]    i_exmem_rd_addr,
   input  logic          i_exmem_rd_wen,
-  input  wb_sel_t       i_exmem_wb_sel,
+  /* verilator lint_off UNUSEDSIGNAL */
+  input  wb_sel_t       i_exmem_wb_sel,  // kept for interface completeness
+  /* verilator lint_on UNUSEDSIGNAL */
   // WB (MEM/WB register)
   input  logic [4:0]    i_memwb_rd_addr,
   input  logic          i_memwb_rd_wen,
@@ -60,11 +64,14 @@ module rv32im_hazard_ctrl
   end
 
   // Stall chain
+  // i_if_busy is NOT included in o_stall_if: the IF FSM (ST_IDLE/ST_WAIT) already
+  // prevents new requests while waiting; including it would prevent the IF stage
+  // from capturing its own memory response (i_stall=1 at the moment rsp arrives).
   always_comb begin
     o_stall_mem = i_mem_busy;
     o_stall_ex  = o_stall_mem | i_ex_busy;
     o_stall_id  = o_stall_ex  | w_load_use;
-    o_stall_if  = o_stall_id  | i_if_busy;
+    o_stall_if  = o_stall_id;
   end
 
   // Flush

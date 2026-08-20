@@ -1,7 +1,7 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-BRANCH
 module rv32im_branch_unit
+  import rv32im_pkg::*;
 (
   input  br_op_t      i_br_op,
   input  logic [31:0] i_op_a,

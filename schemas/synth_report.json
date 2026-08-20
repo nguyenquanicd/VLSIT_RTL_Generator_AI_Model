@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "ip_name": "rv32im_core",
+    "spec_revision": "0.2",
+    "phase": "3a",
+    "tool": "Yosys 0.58+35",
+    "pdk_note": "Generic technology (GF180MCU liberty stub has no cells — used Yosys native gate library)",
+    "elaboration_check": "VCS X-2025.06 elaborate — PASS (0 errors, 0 warnings)",
+    "lint_check": "Verilator 5.041 -Wall — PASS (0 warnings)",
+    "parameters": "all default"
+  },
+  "synthesis_stats": {
+    "total_cells": 16669,
+    "flip_flops": 2213,
+    "mux": 2853,
+    "and_variants": 5813,
+    "or_variants": 4197,
+    "xor_variants": 804,
+    "not": 773,
+    "check_problems": 0
+  },
+  "cell_breakdown": {
+    "$_DFF_PN0_": 167,
+    "$_DFF_PN1_": 3,
+    "$_DFFE_PN0P_": 2041,
+    "$_DFFE_PN1P_": 2,
+    "$_AND_": 412,
+    "$_ANDNOT_": 5057,
+    "$_NAND_": 344,
+    "$_MUX_": 2853,
+    "$_OR_": 3434,
+    "$_NOR_": 455,
+    "$_ORNOT_": 308,
+    "$_NOT_": 773,
+    "$_XOR_": 689,
+    "$_XNOR_": 115
+  },
+  "gate_2_config": "schemas/final_config.json"
+}

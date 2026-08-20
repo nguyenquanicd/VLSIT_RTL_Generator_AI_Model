@@ -1,7 +1,7 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-CSR
 module rv32im_csr_file
+  import rv32im_pkg::*;
 #(
   parameter logic [31:0] PR_MTVEC_RESET  = 32'h0,
   parameter logic [31:0] PR_HART_ID      = 32'h0,
@@ -40,11 +40,14 @@ module rv32im_csr_file
   input  logic        i_instr_retire
 );
 
-  // CSR registers
+  // CSR registers (partial-width registers — unused bits are WARL zeros)
+  /* verilator lint_off UNUSEDSIGNAL */
   logic [31:0] reg_mstatus;   // only MIE[3], MPIE[7], MPP[12:11]
   logic [31:0] reg_mie;
+  /* verilator lint_on UNUSEDSIGNAL */
   logic [31:0] reg_mtvec;
   logic [31:0] reg_mscratch;
+  logic        reg_mtip; // latches 1-cycle i_irq_timer pulse
   logic [31:0] reg_mepc;
   logic [31:0] reg_mcause;
   logic [31:0] reg_mtval;
@@ -52,9 +55,8 @@ module rv32im_csr_file
   logic [63:0] reg_minstret;
 
   // mstatus convenience
-  logic reg_mie_bit, reg_mpie_bit;
-  assign reg_mie_bit  = reg_mstatus[3];
-  assign reg_mpie_bit = reg_mstatus[7];
+  logic reg_mie_bit;
+  assign reg_mie_bit   = reg_mstatus[3];
   assign o_mstatus_mie = reg_mie_bit;
 
   // mtvec output
@@ -65,7 +67,7 @@ module rv32im_csr_file
   always_comb begin
     if (PR_IRQ_EN) begin
       o_irq_pending[0] = i_irq_sw    & reg_mie[3];   // MSI
-      o_irq_pending[1] = i_irq_timer & reg_mie[7];   // MTI
+      o_irq_pending[1] = reg_mtip    & reg_mie[7];   // MTI
       o_irq_pending[2] = i_irq_ext   & reg_mie[11];  // MEI
     end else begin
       o_irq_pending = '0;
@@ -101,7 +103,7 @@ module rv32im_csr_file
       12'h344: begin // mip RO from pins
         w_csr_old    = '0;
         w_csr_old[3]  = i_irq_sw;
-        w_csr_old[7]  = i_irq_timer;
+        w_csr_old[7]  = reg_mtip;
         w_csr_old[11] = i_irq_ext;
       end
       12'hB00: w_csr_old = PR_COUNTER_EN ? reg_mcycle[31:0]   : '0;
@@ -142,6 +144,7 @@ module rv32im_csr_file
       reg_mie      <= '0;
       reg_mtvec    <= PR_MTVEC_RESET;
       reg_mscratch <= '0;
+      reg_mtip     <= 1'b0;
       reg_mepc     <= '0;
       reg_mcause   <= '0;
       reg_mtval    <= '0;
@@ -154,6 +157,12 @@ module rv32im_csr_file
         if (i_instr_retire)
           reg_minstret <= reg_minstret + 1'b1;
       end
+
+      // Latch 1-cycle timer IRQ pulse; clear when MTI trap is taken
+      if (i_trap_valid && i_trap_is_irq && (i_trap_code == 5'd7))
+        reg_mtip <= 1'b0;
+      else if (i_irq_timer)
+        reg_mtip <= 1'b1;
 
       // Priority: trap > mret > csr_wr
       if (i_trap_valid) begin

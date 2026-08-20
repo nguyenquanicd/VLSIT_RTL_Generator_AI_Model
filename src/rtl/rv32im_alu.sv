@@ -1,7 +1,7 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-ALU
 module rv32im_alu
+  import rv32im_pkg::*;
 (
   input  alu_op_t          i_alu_op,
   input  logic [31:0]      i_op_a,

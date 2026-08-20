@@ -1,7 +1,7 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-EX
 module rv32im_ex_stage
+  import rv32im_pkg::*;
 #(
   parameter bit          PR_M_EXT_EN  = 1,
   parameter int unsigned PR_MULT_IMPL = 0,
@@ -13,8 +13,10 @@ module rv32im_ex_stage
   // Control
   input  logic        i_stall,
   input  logic        i_flush,
-  // Input pipeline register
+  // Input pipeline register (some fields unused at EX stage — consumed upstream/downstream)
+  /* verilator lint_off UNUSEDSIGNAL */
   input  idex_t       i_idex,
+  /* verilator lint_on UNUSEDSIGNAL */
   // Forwarding
   input  fwd_sel_t    i_fwd_a_sel,
   input  fwd_sel_t    i_fwd_b_sel,
@@ -151,9 +153,13 @@ module rv32im_ex_stage
   end
 
   // MULDIV
+  /* verilator lint_off UNUSEDSIGNAL */
   logic        w_muldiv_start, w_muldiv_done, w_muldiv_busy;
+  /* verilator lint_on UNUSEDSIGNAL */
   logic [31:0] w_muldiv_result;
-  assign w_muldiv_start = i_idex.valid && i_idex.muldiv_en && !i_stall && !i_flush;
+  // Fix: gate on !w_muldiv_busy instead of !i_stall to break the deadlock:
+  // o_ex_busy=1 when muldiv_en=1 → i_stall=1 → w_muldiv_start=0 → muldiv never starts.
+  assign w_muldiv_start = i_idex.valid && i_idex.muldiv_en && !w_muldiv_busy && !i_flush;
 
   rv32im_muldiv #(
     .PR_M_EXT_EN (PR_M_EXT_EN),

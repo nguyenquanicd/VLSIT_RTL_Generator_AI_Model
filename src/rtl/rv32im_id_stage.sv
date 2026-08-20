@@ -1,7 +1,7 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-ID
 module rv32im_id_stage
+  import rv32im_pkg::*;
 #(
   parameter bit PR_M_EXT_EN = 1,
   parameter bit PR_CSR_EN   = 1
@@ -19,6 +19,9 @@ module rv32im_id_stage
   // Regfile address output (to regfile read ports)
   output logic [4:0]  o_rs1_addr,
   output logic [4:0]  o_rs2_addr,
+  // rs_used: for load-use hazard detection
+  output logic        o_rs1_used,
+  output logic        o_rs2_used,
   // Output pipeline register
   output idex_t       o_idex
 );
@@ -97,6 +100,8 @@ module rv32im_id_stage
   // Connect rs addrs to regfile
   assign o_rs1_addr = w_rs1_addr;
   assign o_rs2_addr = w_rs2_addr;
+  assign o_rs1_used = w_rs1_used;
+  assign o_rs2_used = w_rs2_used;
 
   // Exception priority
   logic        w_exc_valid;
@@ -129,12 +134,15 @@ module rv32im_id_stage
   logic w_rd_wen_clean, w_mem_req_clean, w_csr_en_clean;
   logic w_br_en_clean, w_muldiv_en_clean, w_jump_en_clean;
   always_comb begin
-    w_rd_wen_clean    = w_exc_valid ? 1'b0 : w_rd_wen;
-    w_mem_req_clean   = w_exc_valid ? 1'b0 : w_mem_req;
-    w_csr_en_clean    = w_exc_valid ? 1'b0 : w_csr_en;
-    w_br_en_clean     = w_exc_valid ? 1'b0 : w_br_en;
-    w_muldiv_en_clean = w_exc_valid ? 1'b0 : w_muldiv_en;
-    w_jump_en_clean   = w_exc_valid ? 1'b0 : w_jump_en;
+    // Also gate all side-effects on i_ifid.valid: a bubble (valid=0) produced
+    // by the IF-stage bubble-insertion must not write registers, issue memory
+    // requests, or trigger branches — even if i_ifid.instr carries old bits.
+    w_rd_wen_clean    = (w_exc_valid || !i_ifid.valid) ? 1'b0 : w_rd_wen;
+    w_mem_req_clean   = (w_exc_valid || !i_ifid.valid) ? 1'b0 : w_mem_req;
+    w_csr_en_clean    = (w_exc_valid || !i_ifid.valid) ? 1'b0 : w_csr_en;
+    w_br_en_clean     = (w_exc_valid || !i_ifid.valid) ? 1'b0 : w_br_en;
+    w_muldiv_en_clean = (w_exc_valid || !i_ifid.valid) ? 1'b0 : w_muldiv_en;
+    w_jump_en_clean   = (w_exc_valid || !i_ifid.valid) ? 1'b0 : w_jump_en;
   end
 
   // Pipeline register

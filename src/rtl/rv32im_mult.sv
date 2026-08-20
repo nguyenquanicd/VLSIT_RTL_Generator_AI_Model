@@ -1,7 +1,7 @@
 `default_nettype none
-import rv32im_pkg::*;
 // REQ-MULT
 module rv32im_mult
+  import rv32im_pkg::*;
 #(
   parameter int unsigned PR_MULT_IMPL = 0
 )(

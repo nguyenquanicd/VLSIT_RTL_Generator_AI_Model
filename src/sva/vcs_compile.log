@@ -1,0 +1,72 @@
+                         Chronologic VCS (TM)
+         Version X-2025.06_Full64 -- Tue Aug 18 21:09:22 2026
+
+                    Copyright (c) 1991 - 2025 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+   or distribution of this software is strictly prohibited.  Licensed Products
+     communicate with Synopsys servers for the purpose of providing software
+    updates, detecting software piracy and verifying that customers are using
+    Licensed Products in conformity with the applicable License Key for such
+  Licensed Products. Synopsys will use information gathered in connection with
+    this process to deliver software updates and pursue software pirates and
+                                   infringers.
+
+ Inclusivity & Diversity - Visit SolvNetPlus to read the "Synopsys Statement on
+            Inclusivity and Diversity" (Refer to article 000036315 at
+                        https://solvnetplus.synopsys.com)
+
+
+Warning-[SVAA-UNF] Invalid compile time argument to -assert
+  Invalid compile time argument 'svaext_bind' to -assert option. Ignoring 
+  svaext_bind.
+
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_pkg.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_alu.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_branch_unit.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_imm_gen.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_decoder.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_lsu.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_regfile.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_mult.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_div.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_muldiv.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_hazard_ctrl.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_if_stage.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_id_stage.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_ex_stage.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_csr_file.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_trap_ctrl.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_mem_stage.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/rtl/rv32im_core.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/sva/rv32im_sva_pkg.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/sva/rv32im_if_sva.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/sva/rv32im_id_sva.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/sva/rv32im_ex_sva.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/sva/rv32im_mem_sva.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/sva/rv32im_csr_sva.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/sva/rv32im_trap_sva.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/sva/rv32im_hazard_sva.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/sva/rv32im_top_sva.sv'
+Parsing design file '/home/ltthinh/CLAUDE_PRO/src/sva/rv32im_top_bind.sv'
+Top Level Modules:
+       rv32im_core
+No TimeScale specified
+Starting vcs inline pass...
+9 modules and 0 UDP read.
+recompiling package rv32im_pkg
+recompiling module rv32im_regfile
+recompiling module rv32im_hazard_ctrl
+recompiling module rv32im_ex_stage
+recompiling module rv32im_trap_ctrl
+recompiling module rv32im_core
+recompiling package rv32im_sva_pkg
+recompiling module rv32im_trap_sva
+recompiling module rv32im_top_sva
+All of 9 modules done
+rm -f _cuarc*.so _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
+if [ -x /home/ltthinh/.claude/jobs/8f84e74f/tmp/rv32im_sva_check ]; then chmod a-x /home/ltthinh/.claude/jobs/8f84e74f/tmp/rv32im_sva_check; fi
+g++  -o /home/ltthinh/.claude/jobs/8f84e74f/tmp/rv32im_sva_check   -no-pie    -rdynamic  -Wl,-rpath='$ORIGIN'/rv32im_sva_check.daidir -Wl,-rpath=./rv32im_sva_check.daidir -Wl,-rpath=/tools/Synopsys/vcs/X-2025.06/linux64/lib -L/tools/Synopsys/vcs/X-2025.06/linux64/lib  -Wl,-rpath-link=./ -Wl,--no-as-needed   objs/amcQw_d.o  _347687_archive_1.so  SIM_l.o       rmapats_mop.o rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o rmar_llvm_0_0.o            -lvirsim -lerrorinf -lsnpsmalloc -lvfs      -lvcsnew -lsimprofile -lreader_common /tools/Synopsys/vcs/X-2025.06/linux64/lib/libBA.a -luclinative /tools/Synopsys/vcs/X-2025.06/linux64/lib/vcs_tls.o   -Wl,-whole-archive  -lvcsucli    -Wl,-no-whole-archive          /tools/Synopsys/vcs/X-2025.06/linux64/lib/vcs_save_restore_new.o -ldl  -lc -lm -lpthread -ldl 
+/home/ltthinh/.claude/jobs/8f84e74f/tmp/rv32im_sva_check up to date
+CPU time: .741 seconds to compile + .326 seconds to elab + .188 seconds to link
