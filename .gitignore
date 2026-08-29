@@ -1,0 +1,38 @@
+# ── VCS compile cache (root only) ──────────────────────────────────────────
+/csrc/
+*.daidir/
+ucli.key
+*.key
+
+# ── Working directories (root only) ─────────────────────────────────────────
+# Result/*/ sim/ và work/ KHÔNG bị ignore nhờ có dấu /
+/sim/
+/work/
+
+# ── Simulation waveforms (nặng, không cần lưu) ──────────────────────────────
+*.vcd
+*.vpd
+*.fsdb
+
+# ── Yosys intermediate ───────────────────────────────────────────────────────
+# CHỈ *.blif — KHÔNG ignore *.json vì schemas/*.json là gate artifact
+*.blif
+
+# ── Generated RTL/TB/SVA ở root (root only) ──────────────────────────────────
+# Result/*/ src/ KHÔNG bị ignore
+/src/rtl/
+/src/sva/
+/src/tb/
+
+# ── Generated docs ở root ────────────────────────────────────────────────────
+/docs/specification.pdf
+
+# ── OS & Editor ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc

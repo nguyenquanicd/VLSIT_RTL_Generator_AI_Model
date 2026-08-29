@@ -1,0 +1,1013 @@
+{
+  "metadata": {
+    "ip_name": "rv32im_core",
+    "spec_revision": "0.3",
+    "phase": 2,
+    "gate_status": "approved",
+    "gate_2_approved": true,
+    "approved_at": "2026-08-21T22:15:57+07:00",
+    "source_spec": "schemas/structured_spec.json",
+    "total_requirements": 191
+  },
+  "parameters": {
+    "PR_BOOT_ADDR": {
+      "value": "32'h8000_0000",
+      "default": "32'h8000_0000",
+      "type": "logic [PR_XLEN-1:0]",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [
+        "REQ-020",
+        "REQ-046"
+      ],
+      "feature_ids_affected": [
+        "F01",
+        "F05"
+      ],
+      "change_reason": null
+    },
+    "PR_MTVEC_RESET": {
+      "value": "32'h0000_0000",
+      "default": "32'h0000_0000",
+      "type": "logic [PR_XLEN-1:0]",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [
+        "REQ-021",
+        "REQ-130"
+      ],
+      "feature_ids_affected": [
+        "F11"
+      ],
+      "change_reason": null
+    },
+    "PR_HART_ID": {
+      "value": "32'h0",
+      "default": "32'h0",
+      "type": "logic [PR_XLEN-1:0]",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [
+        "REQ-130"
+      ],
+      "feature_ids_affected": [
+        "F11"
+      ],
+      "change_reason": null
+    },
+    "PR_M_EXT_EN": {
+      "value": "1",
+      "default": "1",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [
+        "REQ-002",
+        "REQ-063",
+        "REQ-072",
+        "REQ-096",
+        "REQ-103",
+        "REQ-188",
+        "REQ-189",
+        "REQ-190",
+        "REQ-191"
+      ],
+      "feature_ids_affected": [
+        "F02",
+        "F17"
+      ],
+      "change_reason": null
+    },
+    "PR_MULT_IMPL": {
+      "value": "0",
+      "default": "0",
+      "type": "int unsigned",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [
+        "REQ-017",
+        "REQ-104",
+        "REQ-105",
+        "REQ-188",
+        "REQ-189"
+      ],
+      "feature_ids_affected": [
+        "F17"
+      ],
+      "change_reason": null
+    },
+    "PR_DIV_IMPL": {
+      "value": "0",
+      "default": "0",
+      "type": "int unsigned",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": true,
+      "req_ids_affected": [
+        "REQ-017",
+        "REQ-025",
+        "REQ-106",
+        "REQ-190"
+      ],
+      "feature_ids_affected": [
+        "F17"
+      ],
+      "change_reason": null
+    },
+    "PR_CSR_EN": {
+      "value": "1",
+      "default": "1",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [
+        "REQ-003",
+        "REQ-011",
+        "REQ-015",
+        "REQ-022",
+        "REQ-023",
+        "REQ-024",
+        "REQ-064",
+        "REQ-065",
+        "REQ-073",
+        "REQ-115",
+        "REQ-120",
+        "REQ-130",
+        "REQ-131",
+        "REQ-132"
+      ],
+      "feature_ids_affected": [
+        "F03",
+        "F11",
+        "F15"
+      ],
+      "change_reason": null
+    },
+    "PR_IRQ_EN": {
+      "value": "1",
+      "default": "1",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [
+        "REQ-014",
+        "REQ-022",
+        "REQ-031",
+        "REQ-134",
+        "REQ-152",
+        "REQ-154",
+        "REQ-155",
+        "REQ-156",
+        "REQ-158"
+      ],
+      "feature_ids_affected": [
+        "F14"
+      ],
+      "change_reason": null
+    },
+    "PR_COUNTER_EN": {
+      "value": "1",
+      "default": "1",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [
+        "REQ-016",
+        "REQ-024",
+        "REQ-147",
+        "REQ-148",
+        "REQ-149",
+        "REQ-150"
+      ],
+      "feature_ids_affected": [
+        "F16"
+      ],
+      "change_reason": null
+    },
+    "PR_MTVEC_VEC_EN": {
+      "value": "0",
+      "default": "0",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [
+        "REQ-019",
+        "REQ-023",
+        "REQ-135",
+        "REQ-167"
+      ],
+      "feature_ids_affected": [
+        "F19"
+      ],
+      "change_reason": null
+    },
+    "PR_FWD_EN": {
+      "value": "1",
+      "default": "1",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [
+        "REQ-006",
+        "REQ-084",
+        "REQ-171",
+        "REQ-172",
+        "REQ-173",
+        "REQ-187"
+      ],
+      "feature_ids_affected": [
+        "F06"
+      ],
+      "change_reason": null
+    },
+    "PR_RF_RESET_EN": {
+      "value": "1",
+      "default": "1",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [
+        "REQ-079",
+        "REQ-083"
+      ],
+      "feature_ids_affected": [
+        "F09"
+      ],
+      "change_reason": null
+    },
+    "PR_RF_IMPL": {
+      "value": "0",
+      "default": "0",
+      "type": "int unsigned",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [
+        "REQ-009",
+        "REQ-027",
+        "REQ-080",
+        "REQ-081",
+        "REQ-082",
+        "REQ-083"
+      ],
+      "feature_ids_affected": [
+        "F09"
+      ],
+      "change_reason": null
+    },
+    "PR_TRACE_EN": {
+      "value": "0",
+      "default": "0",
+      "type": "bit",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": false,
+      "req_ids_affected": [
+        "REQ-018",
+        "REQ-032",
+        "REQ-123"
+      ],
+      "feature_ids_affected": [
+        "F18"
+      ],
+      "change_reason": null
+    },
+    "PR_BUS_OUTSTANDING": {
+      "value": "1",
+      "default": "1",
+      "type": "int unsigned",
+      "changed_from_default": false,
+      "confirmed_by_user": true,
+      "locked": true,
+      "req_ids_affected": [
+        "REQ-026",
+        "REQ-037"
+      ],
+      "feature_ids_affected": [
+        "F10"
+      ],
+      "change_reason": null
+    }
+  },
+  "constraints": {
+    "C1": {
+      "rule": "PR_BOOT_ADDR[1:0] == 2'b00",
+      "pass": true,
+      "detail": "PR_BOOT_ADDR = 32'h8000_0000 → [1:0] = 2'b00"
+    },
+    "C2": {
+      "rule": "PR_MTVEC_RESET[1:0] == 2'b00",
+      "pass": true,
+      "detail": "PR_MTVEC_RESET = 32'h0000_0000 → [1:0] = 2'b00"
+    },
+    "C3": {
+      "rule": "PR_IRQ_EN == 1 → PR_CSR_EN == 1",
+      "pass": true,
+      "detail": "PR_IRQ_EN = 1, PR_CSR_EN = 1"
+    },
+    "C4": {
+      "rule": "PR_MTVEC_VEC_EN == 1 → PR_CSR_EN == 1",
+      "pass": true,
+      "detail": "PR_MTVEC_VEC_EN = 0 → tiền đề sai, ràng buộc thoả vacuously"
+    },
+    "C5": {
+      "rule": "PR_COUNTER_EN == 1 → PR_CSR_EN == 1",
+      "pass": true,
+      "detail": "PR_COUNTER_EN = 1, PR_CSR_EN = 1"
+    },
+    "C6": {
+      "rule": "PR_DIV_IMPL == 0",
+      "pass": true,
+      "detail": "Phase 1 khoá ở 0 (SEQ non-restoring)"
+    },
+    "C7": {
+      "rule": "PR_BUS_OUTSTANDING == 1",
+      "pass": true,
+      "detail": "Phase 1 khoá ở 1"
+    },
+    "C8": {
+      "rule": "PR_RF_IMPL == 1 → target phải là FPGA",
+      "pass": true,
+      "detail": "PR_RF_IMPL = 0 → flop array, không phụ thuộc công nghệ target"
+    }
+  },
+  "style_constraints": {
+    "source_file": "rtl_rule.md",
+    "source_revision": "1.0",
+    "natural_language_additions": [],
+    "lint_rules": [
+      {
+        "id": "STYLE-001",
+        "source": "rtl_rule.md",
+        "rule": "[§1.1] Port input dùng prefix i_, output o_, bidirectional io_",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-002",
+        "source": "rtl_rule.md",
+        "rule": "[§1.1] Clock i_clk_<domain>, reset active-low i_resetn_<domain>",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-003",
+        "source": "rtl_rule.md",
+        "rule": "[§1.1] Flop gán trong always_ff dùng prefix reg_; comb/wire dùng w_",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-004",
+        "source": "rtl_rule.md",
+        "rule": "[§1.1] parameter dùng prefix PR_, localparam dùng LP_",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-005",
+        "source": "rtl_rule.md",
+        "rule": "[§1.1] typedef hậu tố _t, enum member UPPER_SNAKE, package hậu tố _pkg",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-006",
+        "source": "rtl_rule.md",
+        "rule": "[§1.1] Instance u_<tên>, generate label g_, always block label p_, assertion label a_",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-007",
+        "source": "rtl_rule.md",
+        "rule": "[§1.2] Active-low chỉ dùng cho reset; tín hiệu khác active-high, nếu bắt buộc thì hậu tố _n",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-008",
+        "source": "rtl_rule.md",
+        "rule": "[§1.2] Toàn bộ lower_snake_case trừ PR_/LP_/enum member/macro; tối đa 40 ký tự",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-009",
+        "source": "rtl_rule.md",
+        "rule": "[§1.2] Next-value của reg_x phải tên w_x_nxt",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-010",
+        "source": "rtl_rule.md",
+        "rule": "[§1.2] Cấm tên trùng keyword SV và cấm prefix trần",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-011",
+        "source": "rtl_rule.md",
+        "rule": "[§1.3] Chỉ dùng 24 từ viết tắt trong whitelist §1.3, không tự chế",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-012",
+        "source": "rtl_rule.md",
+        "rule": "[§2.1] Port thuộc giao thức đặt tên <dir>_<bus>_<channel>_<field>",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-013",
+        "source": "rtl_rule.md",
+        "rule": "[§2.3] Cấm hardcode magic number; mọi hằng phải là PR_, LP_ hoặc enum member. Ngoại lệ: 0 và 1",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-014",
+        "source": "rtl_rule.md",
+        "rule": "[§3.1] Thứ tự khai báo trong module theo 12 bước §3.1",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-015",
+        "source": "rtl_rule.md",
+        "rule": "[§3.2] Thứ tự port 8 nhóm; mỗi nhóm cách 1 dòng trống + comment // ---- <nhóm> ----",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-016",
+        "source": "rtl_rule.md",
+        "rule": "[§3.3] Mọi file phải có module header: Module / Description / Parent / Spec ref",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-017",
+        "source": "rtl_rule.md",
+        "rule": "[§4.1 R1] Sequential chỉ dùng always_ff @(posedge i_clk_* or negedge i_resetn_*)",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-018",
+        "source": "rtl_rule.md",
+        "rule": "[§4.1 R2] Combinational chỉ dùng always_comb hoặc assign",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-019",
+        "source": "rtl_rule.md",
+        "rule": "[§4.1 R3] always_ff chỉ dùng <=; always_comb chỉ dùng =; không trộn",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-020",
+        "source": "rtl_rule.md",
+        "rule": "[§4.1 R4] Mọi always_comb phải gán default cho toàn bộ output ở dòng đầu",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-021",
+        "source": "rtl_rule.md",
+        "rule": "[§4.1 R5] Một signal chỉ được driver bởi đúng một always block hoặc assign",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-022",
+        "source": "rtl_rule.md",
+        "rule": "[§4.1 R6] Mọi case phải có default; dùng unique case cho enum liệt kê đủ",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-023",
+        "source": "rtl_rule.md",
+        "rule": "[§4.1 R7] Kiểu dữ liệu dùng logic; cấm reg, wire, integer trong RTL",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-024",
+        "source": "rtl_rule.md",
+        "rule": "[§4.1 R8] Mọi block always phải có label p_<tên>",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-025",
+        "source": "rtl_rule.md",
+        "rule": "[§4.1 R9] Một file = một module; tên file = tên module + .sv",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-026",
+        "source": "rtl_rule.md",
+        "rule": "[§4.1 R10] Width khớp tường minh; dùng cast PR_XLEN'(...) thay vì để tool pad",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-027",
+        "source": "rtl_rule.md",
+        "rule": "[§4.1 R11] Module có clock phải nhận đủ i_clk_* + i_resetn_*; module thuần comb không được có port clock",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-028",
+        "source": "rtl_rule.md",
+        "rule": "[§4.2] Control flop và CSR bắt buộc có reset; datapath flop không bắt buộc",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-029",
+        "source": "rtl_rule.md",
+        "rule": "[§4.2] Reset scheme: asynchronous assert, synchronous deassert",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-030",
+        "source": "rtl_rule.md",
+        "rule": "[§4.3] Một clock domain i_clk_core; cấm gated clock, cấm negedge i_clk_core, cấm dùng clock làm data",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-031",
+        "source": "rtl_rule.md",
+        "rule": "[§4.4 P1] Cấm #delay trong RTL",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-032",
+        "source": "rtl_rule.md",
+        "rule": "[§4.4 P2] Cấm initial block trong RTL",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-033",
+        "source": "rtl_rule.md",
+        "rule": "[§4.4 P3] Cấm casex, casez",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-034",
+        "source": "rtl_rule.md",
+        "rule": "[§4.4 P4] Cấm defparam; dùng #() khi instantiate",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-035",
+        "source": "rtl_rule.md",
+        "rule": "[§4.4 P5] Cấm implicit net; bật `default_nettype none đầu file và `default_nettype wire cuối file",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-036",
+        "source": "rtl_rule.md",
+        "rule": "[§4.4 P6] Cấm always @(*); dùng always_comb",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-037",
+        "source": "rtl_rule.md",
+        "rule": "[§4.4 P7] Cấm latch có chủ ý",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-038",
+        "source": "rtl_rule.md",
+        "rule": "[§4.4 P8] Cấm multi-driven net",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-039",
+        "source": "rtl_rule.md",
+        "rule": "[§4.4 P9] Cấm function có side effect hoặc static variable",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-040",
+        "source": "rtl_rule.md",
+        "rule": "[§4.4 P10] Cấm magic number",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-041",
+        "source": "rtl_rule.md",
+        "rule": "[§4.4 P11] Cấm $random, $display trong RTL",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-042",
+        "source": "rtl_rule.md",
+        "rule": "[§4.4 P12] Cấm port inout bên trong lõi",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-043",
+        "source": "rtl_rule.md",
+        "rule": "[§4.5] Instantiate dùng named port + named parameter; cấm positional và cấm .*",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-044",
+        "source": "rtl_rule.md",
+        "rule": "[§5] Comment trong RTL bằng tiếng Anh; comment 'tại sao' không 'cái gì'; cấm comment code chết",
+        "original_nl": null
+      },
+      {
+        "id": "STYLE-045",
+        "source": "rtl_rule.md",
+        "rule": "[§6] Assertion đặt cuối module, bọc trong `ifndef SYNTHESIS, label a_<tên>",
+        "original_nl": null
+      }
+    ]
+  },
+  "feature_matrix": {
+    "F01": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [],
+      "req_ids": [
+        "REQ-001"
+      ],
+      "description": "RV32I base — 40 lệnh"
+    },
+    "F02": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [
+        "PR_M_EXT_EN"
+      ],
+      "req_ids": [
+        "REQ-002"
+      ],
+      "description": "RV32M"
+    },
+    "F03": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [
+        "PR_CSR_EN"
+      ],
+      "req_ids": [
+        "REQ-003"
+      ],
+      "description": "Zicsr"
+    },
+    "F04": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [],
+      "req_ids": [
+        "REQ-004"
+      ],
+      "description": "Zifencei FENCE.I"
+    },
+    "F05": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [],
+      "req_ids": [
+        "REQ-005"
+      ],
+      "description": "Pipeline 5 tầng"
+    },
+    "F06": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [
+        "PR_FWD_EN"
+      ],
+      "req_ids": [
+        "REQ-006"
+      ],
+      "description": "Full forwarding"
+    },
+    "F07": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [],
+      "req_ids": [
+        "REQ-007"
+      ],
+      "description": "Load-use interlock"
+    },
+    "F08": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [],
+      "req_ids": [
+        "REQ-008"
+      ],
+      "description": "Branch resolve tại EX"
+    },
+    "F09": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [
+        "PR_RF_IMPL"
+      ],
+      "req_ids": [
+        "REQ-009"
+      ],
+      "description": "Regfile 32×32"
+    },
+    "F10": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [],
+      "req_ids": [
+        "REQ-010"
+      ],
+      "description": "I-bus / D-bus Harvard"
+    },
+    "F11": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [
+        "PR_CSR_EN"
+      ],
+      "req_ids": [
+        "REQ-011"
+      ],
+      "description": "M-mode CSR file"
+    },
+    "F12": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [],
+      "req_ids": [
+        "REQ-012"
+      ],
+      "description": "Precise exception"
+    },
+    "F13": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [],
+      "req_ids": [
+        "REQ-013"
+      ],
+      "description": "9 exception đồng bộ"
+    },
+    "F14": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [
+        "PR_IRQ_EN"
+      ],
+      "req_ids": [
+        "REQ-014"
+      ],
+      "description": "3 interrupt M-mode"
+    },
+    "F15": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [
+        "PR_CSR_EN"
+      ],
+      "req_ids": [
+        "REQ-015"
+      ],
+      "description": "MRET"
+    },
+    "F16": {
+      "enabled": true,
+      "mandatory": false,
+      "parameters_driving": [
+        "PR_COUNTER_EN"
+      ],
+      "req_ids": [
+        "REQ-016"
+      ],
+      "description": "mcycle / minstret 64-bit"
+    },
+    "F17": {
+      "enabled": true,
+      "mandatory": true,
+      "parameters_driving": [
+        "PR_MULT_IMPL",
+        "PR_DIV_IMPL"
+      ],
+      "req_ids": [
+        "REQ-017"
+      ],
+      "description": "MULDIV multi-cycle"
+    },
+    "F18": {
+      "enabled": false,
+      "mandatory": false,
+      "parameters_driving": [
+        "PR_TRACE_EN"
+      ],
+      "req_ids": [
+        "REQ-018"
+      ],
+      "description": "Retire trace port"
+    },
+    "F19": {
+      "enabled": false,
+      "mandatory": false,
+      "parameters_driving": [
+        "PR_MTVEC_VEC_EN"
+      ],
+      "req_ids": [
+        "REQ-019"
+      ],
+      "description": "mtvec Vectored mode"
+    }
+  },
+  "requirements_active": [
+    "REQ-001",
+    "REQ-002",
+    "REQ-003",
+    "REQ-004",
+    "REQ-005",
+    "REQ-006",
+    "REQ-007",
+    "REQ-008",
+    "REQ-009",
+    "REQ-010",
+    "REQ-011",
+    "REQ-012",
+    "REQ-013",
+    "REQ-014",
+    "REQ-015",
+    "REQ-016",
+    "REQ-017",
+    "REQ-020",
+    "REQ-021",
+    "REQ-022",
+    "REQ-023",
+    "REQ-024",
+    "REQ-025",
+    "REQ-026",
+    "REQ-027",
+    "REQ-028",
+    "REQ-029",
+    "REQ-030",
+    "REQ-031",
+    "REQ-032",
+    "REQ-033",
+    "REQ-034",
+    "REQ-035",
+    "REQ-036",
+    "REQ-037",
+    "REQ-038",
+    "REQ-039",
+    "REQ-040",
+    "REQ-041",
+    "REQ-042",
+    "REQ-043",
+    "REQ-044",
+    "REQ-045",
+    "REQ-046",
+    "REQ-047",
+    "REQ-048",
+    "REQ-049",
+    "REQ-050",
+    "REQ-051",
+    "REQ-052",
+    "REQ-053",
+    "REQ-054",
+    "REQ-055",
+    "REQ-056",
+    "REQ-057",
+    "REQ-058",
+    "REQ-059",
+    "REQ-060",
+    "REQ-061",
+    "REQ-062",
+    "REQ-063",
+    "REQ-064",
+    "REQ-065",
+    "REQ-066",
+    "REQ-067",
+    "REQ-068",
+    "REQ-069",
+    "REQ-070",
+    "REQ-071",
+    "REQ-074",
+    "REQ-075",
+    "REQ-076",
+    "REQ-077",
+    "REQ-078",
+    "REQ-079",
+    "REQ-084",
+    "REQ-085",
+    "REQ-086",
+    "REQ-087",
+    "REQ-088",
+    "REQ-089",
+    "REQ-090",
+    "REQ-091",
+    "REQ-092",
+    "REQ-093",
+    "REQ-094",
+    "REQ-095",
+    "REQ-097",
+    "REQ-098",
+    "REQ-099",
+    "REQ-100",
+    "REQ-101",
+    "REQ-102",
+    "REQ-103",
+    "REQ-104",
+    "REQ-106",
+    "REQ-107",
+    "REQ-108",
+    "REQ-109",
+    "REQ-110",
+    "REQ-111",
+    "REQ-112",
+    "REQ-113",
+    "REQ-114",
+    "REQ-115",
+    "REQ-116",
+    "REQ-117",
+    "REQ-118",
+    "REQ-119",
+    "REQ-120",
+    "REQ-121",
+    "REQ-122",
+    "REQ-124",
+    "REQ-125",
+    "REQ-126",
+    "REQ-127",
+    "REQ-128",
+    "REQ-129",
+    "REQ-130",
+    "REQ-131",
+    "REQ-132",
+    "REQ-133",
+    "REQ-134",
+    "REQ-135",
+    "REQ-136",
+    "REQ-137",
+    "REQ-138",
+    "REQ-139",
+    "REQ-140",
+    "REQ-141",
+    "REQ-142",
+    "REQ-143",
+    "REQ-144",
+    "REQ-145",
+    "REQ-146",
+    "REQ-147",
+    "REQ-148",
+    "REQ-149",
+    "REQ-151",
+    "REQ-152",
+    "REQ-153",
+    "REQ-154",
+    "REQ-155",
+    "REQ-156",
+    "REQ-157",
+    "REQ-158",
+    "REQ-159",
+    "REQ-160",
+    "REQ-161",
+    "REQ-162",
+    "REQ-163",
+    "REQ-164",
+    "REQ-165",
+    "REQ-166",
+    "REQ-168",
+    "REQ-169",
+    "REQ-170",
+    "REQ-171",
+    "REQ-172",
+    "REQ-174",
+    "REQ-175",
+    "REQ-176",
+    "REQ-177",
+    "REQ-178",
+    "REQ-179",
+    "REQ-180",
+    "REQ-181",
+    "REQ-182",
+    "REQ-183",
+    "REQ-184",
+    "REQ-185",
+    "REQ-186",
+    "REQ-188",
+    "REQ-190",
+    "REQ-191"
+  ],
+  "requirements_inactive": {
+    "REQ-018": "PR_TRACE_EN = 0 → F18 không build",
+    "REQ-019": "PR_MTVEC_VEC_EN = 0 → F19 không build",
+    "REQ-072": "PR_M_EXT_EN = 1 → nhánh L7 (RV32M illegal) không kích hoạt",
+    "REQ-073": "PR_CSR_EN = 1 → nhánh L8 (CSR/MRET illegal) không kích hoạt",
+    "REQ-080": "PR_RF_IMPL = 0 → không dùng LUTRAM",
+    "REQ-081": "PR_RF_IMPL = 0 → R1 không áp dụng",
+    "REQ-082": "PR_RF_IMPL = 0 → R2 không áp dụng",
+    "REQ-083": "PR_RF_IMPL = 0 → R3 không áp dụng",
+    "REQ-096": "PR_M_EXT_EN = 1 → muldiv không phải module rỗng",
+    "REQ-105": "PR_MULT_IMPL = 0 → không dùng nhánh COMB",
+    "REQ-123": "PR_TRACE_EN = 0 → không xuất trace port",
+    "REQ-150": "PR_COUNTER_EN = 1 → counter không đọc ra '0",
+    "REQ-167": "PR_MTVEC_VEC_EN = 0 → không có Vectored target",
+    "REQ-173": "PR_FWD_EN = 1 → không dùng nhánh stall-only §18.4.1",
+    "REQ-187": "PR_FWD_EN = 1 → penalty stall-only không áp dụng",
+    "REQ-189": "PR_MULT_IMPL = 0 → không có latency 1 cycle"
+  }
+}

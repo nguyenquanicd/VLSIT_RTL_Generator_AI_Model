@@ -1,147 +1,194 @@
 # RTL Generation Flow — Guideline
 
-Template commands: `/home/ltthinh/CLAUDE_PRO/claude_template/`
+**Git repo:** `https://github.com/nguyenquanicd/VLSIT_RTL_Generator_AI_Model` (hoặc `git clone` về `~/VLSIT_RTL_Generator_AI_Model`)
+**Template commands:** `.claude/commands/` (Claude Code slash commands)
+**RTL coding rules:** `rtl_rule.md`
 
 ---
 
-## Dùng lại flow cho project RTL mới
-
-### Bước 0 — Copy template (1 lần per project)
+## Bước 0 — Setup môi trường
 
 ```bash
-# Project-scoped (recommend)
-mkdir -p <new_project>/.claude/commands
-cp /home/ltthinh/CLAUDE_PRO/claude_template/commands/*.md <new_project>/.claude/commands/
-cp -r /home/ltthinh/CLAUDE_PRO/claude_template/schemas/ <new_project>/schemas/
+cd ~/VLSIT_RTL_Generator_AI_Model
+source sourceme.sh          # load tools + set $PROJECT_ROOT
 ```
 
-### Chỉnh spec_parser.md cho design mới (3 chỗ)
+`sourceme.sh` tự động load:
+- `synopsys/vcs/X-2025.06` — simulation
+- `oss-cad-suite` — Yosys 0.58 + Verilator 5.041
+- `riscv` — riscv-gcc 14.2.0
+- export `$PROJECT_ROOT` = git repo root
 
-Mở `.claude/commands/spec_parser.md`, chỉnh:
+---
+
+## Bước 0b — Chuẩn bị cho project mới
+
+Slash commands đã có sẵn trong `.claude/commands/` — không cần copy thêm.
+
+Chỉnh `spec_parser.md` (hoặc `.claude/commands/spec_parser.md`) cho design mới:
 1. **Bước 2** — Section headers thực tế của spec mới
 2. **Bước 6.1** — Tên parameter của design mới
 3. **Bước 6.2** — Tên module RTL của design mới
 
-Phần còn lại (ambiguity rules, gate logic, error handling) giữ nguyên.
-Xem chi tiết: `claude_template/spec_parser_authoring_rules.md`
+Chi tiết xem `claude_template/spec_parser_authoring_rules.md`.
 
 ---
 
-## Chuẩn bị (rv32im_core / server nội bộ)
+## Flow tổng quan
 
-```bash
-source /etc/profile.d/modules.sh
-module load synopsys/vcs/X-2025.06   # VCS simulation
-module load oss-cad-suite             # Yosys + Verilator + Icarus
-module load riscv                     # riscv-gcc (nếu cần compile test binary)
 ```
+source sourceme.sh
+
+/spec_parser <spec.md>              → schemas/structured_spec.json   (Gate 1)
+/config_ui                          → schemas/final_config.json       (Gate 2)
+
+        ┌───────────────────────────────────┐
+  /rtl_generator                  /tb_generator      ← song song được
+  src/rtl/ + lint + synth         src/tb/tests/
+  Gate 3a                         Gate 4
+        └───────────────────────────────────┘
+
+/sva_generator                      → schemas/rtm.json                (Gate 3b)
+/verification                       → schemas/verification_report.json (Gate 5)
+/spec_pdf_generator                 → docs/specification.pdf           (Phase 6)
+```
+
+> RTL và TB có thể chạy song song sau Gate 2 vì `/tb_generator` không đọc RTL source.
+> Phase 6 chỉ chạy được sau khi Gate 5 đã ký.
 
 ---
 
 ## Phase 1 — Parse Spec
 
-**Input:** `spec_parser.md`
-**Slash command:** `/spec_parser`
+```
+/spec_parser <spec_file.md>
+```
 
-Claude đọc spec, trích xuất requirements, sinh ra `structured_spec.json` và RTM draft.
-Schema validate theo `claude_template/schemas/structured_spec_schema.json`.
+Output: `schemas/structured_spec.json` (Gate 1 phải ký mới tiếp tục).
 
 ---
 
-## Phase 2 — Config & Gate 2
+## Phase 2 — Config
 
-**Slash command:** `/config_ui`
-
-Chọn parameter cho design (boot addr, IRQ, CSR, M-ext, trace, v.v.).
-Output sign vào `schemas/final_config.json`.
-
-```json
-// Ví dụ parameter rv32im_core
-{
-  "PR_BOOT_ADDR":    "0x80000000",
-  "PR_M_EXT_EN":     true,
-  "PR_CSR_EN":       true,
-  "PR_IRQ_EN":       true,
-  "PR_TRACE_EN":     true,
-  "PR_RF_RESET_EN":  true,
-  "PR_FWD_EN":       true
-}
 ```
+/config_ui
+```
+
+Output: `schemas/final_config.json` (Gate 2).
 
 ---
 
 ## Phase 3a — Generate RTL
 
-**Slash command:** `/rtl_generator`
+```
+/rtl_generator
+```
 
-Sinh 18 module SystemVerilog vào `src/rtl/`, bao gồm `filelist.f`.
-Naming convention bắt buộc theo `rtl_rule.md`.
+Sinh `src/rtl/` (18 modules) + `src/rtl/filelist.f`.
 
-**Kiểm tra ngay sau khi sinh:**
-
+**Lint check sau khi sinh:**
 ```bash
-# Lint check — phải 0 warnings
-cd /home/ltthinh/CLAUDE_PRO
-verilator --lint-only --sv --Wall -f src/rtl/filelist.f --top-module rv32im_core
+source sourceme.sh
+verilator --lint-only --sv --Wall -f src/rtl/filelist.f --top-module <top_module>
+# Phải 0 warnings
+```
 
-# Synthesis — area/timing report
-yosys synth_rv32im.ys   # dùng GF180MCU lib (Sky130 không có trên server)
-# PDK lib: /tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/
-#           build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib
+**Synthesis (GF180MCU — Sky130 không có trên server):**
+```bash
+yosys scripts/synth_gf180.sh
+# PDK: /tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/
+#      build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib
 ```
 
 ---
 
-## Phase 3b — Generate SVA & Gate 3
+## Phase 3b — Generate SVA
 
-**Slash command:** `/sva_generator`
-
-Sinh SVA bind files dựa trên RTM. Compile check bằng VCS:
-
-```bash
-vcs -sverilog -full64 -f src/rtl/filelist.f [sva_files] -top rv32im_core
+```
+/sva_generator
 ```
 
-Output sign vào `schemas/rtm.json` (Gate 3).
+Sinh `src/sva/` + `src/sva/filelist_sva.f`. Output: `schemas/rtm.json` (Gate 3b).
 
 ---
 
-## Phase 4 — Generate Testbench & Gate 4
+## Phase 4 — Generate Testbench
 
-**Slash command:** `/tb_generator`
+```
+/tb_generator
+```
 
-Sinh TB top + 24 TC tasks vào `src/tb/tests/tc_0XX_*.sv`.
-Output sign vào `schemas/selected_testplan.json` (Gate 4).
+Sinh `src/tb/` (TB top + models + TC files). Output: `schemas/selected_testplan.json` (Gate 4).
 
 ---
 
-## Phase 5 — Verification & Gate 5
+## Phase 5 — Verification
 
-**Slash command:** `/verification`
-
-### Bước 1: Compile TB
-
-```bash
-cd /home/ltthinh/CLAUDE_PRO          # PHẢI chạy từ project root
-bash src/tb/run_vcs_compile.sh
-# Output binary: sim/rv32im_tb
+```
+/verification
 ```
 
-### Bước 2: Run simulation
+### Thủ công nếu cần:
 
+**Bước 1 — Compile TB:**
 ```bash
-cd sim
+source sourceme.sh
+cd $PROJECT_ROOT
+bash src/tb/run_vcs_compile.sh          # PHẢI chạy từ PROJECT_ROOT
+# Binary: sim/rv32im_tb
+```
+
+**Bước 2 — Run sim:**
+```bash
+cd $PROJECT_ROOT/sim
 ./rv32im_tb -suppress=ASLR_DETECTED_INFO 2>&1 | tee sim.log
 ```
 
-### Bước 3: Kiểm tra kết quả
-
+**Bước 3 — Kiểm tra:**
 ```bash
 grep -E "(PASS|FAIL|Total)" sim.log
-# Target: 24/24 PASS, Total errors: 0
+# Target: N/N PASS, Total errors: 0
 ```
 
-Output sign vào `schemas/verification_report.json` (Gate 5).
+Output: `schemas/verification_report.json` (Gate 5).
+
+---
+
+## Cấu trúc thư mục
+
+```
+VLSIT_RTL_Generator_AI_Model/   ← git root
+├── docs/                       ← GENERATED — spec PDF output
+│   ├── specification.md        ← Markdown source
+│   └── specification.pdf       ← PDF (nếu pandoc/weasyprint có sẵn)
+├── .claude/
+│   └── commands/               ← 7 slash commands (spec_parser ... spec_pdf_generator)
+├── claude_template/
+│   ├── commands/               ← bản gốc của slash commands (backup)
+│   ├── schemas/                ← JSON schema validate từng gate
+│   └── spec_parser_authoring_rules.md
+├── Result/                     ← lưu trữ kết quả các lần gen
+│   ├── RISCV_24_08_2026/       ← spec v0.2 | 24/24 PASS | Gate 1–5 hoàn tất
+│   │   ├── src/rtl/            ← 18 modules
+│   │   ├── src/sva/            ← 35 assertions
+│   │   ├── src/tb/             ← TB top + 24 TCs
+│   │   ├── schemas/            ← 5 gate artifacts
+│   │   └── spec_parser.md
+│   └── RISCV_23_08_2026/       ← spec v0.4 | 191 REQ | Gate 1–3b hoàn tất
+│       ├── src/rtl/            ← 18 modules (12731 cells, 371k µm²)
+│       ├── src/sva/            ← 181 properties
+│       ├── schemas/            ← structured_spec + config + rtm
+│       ├── PROGRESS.md         ← checkpoint trạng thái
+│       └── spec_parser.md
+├── schemas/                    ← Gate artifacts project hiện tại (tracked)
+├── src/                        ← GENERATED (gitignored)
+├── sim/                        ← GENERATED (gitignored)
+├── work/                       ← GENERATED (gitignored)
+├── rtl_rule.md
+├── sourceme.sh
+├── guideline.md
+└── .gitignore
+```
 
 ---
 
@@ -149,14 +196,15 @@ Output sign vào `schemas/verification_report.json` (Gate 5).
 
 | Vấn đề | Fix |
 |--------|-----|
-| VCS không detect TC file thay đổi → chạy binary cũ | Xóa `csrc/` và `sim/rv32im_tb.daidir/`, compile lại |
-| Compile TB từ sai thư mục | Luôn `cd /home/ltthinh/CLAUDE_PRO` trước khi chạy `run_vcs_compile.sh` |
-| Sky130 không có trên server | Dùng GF180MCU thay thế cho synthesis |
-| Verilator lint dùng lib stub trong `liberty/` | Dùng full lib trong đường dẫn PDK đầy đủ |
+| VCS không detect thay đổi TC file | Xóa `csrc/` và `sim/*.daidir/`, compile lại |
+| `run_vcs_compile.sh` fail | Phải chạy từ `$PROJECT_ROOT`, không được chạy từ subfolder |
+| Sky130 không có trên server | Dùng GF180MCU cho synthesis |
+| `structured_spec.json` thiếu khi chạy `/tb_generator` | TB dùng REQ-IDs từ `rtm.json` thay thế |
+| Slash command không nhận diện | Kiểm tra `.claude/commands/*.md` có đúng tên không |
 
 ---
 
-## Kết quả tham khảo (rv32im_core, 2026-08-19)
+## Kết quả tham khảo (rv32im_core, 2026-08)
 
 | Metric | Value |
 |--------|-------|
@@ -166,4 +214,5 @@ Output sign vào `schemas/verification_report.json` (Gate 5).
 | Chip area | ~378,000 µm² |
 | SVA assertions | 35 |
 | Test cases | 24 |
-| Simulation result | **24/24 PASS** |
+| Simulation | **24/24 PASS** |
+| Mutation sign-off | 8/23 REQ-IDs |

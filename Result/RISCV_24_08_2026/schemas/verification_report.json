@@ -1,0 +1,52 @@
+{
+  "metadata": {
+    "ip_name": "rv32im_core",
+    "spec_revision": "0.2",
+    "phase": 5,
+    "gate_5_approved": true,
+    "approved_at": "2026-08-24T21:56:44+07:00"
+  },
+  "sim_summary": {
+    "total_tc": 24,
+    "pass": 24,
+    "fail": 0,
+    "timeout": 0,
+    "sva_violations": 0,
+    "compile_log": "work/compile.log",
+    "sim_log": "work/sim_all.log"
+  },
+  "mutation_summary": {
+    "total_req_ids_tested": 6,
+    "above_threshold": 0,
+    "below_threshold": 6,
+    "na": 17,
+    "threshold": 0.85,
+    "scores": {
+      "REQ-F06": { "killed": 14, "testable": 20, "pct": 70.0 },
+      "REQ-F07": { "killed": 14, "testable": 20, "pct": 70.0 },
+      "REQ-F08": { "killed":  6, "testable": 20, "pct": 30.0 },
+      "REQ-F09": "N/A",
+      "REQ-F12": { "killed":  9, "testable": 20, "pct": 45.0 },
+      "REQ-F13": { "killed":  9, "testable": 20, "pct": 45.0 }
+    },
+    "note": "All scores below 85% — sign-off LOCKED for these REQ-IDs. To improve: add TC targeting branch edge cases (F08), forwarding corner cases (F06/F07), and exception priority cases (F12/F13)."
+  },
+  "rtm_summary": {
+    "total_req_ids": 23,
+    "signed_off": 8,
+    "pending": 0,
+    "locked": 15,
+    "signed_off_list": ["REQ-F01","REQ-F02","REQ-F09","REQ-F10","REQ-F11","REQ-F14","REQ-F15","REQ-F16"],
+    "locked_reasons": {
+      "mutation_below_85": ["REQ-F06","REQ-F07","REQ-F08","REQ-F12","REQ-F13"],
+      "no_tc": ["REQ-F05","REQ-F17","REQ-F18","REQ-C01","REQ-C02","REQ-C03","REQ-C04","REQ-C05"],
+      "no_sva_in_rtm": ["REQ-F03","REQ-F04"]
+    }
+  },
+  "tool_versions": {
+    "vcs": "X-2025.06",
+    "yosys": "0.58+35",
+    "pdk": "GF180MCU TT 025C 1v80",
+    "pdk_lib": "/tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib"
+  }
+}

@@ -1,0 +1,10 @@
+/home/ltthinh/VSLI_AI/Result/RISCV_24_08_2026/src/sva/rv32im_sva_pkg.sv
+/home/ltthinh/VSLI_AI/Result/RISCV_24_08_2026/src/sva/rv32im_if_sva.sv
+/home/ltthinh/VSLI_AI/Result/RISCV_24_08_2026/src/sva/rv32im_id_sva.sv
+/home/ltthinh/VSLI_AI/Result/RISCV_24_08_2026/src/sva/rv32im_ex_sva.sv
+/home/ltthinh/VSLI_AI/Result/RISCV_24_08_2026/src/sva/rv32im_mem_sva.sv
+/home/ltthinh/VSLI_AI/Result/RISCV_24_08_2026/src/sva/rv32im_csr_sva.sv
+/home/ltthinh/VSLI_AI/Result/RISCV_24_08_2026/src/sva/rv32im_trap_sva.sv
+/home/ltthinh/VSLI_AI/Result/RISCV_24_08_2026/src/sva/rv32im_hazard_sva.sv
+/home/ltthinh/VSLI_AI/Result/RISCV_24_08_2026/src/sva/rv32im_top_sva.sv
+/home/ltthinh/VSLI_AI/Result/RISCV_24_08_2026/src/sva/rv32im_top_bind.sv

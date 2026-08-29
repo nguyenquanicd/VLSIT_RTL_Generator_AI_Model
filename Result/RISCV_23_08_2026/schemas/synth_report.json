@@ -1,0 +1,39 @@
+{
+  "tool": "Yosys 0.58+35 (git sha1 89f32a415, clang++ 18.1.8 -fPIC -O3)",
+  "frontend": "read_slang (plugin) - Yosys read_verilog khong parse duoc 'module X import pkg::*;'",
+  "lint_tool": "Verilator 5.041",
+  "pdk": "GF180MCU",
+  "top_module": "rv32im_core",
+  "spec_revision": "0.4",
+  "modules_generated": 18,
+  "lint_full_design": {
+    "status": "pass",
+    "warnings": 0,
+    "errors": 0
+  },
+  "corners": {
+    "tt_025C_1v80": {
+      "status": "pass",
+      "cell_count": 12731,
+      "flop_count": 2219,
+      "wire_count": 10470,
+      "area_estimate_um2": 371271.98,
+      "liberty": "/tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib",
+      "log": "src/rtl/synth_tt.log",
+      "netlist": "src/rtl/synth_gf180_tt.json"
+    },
+    "ss_125C_1v62": {
+      "status": "pass",
+      "cell_count": 12731,
+      "flop_count": 2219,
+      "wire_count": 10470,
+      "area_estimate_um2": 371271.98,
+      "liberty": "/tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__ss_125C_1v62_full.lib",
+      "log": "src/rtl/synth_ss.log",
+      "netlist": "src/rtl/synth_gf180_ss.json"
+    }
+  },
+  "req_ids_tagged": 173,
+  "req_id_tag_occurrences": 393,
+  "generated_at": "2026-08-23T21:05:18+07:00"
+}

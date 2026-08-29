@@ -1,0 +1,48 @@
+{
+  "metadata": {
+    "ip_name": "rv32im_core",
+    "phase": 4,
+    "gate_4_approved": true,
+    "approved_at": "2026-08-24T00:00:00Z",
+    "note": "structured_spec.json absent — REQ-IDs sourced from rtm.json (21 REQ-IDs)"
+  },
+  "test_cases": [
+    { "tc_id": "TC-001", "name": "reset_boot_addr",           "req_ids": ["REQ-F01"],          "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_001_reset_boot_addr.sv",           "compile_status": "pass" },
+    { "tc_id": "TC-002", "name": "rv32i_alu_ops",             "req_ids": ["REQ-F01","REQ-F07"], "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_002_rv32i_alu_ops.sv",             "compile_status": "pass" },
+    { "tc_id": "TC-003", "name": "rv32i_lui_auipc",           "req_ids": ["REQ-F01","REQ-F07"], "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_003_rv32i_lui_auipc.sv",           "compile_status": "pass" },
+    { "tc_id": "TC-004", "name": "load_instructions",         "req_ids": ["REQ-F07","REQ-F10"], "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_004_load_instructions.sv",         "compile_status": "pass" },
+    { "tc_id": "TC-005", "name": "store_instructions",        "req_ids": ["REQ-F07","REQ-F10"], "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_005_store_instructions.sv",        "compile_status": "pass" },
+    { "tc_id": "TC-006", "name": "branch_not_taken",          "req_ids": ["REQ-F08"],           "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_006_branch_not_taken.sv",          "compile_status": "pass" },
+    { "tc_id": "TC-007", "name": "branch_taken_penalty",      "req_ids": ["REQ-F08"],           "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_007_branch_taken_penalty.sv",      "compile_status": "pass" },
+    { "tc_id": "TC-008", "name": "jal_jalr",                  "req_ids": ["REQ-F08"],           "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_008_jal_jalr.sv",                  "compile_status": "pass" },
+    { "tc_id": "TC-009", "name": "fence_i_refetch",           "req_ids": ["REQ-F04"],           "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_009_fence_i_refetch.sv",           "compile_status": "pass" },
+    { "tc_id": "TC-010", "name": "load_use_hazard",           "req_ids": ["REQ-F07"],           "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_010_load_use_hazard.sv",           "compile_status": "pass" },
+    { "tc_id": "TC-011", "name": "ex_forwarding",             "req_ids": ["REQ-F06"],           "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_011_ex_forwarding.sv",             "compile_status": "pass" },
+    { "tc_id": "TC-012", "name": "mem_forwarding",            "req_ids": ["REQ-F06"],           "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_012_mem_forwarding.sv",            "compile_status": "pass" },
+    { "tc_id": "TC-013", "name": "x0_hardwired_zero",         "req_ids": ["REQ-F09"],           "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_013_x0_hardwired_zero.sv",         "compile_status": "pass" },
+    { "tc_id": "TC-014", "name": "rv32m_multiply",            "req_ids": ["REQ-F02"],           "selected": true, "conditional_param": "PR_M_EXT_EN=1",  "file": "src/tb/tests/tc_014_rv32m_multiply.sv",            "compile_status": "pass" },
+    { "tc_id": "TC-015", "name": "rv32m_divide_special",      "req_ids": ["REQ-F02"],           "selected": true, "conditional_param": "PR_M_EXT_EN=1",  "file": "src/tb/tests/tc_015_rv32m_divide_special.sv",      "compile_status": "pass" },
+    { "tc_id": "TC-016", "name": "csr_read_write",            "req_ids": ["REQ-F03","REQ-F11"], "selected": true, "conditional_param": "PR_CSR_EN=1",    "file": "src/tb/tests/tc_016_csr_read_write.sv",            "compile_status": "pass" },
+    { "tc_id": "TC-017", "name": "ecall_ebreak_exception",    "req_ids": ["REQ-F13"],           "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_017_ecall_ebreak_exception.sv",    "compile_status": "pass" },
+    { "tc_id": "TC-018", "name": "illegal_instruction",       "req_ids": ["REQ-F13"],           "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_018_illegal_instruction.sv",       "compile_status": "pass" },
+    { "tc_id": "TC-019", "name": "misaligned_access",         "req_ids": ["REQ-F13"],           "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_019_misaligned_access.sv",         "compile_status": "pass" },
+    { "tc_id": "TC-020", "name": "machine_interrupt",         "req_ids": ["REQ-F14"],           "selected": true, "conditional_param": "PR_IRQ_EN=1",    "file": "src/tb/tests/tc_020_machine_interrupt.sv",         "compile_status": "pass" },
+    { "tc_id": "TC-021", "name": "mret_behavior",             "req_ids": ["REQ-F15"],           "selected": true, "conditional_param": "PR_CSR_EN=1",    "file": "src/tb/tests/tc_021_mret_behavior.sv",             "compile_status": "pass" },
+    { "tc_id": "TC-022", "name": "mcycle_minstret_counter",   "req_ids": ["REQ-F16"],           "selected": true, "conditional_param": "PR_COUNTER_EN=1","file": "src/tb/tests/tc_022_mcycle_minstret_counter.sv",   "compile_status": "pass" },
+    { "tc_id": "TC-023", "name": "bus_protocol_handshake",    "req_ids": ["REQ-F10"],           "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_023_bus_protocol_handshake.sv",    "compile_status": "pass" },
+    { "tc_id": "TC-024", "name": "precise_exception_commit",  "req_ids": ["REQ-F12"],           "selected": true, "conditional_param": null,             "file": "src/tb/tests/tc_024_precise_exception_commit.sv",  "compile_status": "pass" },
+    { "tc_id": "TC-025", "name": "mtvec_vectored_mode",       "req_ids": ["REQ-F19"],           "selected": false,"conditional_param": "PR_MTVEC_VEC_EN=1","file": "src/tb/tests/tc_025_mtvec_vectored_mode.sv",      "compile_status": "skipped" }
+  ],
+  "coverage": {
+    "total_req_ids": 21,
+    "covered_req_ids": ["REQ-F01","REQ-F02","REQ-F03","REQ-F04","REQ-F06","REQ-F07","REQ-F08","REQ-F09","REQ-F10","REQ-F11","REQ-F12","REQ-F13","REQ-F14","REQ-F15","REQ-F16"],
+    "uncovered_req_ids": ["REQ-C01","REQ-C02","REQ-C03","REQ-C04","REQ-C05","REQ-F05","REQ-F17","REQ-F18"],
+    "uncovered_note": "REQ-C01~C05 covered by SVA; REQ-F05 covered by SVA; REQ-F17/F18 disabled or parameter-only",
+    "coverage_pct": 71.4
+  },
+  "compile_check": {
+    "tool": "vcs X-2025.06",
+    "status": "pass",
+    "error_count": 0
+  }
+}

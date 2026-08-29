@@ -1,0 +1,3268 @@
+{
+  "metadata": {
+    "ip_name": "rv32im_core",
+    "spec_revision": "0.3",
+    "phase": 1,
+    "gate_status": "approved",
+    "approved_at": "2026-08-21T22:05:58+07:00",
+    "source_spec": "spec_parser.md",
+    "gate_1_approved": true
+  },
+  "requirements": [
+    {
+      "req_id": "REQ-001",
+      "text": "RV32I base integer instruction set — 40 lệnh, liệt kê đầy đủ ở §1.1.1 (37 lệnh cơ bản + FENCE + ECALL + EBREAK). FENCE.I/CSRR*/MRET/WFI KHÔNG tính vào 40.",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F01 / §1.1.1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)",
+        "rv32im_imm_gen (U06)",
+        "rv32im_alu (U09)",
+        "rv32im_branch_unit (U10)",
+        "rv32im_lsu (U15)"
+      ],
+      "parameters_affected": [],
+      "feature_id": "F01"
+    },
+    {
+      "req_id": "REQ-002",
+      "text": "RV32M: MUL MULH MULHSU MULHU DIV DIVU REM REMU",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F02",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)",
+        "rv32im_muldiv (U11)",
+        "rv32im_mult (U12)",
+        "rv32im_div (U13)"
+      ],
+      "parameters_affected": [
+        "PR_M_EXT_EN"
+      ],
+      "feature_id": "F02"
+    },
+    {
+      "req_id": "REQ-003",
+      "text": "Zicsr: CSRRW/S/C, CSRRWI/SI/CI",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F03",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)",
+        "rv32im_csr_file (U16)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": [
+        "PR_CSR_EN"
+      ],
+      "feature_id": "F03"
+    },
+    {
+      "req_id": "REQ-004",
+      "text": "Zifencei: FENCE.I — flush pipeline và refetch từ pc+4",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F04",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)",
+        "rv32im_trap_ctrl (U17)",
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": [],
+      "feature_id": "F04"
+    },
+    {
+      "req_id": "REQ-005",
+      "text": "Pipeline 5 tầng in-order, single-issue",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F05",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)",
+        "rv32im_id_stage (U04)",
+        "rv32im_ex_stage (U08)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": [],
+      "feature_id": "F05"
+    },
+    {
+      "req_id": "REQ-006",
+      "text": "Full forwarding EX/MEM → EX và MEM/WB → EX",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F06",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_hazard_ctrl (U18)",
+        "rv32im_ex_stage (U08)"
+      ],
+      "parameters_affected": [
+        "PR_FWD_EN"
+      ],
+      "feature_id": "F06"
+    },
+    {
+      "req_id": "REQ-007",
+      "text": "Load-use interlock — stall khi consumer đứng ngay sau load",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F07",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_hazard_ctrl (U18)"
+      ],
+      "parameters_affected": [],
+      "feature_id": "F07"
+    },
+    {
+      "req_id": "REQ-008",
+      "text": "Branch resolve tại tầng EX, static predict-not-taken",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F08",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_ex_stage (U08)",
+        "rv32im_branch_unit (U10)",
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": [],
+      "feature_id": "F08"
+    },
+    {
+      "req_id": "REQ-009",
+      "text": "Regfile 32×32, x0 hardwired 0, write-first bypass",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F09",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_regfile (U07)"
+      ],
+      "parameters_affected": [
+        "PR_RF_IMPL"
+      ],
+      "feature_id": "F09"
+    },
+    {
+      "req_id": "REQ-010",
+      "text": "I-bus / D-bus tách rời (Harvard), valid-ready handshake",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F10",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": [],
+      "feature_id": "F10"
+    },
+    {
+      "req_id": "REQ-011",
+      "text": "M-mode CSR file — 16 CSR theo §16.4",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F11",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_CSR_EN"
+      ],
+      "feature_id": "F11"
+    },
+    {
+      "req_id": "REQ-012",
+      "text": "Precise exception, commit point tại tầng MEM",
+      "category": "functional",
+      "ambiguity_score": 0.15,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F12",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": [],
+      "feature_id": "F12"
+    },
+    {
+      "req_id": "REQ-013",
+      "text": "9 exception đồng bộ (ECALL/EBREAK/illegal/misaligned/access fault)",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F13",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)",
+        "rv32im_if_stage (U03)",
+        "rv32im_id_stage (U04)",
+        "rv32im_ex_stage (U08)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": [],
+      "feature_id": "F13"
+    },
+    {
+      "req_id": "REQ-014",
+      "text": "3 interrupt M-mode (software/timer/external), level-sensitive",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F14",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)",
+        "rv32im_trap_ctrl (U17)"
+      ],
+      "parameters_affected": [
+        "PR_IRQ_EN"
+      ],
+      "feature_id": "F14"
+    },
+    {
+      "req_id": "REQ-015",
+      "text": "MRET khôi phục mstatus.MIE và PC",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F15",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)",
+        "rv32im_csr_file (U16)",
+        "rv32im_trap_ctrl (U17)"
+      ],
+      "parameters_affected": [
+        "PR_CSR_EN"
+      ],
+      "feature_id": "F15"
+    },
+    {
+      "req_id": "REQ-016",
+      "text": "mcycle / minstret 64-bit",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F16",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_COUNTER_EN"
+      ],
+      "feature_id": "F16",
+      "optional": true
+    },
+    {
+      "req_id": "REQ-017",
+      "text": "MULDIV multi-cycle, stall tầng EX, special case bit-exact",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F17",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_muldiv (U11)",
+        "rv32im_mult (U12)",
+        "rv32im_div (U13)",
+        "rv32im_ex_stage (U08)"
+      ],
+      "parameters_affected": [
+        "PR_MULT_IMPL",
+        "PR_DIV_IMPL"
+      ],
+      "feature_id": "F17"
+    },
+    {
+      "req_id": "REQ-018",
+      "text": "Retire trace port cho co-simulation với ISS",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F18",
+      "sva_hint": "cover",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)",
+        "rv32im_core (U02)"
+      ],
+      "parameters_affected": [
+        "PR_TRACE_EN"
+      ],
+      "feature_id": "F18",
+      "optional": true
+    },
+    {
+      "req_id": "REQ-019",
+      "text": "mtvec Vectored mode",
+      "category": "functional",
+      "ambiguity_score": 0.12,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F19",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)",
+        "rv32im_trap_ctrl (U17)"
+      ],
+      "parameters_affected": [
+        "PR_MTVEC_VEC_EN"
+      ],
+      "feature_id": "F19",
+      "optional": true
+    },
+    {
+      "req_id": "REQ-020",
+      "text": "C1: PR_BOOT_ADDR[1:0] == 2'b00",
+      "category": "constraint",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§2.2 C1",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_core (U02)"
+      ],
+      "parameters_affected": [
+        "PR_BOOT_ADDR"
+      ]
+    },
+    {
+      "req_id": "REQ-021",
+      "text": "C2: PR_MTVEC_RESET[1:0] == 2'b00",
+      "category": "constraint",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§2.2 C2",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_core (U02)"
+      ],
+      "parameters_affected": [
+        "PR_MTVEC_RESET"
+      ]
+    },
+    {
+      "req_id": "REQ-022",
+      "text": "C3: PR_IRQ_EN == 1 → yêu cầu PR_CSR_EN == 1",
+      "category": "constraint",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§2.2 C3",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_core (U02)"
+      ],
+      "parameters_affected": [
+        "PR_IRQ_EN",
+        "PR_CSR_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-023",
+      "text": "C4: PR_MTVEC_VEC_EN == 1 → yêu cầu PR_CSR_EN == 1",
+      "category": "constraint",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§2.2 C4",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_core (U02)"
+      ],
+      "parameters_affected": [
+        "PR_MTVEC_VEC_EN",
+        "PR_CSR_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-024",
+      "text": "C5: PR_COUNTER_EN == 1 → yêu cầu PR_CSR_EN == 1",
+      "category": "constraint",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§2.2 C5",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_core (U02)"
+      ],
+      "parameters_affected": [
+        "PR_COUNTER_EN",
+        "PR_CSR_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-025",
+      "text": "C6: PR_DIV_IMPL == 0 — Phase 1 chỉ có SEQ non-restoring",
+      "category": "constraint",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§2.2 C6",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_core (U02)"
+      ],
+      "parameters_affected": [
+        "PR_DIV_IMPL"
+      ]
+    },
+    {
+      "req_id": "REQ-026",
+      "text": "C7: PR_BUS_OUTSTANDING == 1 — Phase 1 khoá ở 1",
+      "category": "constraint",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§2.2 C7",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_core (U02)"
+      ],
+      "parameters_affected": [
+        "PR_BUS_OUTSTANDING"
+      ]
+    },
+    {
+      "req_id": "REQ-027",
+      "text": "C8: PR_RF_IMPL == 1 chỉ hợp lệ khi target là FPGA (LUTRAM async-read, §9.5). Target ASIC bắt buộc PR_RF_IMPL == 0.",
+      "category": "constraint",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§2.2 C8",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_core (U02)"
+      ],
+      "parameters_affected": [
+        "PR_RF_IMPL"
+      ]
+    },
+    {
+      "req_id": "REQ-028",
+      "text": "Nhóm clock/reset: i_clk_core là clock duy nhất của lõi; i_resetn_core active-low, async assert / sync deassert (synchronizer ở SoC)",
+      "category": "interface",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.3 Nhóm 1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_core (U02)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-029",
+      "text": "Nhóm Instruction bus (read-only): o_imem_req_valid/addr, i_imem_req_ready, i_imem_rsp_valid/rdata/err",
+      "category": "interface",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.3 Nhóm 2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-030",
+      "text": "Nhóm Data bus: o_dmem_req_valid/addr/we/be/wdata, i_dmem_req_ready, i_dmem_rsp_valid/rdata/err",
+      "category": "interface",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.3 Nhóm 3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-031",
+      "text": "Nhóm Interrupt: i_irq_sw / i_irq_timer / i_irq_ext level-sensitive. Lõi KHÔNG có synchronizer — cả 3 pin phải được đồng bộ về i_clk_core ở ngoài lõi",
+      "category": "interface",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.3 Nhóm 4",
+      "sva_hint": "assume",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_IRQ_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-032",
+      "text": "Nhóm Retire trace: 6 port o_trace_*. Khi PR_TRACE_EN = 0 các port vẫn tồn tại nhưng bị tie '0",
+      "category": "interface",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.3 Nhóm 5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": [
+        "PR_TRACE_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-033",
+      "text": "B1: transfer xảy ra tại rising edge khi o_*_req_valid && i_*_req_ready",
+      "category": "interface",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.4.1 B1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-034",
+      "text": "B2: khi o_*_req_valid = 1, toàn bộ payload phải giữ ổn định cho tới khi bắt tay xong",
+      "category": "interface",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.4.1 B2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-035",
+      "text": "B3: o_*_req_valid KHÔNG được phụ thuộc tổ hợp vào i_*_req_ready (chống combinational loop)",
+      "category": "interface",
+      "ambiguity_score": 0.12,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.4.1 B3",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-036",
+      "text": "B4: i_*_req_ready ĐƯỢC PHÉP phụ thuộc tổ hợp vào o_*_req_valid",
+      "category": "interface",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.4.1 B4",
+      "sva_hint": "assume",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-037",
+      "text": "B5: lõi phát tối đa PR_BUS_OUTSTANDING = 1 request chưa hoàn tất trên mỗi bus",
+      "category": "interface",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.4.1 B5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": [
+        "PR_BUS_OUTSTANDING"
+      ]
+    },
+    {
+      "req_id": "REQ-038",
+      "text": "B6: mỗi request được chấp nhận sinh đúng một xung i_*_rsp_valid rộng 1 chu kỳ",
+      "category": "interface",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.4.2 B6",
+      "sva_hint": "assume",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-039",
+      "text": "B7: response in-order",
+      "category": "interface",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.4.2 B7",
+      "sva_hint": "assume",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-040",
+      "text": "B8: lõi luôn sẵn sàng nhận response — không có rsp_ready",
+      "category": "interface",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.4.2 B8",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-041",
+      "text": "B9: i_*_rsp_valid được phép xảy ra cùng chu kỳ với bắt tay request (memory latency 0)",
+      "category": "interface",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.4.2 B9",
+      "sva_hint": "assume",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-042",
+      "text": "B10: khi i_*_rsp_err = 1, i_*_rsp_rdata là don't-care",
+      "category": "interface",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.4.2 B10",
+      "sva_hint": "assume",
+      "rtl_modules": [
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-043",
+      "text": "rv32im_pkg định nghĩa 11 enum type: alu_op_t, op_a_sel_t, op_b_sel_t, imm_sel_t, br_op_t, mem_size_t, wb_sel_t, csr_op_t, muldiv_op_t, fwd_sel_t, exc_code_t",
+      "category": "interface",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§4.2",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_pkg (U01)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-044",
+      "text": "Pipeline bundle typedef struct packed: ifid_t, idex_t, exmem_t, memwb_t. Field instr trong idex_t và exmem_t là VÔ ĐIỀU KIỆN, không phụ thuộc PR_TRACE_EN (cần cho mtval của EXC_ILLEGAL phát ở MEM, §14.6 P2)",
+      "category": "interface",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§4.3",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_pkg (U01)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-045",
+      "text": "TOP rv32im_core thuần structural: instantiate U03–U18 và đấu nối theo bảng channel CH01–CH19 (gồm CH12c mới). Không có module wb_stage — tầng WB chỉ là register w_memwb nối thẳng vào write port regfile",
+      "category": "interface",
+      "ambiguity_score": 0.2,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§4.1 / §3.2",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_core (U02)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-046",
+      "text": "reg_pc sau reset = PR_BOOT_ADDR",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§5.2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": [
+        "PR_BOOT_ADDR"
+      ]
+    },
+    {
+      "req_id": "REQ-047",
+      "text": "PC mux ưu tiên §5.4.1: (1) i_redirect_mem_valid → i_redirect_mem_pc, (2) i_redirect_ex_valid → i_redirect_ex_pc, (3) mặc định reg_pc + 4",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§5.4.1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-048",
+      "text": "Fetch FSM 2 state theo bảng 5 hàng §5.4.2. Mỗi lần fetch BẮT BUỘC đi qua ST_WAIT ít nhất 1 chu kỳ, kể cả khi slave trả response tổ hợp cùng chu kỳ bắt tay (B9)",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§5.4.2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-049",
+      "text": "reg_rsp_early bắt response latency-0 tại chu kỳ bắt tay. w_rsp_seen = i_imem_rsp_valid || reg_rsp_early; w_rsp_data / w_rsp_err chọn giữa đường trực tiếp và đường đã đăng ký",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§5.4.2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-050",
+      "text": "Redirect trong lúc ST_WAIT: vẫn phải nhận response (B6), kết quả bị bỏ đi và fetch lại từ PC mới. KHÔNG được huỷ request đã bắt tay",
+      "category": "functional",
+      "ambiguity_score": 0.12,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§5.4.2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-051",
+      "text": "I1: o_imem_req_addr[1:0] luôn 2'b00",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§5.4.3 I1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-052",
+      "text": "I2: reg_pc[1:0] luôn 2'b00",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§5.4.3 I2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-053",
+      "text": "I3: khi i_imem_rsp_err → o_ifid.exc_valid = 1, exc_code = EXC_INSTR_ACCESS, exc_tval = pc",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§5.4.3 I3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-054",
+      "text": "o_if_busy = 1 khi đã phát request mà chưa nhận response (ST_WAIT && !w_rsp_seen)",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§5.1 T5 / §5.4.2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-055",
+      "text": "i_stall giữ nguyên reg_pc và IF/ID; i_flush đặt o_ifid.valid = 0",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§5.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-056",
+      "text": "id_stage instantiate decoder + imm_gen, phát o_rf_rs1_addr / o_rf_rs2_addr, nhận dữ liệu async, chốt pipeline register ID/EX",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§6.1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_id_stage (U04)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-057",
+      "text": "Exception ở ID §6.4, ưu tiên: exception từ IF (giữ nguyên) > decoder.o_illegal (EXC_ILLEGAL=2, tval=instr) > o_sys_ecall (EXC_ECALL_M=11, tval='0) / o_sys_ebreak (EXC_BREAKPOINT=3, tval=pc)",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§6.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_id_stage (U04)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-058",
+      "text": "Khi có exception ở ID: rd_wen=0, mem_req=0, csr_en=0, br_en=0, muldiv_en=0. Instruction vẫn chảy tiếp tới MEM để commit trap ở đó",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§6.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_id_stage (U04)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-059",
+      "text": "o_id_rs1_addr / o_id_rs2_addr / o_id_rs1_used / o_id_rs2_used là tín hiệu pre-register xuất sang hazard_ctrl để phát hiện load-use",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§6.1 T4 / §6.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_id_stage (U04)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-060",
+      "text": "decoder thuần combinational; mọi encoding không nằm trong bảng §7.4–§7.7 → o_illegal = 1",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-061",
+      "text": "Opcode map §7.4 — 11 opcode hợp lệ (LUI AUIPC JAL JALR BRANCH LOAD STORE OP-IMM OP MISC-MEM SYSTEM), còn lại illegal",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-062",
+      "text": "Immediate select §7.5: OP-IMM/LOAD/JALR→IMM_I, STORE→IMM_S, BRANCH→IMM_B, LUI/AUIPC→IMM_U, JAL→IMM_J, SYSTEM CSR-immediate→IMM_Z",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-063",
+      "text": "RV32M decode §7.6: opcode 0110011 + funct7 0000001, funct3 → muldiv_op. PR_M_EXT_EN = 0 → toàn bộ nhánh ra o_illegal = 1",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": [
+        "PR_M_EXT_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-064",
+      "text": "SYSTEM decode §7.7: ECALL/EBREAK/MRET/WFI (funct3=000, phân biệt bằng funct12) và 6 lệnh CSR (funct3 001/010/011/101/110/111); funct3=100 illegal",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.7",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": [
+        "PR_CSR_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-065",
+      "text": "Sinh o_csr_rd_en / o_csr_wr_en §7.7: CSRRW/WI → rd_en=(rd!=x0), wr_en=1; CSRRS/C → rd_en=1, wr_en=(rs1!=x0); CSRRSI/CI → rd_en=1, wr_en=(uimm!=0)",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.7",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": [
+        "PR_CSR_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-066",
+      "text": "Illegal instruction L1: opcode không có trong bảng §7.4",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.8 L1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-067",
+      "text": "Illegal instruction L2: opcode[1:0] != 2'b11 (dạng compressed, không hỗ trợ)",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.8 L2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-068",
+      "text": "Illegal instruction L3: funct3 không hợp lệ cho opcode tương ứng",
+      "category": "functional",
+      "ambiguity_score": 0.12,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.8 L3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-069",
+      "text": "Illegal instruction L4: funct7 sai với R-type (0000000 / 0100000 / 0000001 tuỳ lệnh)",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.8 L4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-070",
+      "text": "Illegal instruction L5: SLLI/SRLI mà instr[31:25] != 7'b0000000; SRAI mà != 7'b0100000",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.8 L5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-071",
+      "text": "Illegal instruction L6: ECALL/EBREAK/MRET/WFI mà rs1 != 0 hoặc rd != 0",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.8 L6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-072",
+      "text": "Illegal instruction L7: RV32M khi PR_M_EXT_EN = 0",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.8 L7",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": [
+        "PR_M_EXT_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-073",
+      "text": "Illegal instruction L8: Lệnh CSR / MRET khi PR_CSR_EN = 0",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.8 L8",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": [
+        "PR_CSR_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-074",
+      "text": "o_rs1_used / o_rs2_used theo bảng §7.9 — bắt buộc để tránh stall giả trong hazard_ctrl (LUI/AUIPC/JAL không dùng rs nào)",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§7.9",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-075",
+      "text": "imm_gen thuần comb: 6 công thức extract + sign/zero-extend theo §8.3. shamt cho SLLI/SRLI/SRAI lấy từ IMM_I[LP_SHAMT_W-1:0], không cần đường riêng",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§8.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_imm_gen (U06)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-076",
+      "text": "32 × PR_XLEN bit, 2 read port async + 1 write port sync",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§9.1 T1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_regfile (U07)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-077",
+      "text": "x0 hardwired 0 — ghi bị bỏ qua, đọc luôn ra 0",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§9.1 T2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_regfile (U07)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-078",
+      "text": "Write-first bypass: cùng chu kỳ i_wr_en && (i_wr_addr == i_rs*_addr) → read trả i_wr_data. Nhờ vậy không cần forwarding path WB → ID",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§9.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_regfile (U07)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-079",
+      "text": "PR_RF_RESET_EN = 1 → reset toàn bộ regfile về 0 (sim deterministic)",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§9.2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_regfile (U07)"
+      ],
+      "parameters_affected": [
+        "PR_RF_RESET_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-080",
+      "text": "PR_RF_IMPL = 1 → mảng reg_file infer thành distributed RAM (LUTRAM), KHÔNG phải block RAM",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§9.5",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_regfile (U07)"
+      ],
+      "parameters_affected": [
+        "PR_RF_IMPL"
+      ]
+    },
+    {
+      "req_id": "REQ-081",
+      "text": "R1: khi PR_RF_IMPL = 1, read port giữ nguyên tổ hợp — dữ liệu ra cùng chu kỳ với i_rs*_addr",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§9.5 R1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_regfile (U07)"
+      ],
+      "parameters_affected": [
+        "PR_RF_IMPL"
+      ]
+    },
+    {
+      "req_id": "REQ-082",
+      "text": "R2: khi PR_RF_IMPL = 1, bypass §9.4 phải làm bằng mux bên ngoài mảng RAM — LUTRAM không có write-first",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§9.5 R2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_regfile (U07)"
+      ],
+      "parameters_affected": [
+        "PR_RF_IMPL"
+      ]
+    },
+    {
+      "req_id": "REQ-083",
+      "text": "R3: khi PR_RF_IMPL = 1, PR_RF_RESET_EN bị bỏ qua — LUTRAM không reset được",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§9.5 R3",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_regfile (U07)"
+      ],
+      "parameters_affected": [
+        "PR_RF_IMPL",
+        "PR_RF_RESET_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-084",
+      "text": "Forwarding mux §10.4: FWD_EXMEM → i_fwd_exmem_data, FWD_MEMWB → i_fwd_memwb_data, mặc định i_idex.rs*_data. Store data dùng chung w_op_b_fwd",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§10.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_ex_stage (U08)"
+      ],
+      "parameters_affected": [
+        "PR_FWD_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-085",
+      "text": "Mux nguồn ALU sau forwarding: op_a_sel ∈ {OPA_RS1, OPA_PC, OPA_ZERO}, op_b_sel ∈ {OPB_RS2, OPB_IMM}",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§10.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_ex_stage (U08)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-086",
+      "text": "Branch/Jump target §10.5: BRANCH và JAL = pc + imm; JALR = (w_op_a_fwd + imm) & ~PR_XLEN'(1) — bit 0 luôn bị xoá",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§10.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_ex_stage (U08)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-087",
+      "text": "o_redirect_ex_valid = i_idex.valid && !i_idex.exc_valid && ((br_en && w_br_take) || jump_en)",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§10.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_ex_stage (U08)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-088",
+      "text": "JAL/JALR ghi pc + 4 vào rd qua wb_sel = WB_PC4",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§10.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_ex_stage (U08)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-089",
+      "text": "EXC_INSTR_MISALIGNED (0) khi o_redirect_ex_valid && target[1:0] != 0; tval = target address",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§10.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_ex_stage (U08)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-090",
+      "text": "EXC_LOAD_MISALIGNED (4): load SZ_W & addr[1:0]!=0, hoặc load SZ_H & addr[0]!=0; tval = địa chỉ",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§10.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_ex_stage (U08)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-091",
+      "text": "EXC_STORE_MISALIGNED (6): store SZ_W & addr[1:0]!=0, hoặc store SZ_H & addr[0]!=0; tval = địa chỉ",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§10.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_ex_stage (U08)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-092",
+      "text": "Khi phát hiện misaligned ở EX: o_exmem.mem_req = 0 (không phát request ra D-bus) VÀ o_redirect_ex_valid = 0 (trap sẽ redirect ở MEM)",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§10.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_ex_stage (U08)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-093",
+      "text": "o_ex_busy = i_idex.valid && i_idex.muldiv_en && !w_muldiv_done",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§10.7",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_ex_stage (U08)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-094",
+      "text": "ALU thuần comb, bảng 11 phép §11.4: ADD SUB SLL SLT SLTU XOR SRL SRA OR AND PASS_B. Dùng chung ALU_ADD cho tính địa chỉ load/store",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§11.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_alu (U09)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-095",
+      "text": "Branch comparator độc lập chạy song song ALU (giảm critical path); bảng 6 điều kiện §12.3: EQ NE LT GE LTU GEU",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§12.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_branch_unit (U10)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-096",
+      "text": "PR_M_EXT_EN = 0 → muldiv là module rỗng, o_done tie 1",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.2",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": [
+        "PR_M_EXT_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-097",
+      "text": "D1: i_start là xung 1 chu kỳ; i_op / i_op_a / i_op_b chỉ cần hợp lệ ở chu kỳ đó — module tự đăng ký",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.3 D1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-098",
+      "text": "D2: o_done rộng đúng 1 chu kỳ; o_result hợp lệ CHỈ trong chu kỳ đó",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.3 D2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-099",
+      "text": "D3: o_busy = 1 từ chu kỳ sau i_start tới hết chu kỳ trước o_done. o_busy và o_done KHÔNG BAO GIỜ bật cùng chu kỳ",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.3 D3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-100",
+      "text": "D4: special case §13.5 và PR_MULT_IMPL = 1 → o_done = 1 ngay chu kỳ kế i_start, o_busy không bật chu kỳ nào",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.3 D4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-101",
+      "text": "D5: i_flush = 1 → o_done và o_busy về 0 ngay trong chu kỳ đó, FSM về IDLE, kết quả bị bỏ",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.3 D5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-102",
+      "text": "D6: không nhận i_start mới khi o_busy = 1 — ex_stage đã stall nên trường hợp này không xảy ra; nếu xảy ra là lỗi",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.3 D6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-103",
+      "text": "Chuẩn bị operand mult §13.4 trên datapath 33×33 dùng chung: MUL lấy [PR_XLEN-1:0]; MULH signed×signed, MULHSU signed×zero, MULHU zero×zero — cả ba lấy [2*PR_XLEN-1:PR_XLEN]",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mult (U12)",
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": [
+        "PR_M_EXT_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-104",
+      "text": "PR_MULT_IMPL = 0: shift-add radix-2, 1 partial product mỗi chu kỳ",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mult (U12)",
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": [
+        "PR_MULT_IMPL"
+      ]
+    },
+    {
+      "req_id": "REQ-105",
+      "text": "PR_MULT_IMPL = 1: toán tử * 33×33 → 66-bit, tổ hợp (infer DSP trên FPGA)",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mult (U12)",
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": [
+        "PR_MULT_IMPL"
+      ]
+    },
+    {
+      "req_id": "REQ-106",
+      "text": "Thuật toán div: non-restoring radix-2, PR_XLEN iteration + 1 fixup",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_div (U13)",
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": [
+        "PR_DIV_IMPL"
+      ]
+    },
+    {
+      "req_id": "REQ-107",
+      "text": "Xử lý dấu signed §13.5: lấy trị tuyệt đối 2 operand trước khi chia; quotient âm nếu sign(op_a) ^ sign(op_b); remainder mang dấu của op_a (dividend)",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_div (U13)",
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-108",
+      "text": "Chia 0 (op_b == 0) bit-exact: DIV/DIVU → '1 (tất cả bit 1, = -1); REM/REMU → op_a. RISC-V KHÔNG raise exception khi chia 0",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_div (U13)",
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-109",
+      "text": "Overflow (op_a == {1'b1,{XLEN-1{1'b0}}} && op_b == '1) bit-exact: DIV → op_a (= -2^31); REM → '0. Không áp dụng cho DIVU/REMU",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_div (U13)",
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-110",
+      "text": "Special case (chia 0 / overflow) thoát sớm — early exit, không chạy đủ iteration",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_div (U13)",
+        "rv32im_muldiv (U11)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-111",
+      "text": "mem_stage điều khiển D-bus và gọi lsu để format địa chỉ / byte-enable / dữ liệu store, extract dữ liệu load",
+      "category": "functional",
+      "ambiguity_score": 0.15,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§14.1 T1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-112",
+      "text": "reg_req_sent: cờ nội bộ 1 bit — set khi o_dmem_req_valid && i_dmem_req_ready, clear khi i_dmem_rsp_valid, hoặc khi i_flush / reset",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§14.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-113",
+      "text": "o_mem_busy = reg_req_sent && !i_dmem_rsp_valid",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§14.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-114",
+      "text": "o_mem_outstanding = reg_req_sent",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§14.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-115",
+      "text": "CSR read và write đều xảy ra ở tầng MEM",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§14.1 T2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": [
+        "PR_CSR_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-116",
+      "text": "WB mux ở cuối tầng MEM §14.4: WB_ALU → alu_result, WB_MEM → w_load_data, WB_PC4 → pc_plus4, WB_CSR → i_csr_rdata",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§14.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-117",
+      "text": "Forward path 1 (o_fwd_exmem_data) là mux giữa alu_result, pc_plus4 và i_csr_rdata — KHÔNG bao gồm WB_MEM, vì load data chưa có khi instruction ở EX cần nó",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§14.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-118",
+      "text": "Gate D-bus §14.5: o_dmem_req_valid = i_exmem.valid && i_exmem.mem_req && !i_exmem.exc_valid && !i_trap_taken && !reg_req_sent",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§14.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-119",
+      "text": "§14.6 ưu tiên 1: i_exmem.exc_valid (mang từ IF/ID/EX) — giữ nguyên exc_code và exc_tval",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§14.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-120",
+      "text": "§14.6 ưu tiên 2: i_csr_illegal → EXC_ILLEGAL (2), tval = instruction word (i_exmem.instr — field vô điều kiện theo §4.3)",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§14.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": [
+        "PR_CSR_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-121",
+      "text": "§14.6 ưu tiên 3: i_dmem_rsp_err && !mem_we → EXC_LOAD_ACCESS (5), tval = địa chỉ",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§14.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-122",
+      "text": "§14.6 ưu tiên 4: i_dmem_rsp_err && mem_we → EXC_STORE_ACCESS (7), tval = địa chỉ",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§14.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-123",
+      "text": "Xuất trace port o_trace_* khi PR_TRACE_EN = 1",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§14.1 T6 / §3.3 Nhóm 5",
+      "sva_hint": "cover",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": [
+        "PR_TRACE_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-124",
+      "text": "w_memwb.valid nối tới csr_file.i_instr_retire (CH12c) — nguồn duy nhất tăng minstret",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§4.1 CH12c / §4.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_mem_stage (U14)",
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-125",
+      "text": "o_req_addr = {i_addr[PR_XLEN-1:2], 2'b00} — luôn word-align",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§15.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_lsu (U15)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-126",
+      "text": "Byte-enable + store data replicate theo bảng §15.3: SB 4 offset, SH 2 offset (00/10), SW. Store data replicate ra toàn bộ lane",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§15.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_lsu (U15)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-127",
+      "text": "Load extraction + extend theo bảng §15.4: LB/LBU 4 offset, LH/LHU 2 offset, LW. sign extend cho LB/LH, zero extend cho LBU/LHU",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§15.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_lsu (U15)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-128",
+      "text": "Misaligned detect §15.5: LH/LHU/SH khi i_addr[0] != 0; LW/SW khi i_addr[1:0] != 0; LB/LBU/SB không bao giờ",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§15.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_lsu (U15)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-129",
+      "text": "A1: khi o_dmem_req_valid = 1 thì lsu.o_addr_misaligned phải = 0 (EX đã chặn từ §10.6). Port này KHÔNG nối vào đường exception, chỉ là điểm neo assertion",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§15.5 A1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_lsu (U15)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-130",
+      "text": "Address map 16 CSR §16.4 với reset value; mtvec reset = PR_MTVEC_RESET, mhartid = PR_HART_ID (read-only)",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_MTVEC_RESET",
+        "PR_HART_ID",
+        "PR_CSR_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-131",
+      "text": "o_csr_rdata là đường TỔ HỢP (async read) — sẵn sàng cùng chu kỳ với i_csr_addr, không đăng ký. Bắt buộc vì WB mux ở cuối MEM tiêu thụ nó ngay",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_CSR_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-132",
+      "text": "o_csr_illegal là tổ hợp và bắt buộc = 0 khi i_csr_en = 0",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_CSR_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-133",
+      "text": "mstatus (0x300): bit 3 MIE, bit 7 MPIE, bit 12:11 MPP hardwired 2'b11 (M-mode only); còn lại hardwired 0, ghi bị bỏ qua (WPRI)",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-134",
+      "text": "mie (0x304) / mip (0x344): bit 3 MSIE/MSIP, bit 7 MTIE/MTIP, bit 11 MEIE/MEIP. mip do pin i_irq_sw/timer/ext drive; còn lại hardwired 0",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_IRQ_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-135",
+      "text": "mtvec (0x305): BASE [31:2] writable; MODE [1:0] — PR_MTVEC_VEC_EN=0 hardwired 2'b00 (ghi khác bị bỏ qua, WARL); =1 chấp nhận 00 (Direct) và 01 (Vectored), giá trị >= 10 bị ép về 00",
+      "category": "functional",
+      "ambiguity_score": 0.12,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_MTVEC_VEC_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-136",
+      "text": "mcause (0x342) = {i_trap_is_irq, 26'b0, i_trap_code[4:0]}",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-137",
+      "text": "misa (0x301) đọc ra 0x4000_1100 (MXL=1, ext I+M); ghi bị bỏ qua (WARL)",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-138",
+      "text": "mip (0x344) chấp nhận lệnh ghi nhưng mọi bit read-only → ghi không tác dụng, KHÔNG raise exception",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-139",
+      "text": "mstatush (0x310) RW (WARL), mọi field hardwired 0. Ghi được chấp nhận nhưng vô tác dụng, KHÔNG illegal — vì addr[11:10] == 2'b00 nên X2 không áp dụng",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-140",
+      "text": "mepc (0x341) WARL, bit [1:0] hardwired 0",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-141",
+      "text": "Semantics CSR §16.6: CSRRW/WI ghi i_csr_wdata; CSRRS/SI ghi old | wdata; CSRRC/CI ghi old & ~wdata. o_csr_rdata LUÔN là giá trị TRƯỚC khi ghi, kể cả khi rd và CSR nguồn trùng nhau",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-142",
+      "text": "X1: o_csr_illegal = 1 khi i_csr_addr không nằm trong bảng §16.4",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.6 X1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-143",
+      "text": "X2: o_csr_illegal = 1 khi i_csr_wr_en = 1 và i_csr_addr[11:10] == 2'b11 (CSR read-only theo chuẩn RISC-V)",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.6 X2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-144",
+      "text": "Trap update §16.7 (1 chu kỳ khi i_trap_valid): mepc <= i_trap_pc; mcause <= {irq,26'b0,code}; mtval <= i_trap_tval; mstatus.MPIE <= mstatus.MIE; mstatus.MIE <= 0; mstatus.MPP <= 2'b11",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.7",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-145",
+      "text": "mepc lưu PC của CHÍNH instruction bị trap, không phải pc + 4. Với ECALL/EBREAK, handler phải tự mepc += 4 trước MRET",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.7",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-146",
+      "text": "MRET update §16.8 (khi i_mret_valid): mstatus.MIE <= mstatus.MPIE; mstatus.MPIE <= 1'b1; mstatus.MPP <= 2'b11",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.8",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-147",
+      "text": "mcycle 64-bit tăng mỗi chu kỳ sau khi i_resetn_core deassert, KỂ CẢ khi stall",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.9",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_COUNTER_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-148",
+      "text": "minstret 64-bit tăng khi i_instr_retire = 1",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.9",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_COUNTER_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-149",
+      "text": "Mỗi counter implement như MỘT counter 64-bit duy nhất với 2 write port riêng cho nửa thấp / cao, để ghi mcycleh không làm mất carry đang xảy ra ở nửa thấp",
+      "category": "functional",
+      "ambiguity_score": 0.15,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.9",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_COUNTER_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-150",
+      "text": "PR_COUNTER_EN = 0: mcycle/mcycleh/minstret/minstreth đọc ra '0, ghi bị bỏ qua, KHÔNG illegal",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.9",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_COUNTER_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-151",
+      "text": "Ưu tiên ghi CSR §16.10: (1) i_trap_valid, (2) i_mret_valid, (3) i_csr_wr_en. mem_stage đảm bảo o_csr_wr_en = 0 khi i_trap_taken = 1",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.10",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-152",
+      "text": "o_irq_pending[2:0] = {MEI, MTI, MSI} đã AND với mie",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§16.1 T7 / §16.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_IRQ_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-153",
+      "text": "Bảng mã 9 exception §17.4 (code / enum / tầng phát hiện / mtval), mcause[31] = 0",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-154",
+      "text": "Mã interrupt §17.5, mcause[31] = 1: 3 IRQ_M_SOFT, 7 IRQ_M_TIMER, 11 IRQ_M_EXT; taken khi mip.x && mie.x && mstatus.MIE",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)"
+      ],
+      "parameters_affected": [
+        "PR_IRQ_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-155",
+      "text": "mtval = '0 với mọi interrupt",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)"
+      ],
+      "parameters_affected": [
+        "PR_IRQ_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-156",
+      "text": "Interrupt level-sensitive: lõi KHÔNG tự clear mip. Phần mềm phải xử lý nguồn ngắt để pin ngoài hạ xuống, nếu không trap tái phát ngay sau MRET",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.5",
+      "sva_hint": "assume",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)",
+        "rv32im_csr_file (U16)"
+      ],
+      "parameters_affected": [
+        "PR_IRQ_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-157",
+      "text": "Ưu tiên trap §17.6: interrupt luôn thắng exception đồng bộ. Giữa exception: INSTR_ACCESS > ILLEGAL/ECALL/BREAKPOINT > INSTR_MISALIGNED > LOAD/STORE_MISALIGNED > LOAD/STORE_ACCESS",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-158",
+      "text": "Ưu tiên giữa các interrupt: MEI (11) > MSI (3) > MTI (7) theo priv spec",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)"
+      ],
+      "parameters_affected": [
+        "PR_IRQ_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-159",
+      "text": "o_trap_taken = i_mem_instr_valid && !i_mem_outstanding && (i_exc_valid || w_irq_req), với w_irq_req = PR_IRQ_EN && i_mstatus_mie && (|i_irq_pending)",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.7",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-160",
+      "text": "Ràng buộc !i_mem_outstanding: KHÔNG được commit trap khi D-bus còn transaction chưa hoàn tất — nếu vi phạm, store đã ra bus mà instruction bị huỷ sẽ phá precise exception",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.7",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-161",
+      "text": "E1: mọi instruction TRƯỚC instruction trap đã hoàn tất (regfile + memory)",
+      "category": "functional",
+      "ambiguity_score": 0.15,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.8 E1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-162",
+      "text": "E2: instruction trap và mọi instruction SAU nó không để lại dấu vết",
+      "category": "functional",
+      "ambiguity_score": 0.15,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.8 E2",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-163",
+      "text": "Exception phát hiện ở IF/ID/EX KHÔNG trap tại chỗ — đóng gói thành {exc_valid, exc_code, exc_tval} và đi theo pipeline register tới MEM",
+      "category": "functional",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.8",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_if_stage (U03)",
+        "rv32im_id_stage (U04)",
+        "rv32im_ex_stage (U08)",
+        "rv32im_mem_stage (U14)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-164",
+      "text": "Khi o_trap_taken = 1: flush IF/ID/EX, kill WB của instruction ở MEM (o_memwb.rd_wen = 0, o_memwb.valid = 0), gate D-bus, gate CSR write, redirect PC về mtvec. Instruction đang ở WB vẫn hoàn tất bình thường",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.8",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)",
+        "rv32im_mem_stage (U14)",
+        "rv32im_hazard_ctrl (U18)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-165",
+      "text": "Ưu tiên redirect PC §17.9: (1) o_trap_taken, (2) i_sys_mret → i_mepc, (3) i_sys_fencei → i_mem_pc_plus4. Cả 3 đều flush IF, ID, EX",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.9",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-166",
+      "text": "Trap target Direct mode: {i_mtvec[31:2], 2'b00}",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.9",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-167",
+      "text": "Trap target Vectored: {i_mtvec[31:2],2'b00} + (o_trap_code << 2) — CHỈ khi PR_MTVEC_VEC_EN == 1 && i_mtvec[1:0] == 2'b01 && o_trap_is_irq == 1. Exception đồng bộ luôn nhảy tới BASE",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.9",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)"
+      ],
+      "parameters_affected": [
+        "PR_MTVEC_VEC_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-168",
+      "text": "WFI thực thi như NOP trong Phase 1",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.10",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)",
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-169",
+      "text": "FENCE thực thi như NOP (không có store buffer, không reorder, không agent khác)",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.10",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)",
+        "rv32im_decoder (U05)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-170",
+      "text": "FENCE.I: flush IF/ID/EX và refetch từ pc + 4",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§17.10",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_trap_ctrl (U17)",
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-171",
+      "text": "Forwarding priority §18.4: (1) FWD_EXMEM khi i_exmem_rd_wen && rd_addr != 0 && khớp rs; (2) FWD_MEMWB tương tự với i_memwb_*; (3) FWD_NONE mặc định",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§18.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_hazard_ctrl (U18)"
+      ],
+      "parameters_affected": [
+        "PR_FWD_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-172",
+      "text": "Chốt chặn: KHÔNG chọn FWD_EXMEM khi i_exmem_wb_sel == WB_MEM, vì forward path 1 không mang load data (defensive check / assertion anchor)",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§18.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_hazard_ctrl (U18)"
+      ],
+      "parameters_affected": [
+        "PR_FWD_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-173",
+      "text": "Khi PR_FWD_EN = 0: luôn trả FWD_NONE và thay §18.5 bằng w_load_use = w_raw_ex | w_raw_mem theo §18.4.1. KHÔNG bao RAW với MEM/WB vì write-first bypass §9.4 đã xử lý",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§18.4.1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_hazard_ctrl (U18)"
+      ],
+      "parameters_affected": [
+        "PR_FWD_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-174",
+      "text": "w_load_use §18.5 = i_idex_valid && i_idex_mem_req && !i_idex_mem_we && i_idex_rd_addr != '0 && ((rs1_used && khớp) || (rs2_used && khớp))",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§18.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_hazard_ctrl (U18)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-175",
+      "text": "Hành động load-use: stall IF, ID và assert o_flush_id (bubble vào EX)",
+      "category": "functional",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§18.5 / §18.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_hazard_ctrl (U18)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-176",
+      "text": "Định nghĩa 4 port flush §18.6: o_flush_X clear pipeline register ở ĐẦU RA của tầng X (if→w_ifid, id→w_idex, ex→w_exmem, mem→w_memwb). Không có o_flush_wb",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§18.6",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_hazard_ctrl (U18)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-177",
+      "text": "Bảng stall/flush 7 sự kiện §18.6: I-bus busy, load-use, MULDIV busy, D-bus busy, branch/jump taken, trap taken, MRET/FENCE.I",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§18.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_hazard_ctrl (U18)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-178",
+      "text": "Bất biến cascade §18.6: o_stall_mem = i_mem_busy; o_stall_ex = o_stall_mem | i_ex_busy; o_stall_id = o_stall_ex | w_load_use; o_stall_if = o_stall_id | i_if_busy. Khi tầng N stall thì mọi tầng trước N cũng phải stall",
+      "category": "functional",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§18.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_hazard_ctrl (U18)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-179",
+      "text": "CLINT register map §19.3: msip @0x0000 (bit 0), mtimecmp 64-bit @0x4000 (low/high), mtime 64-bit @0xBFF8 (low/high)",
+      "category": "functional",
+      "ambiguity_score": 0.15,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§19.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_clint (U19)"
+      ],
+      "parameters_affected": [],
+      "optional": true
+    },
+    {
+      "req_id": "REQ-180",
+      "text": "o_irq_timer = (reg_mtime >= reg_mtimecmp)",
+      "category": "functional",
+      "ambiguity_score": 0.15,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§19.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_clint (U19)"
+      ],
+      "parameters_affected": [],
+      "optional": true
+    },
+    {
+      "req_id": "REQ-181",
+      "text": "o_irq_sw = reg_msip[0]",
+      "category": "functional",
+      "ambiguity_score": 0.15,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§19.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_clint (U19)"
+      ],
+      "parameters_affected": [],
+      "optional": true
+    },
+    {
+      "req_id": "REQ-182",
+      "text": "CLINT bus slave interface §19.4 tuân theo giao thức §3.4 (B1–B10)",
+      "category": "functional",
+      "ambiguity_score": 0.15,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§19.4",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_clint (U19)"
+      ],
+      "parameters_affected": [],
+      "optional": true
+    },
+    {
+      "req_id": "REQ-183",
+      "text": "File layout §20: 1 module / 1 file, tên file = tên module + .sv. rtl/ cho U01–U18, rtl/soc/ cho U19 và SoC wrapper",
+      "category": "constraint",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§20",
+      "sva_hint": "static",
+      "rtl_modules": [
+        "rv32im_pkg (U01)",
+        "rv32im_core (U02)",
+        "rv32im_if_stage (U03)",
+        "rv32im_id_stage (U04)",
+        "rv32im_decoder (U05)",
+        "rv32im_imm_gen (U06)",
+        "rv32im_regfile (U07)",
+        "rv32im_ex_stage (U08)",
+        "rv32im_alu (U09)",
+        "rv32im_branch_unit (U10)",
+        "rv32im_muldiv (U11)",
+        "rv32im_mult (U12)",
+        "rv32im_div (U13)",
+        "rv32im_mem_stage (U14)",
+        "rv32im_lsu (U15)",
+        "rv32im_csr_file (U16)",
+        "rv32im_trap_ctrl (U17)",
+        "rv32im_hazard_ctrl (U18)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-184",
+      "text": "Fetch throughput §3.4.3: 2 chu kỳ / fetch khi memory latency <= 1 → IPC trần 0.5; (1 + latency) chu kỳ khi latency >= 2",
+      "category": "timing",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§3.4.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-185",
+      "text": "Load-use penalty = 1 cycle",
+      "category": "timing",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F07 / §18.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_hazard_ctrl (U18)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-186",
+      "text": "Branch / Jump taken penalty = 2 cycle",
+      "category": "timing",
+      "ambiguity_score": 0.12,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§1.1 F08 / §18.6",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_hazard_ctrl (U18)",
+        "rv32im_ex_stage (U08)",
+        "rv32im_if_stage (U03)"
+      ],
+      "parameters_affected": []
+    },
+    {
+      "req_id": "REQ-187",
+      "text": "PR_FWD_EN = 0: penalty tối đa 2 cycle (producer đi EX → MEM → WB)",
+      "category": "timing",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§18.4.1",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_hazard_ctrl (U18)"
+      ],
+      "parameters_affected": [
+        "PR_FWD_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-188",
+      "text": "MUL/MULH/MULHSU/MULHU latency 33 cycle khi PR_MULT_IMPL = 0",
+      "category": "timing",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_muldiv (U11)",
+        "rv32im_mult (U12)"
+      ],
+      "parameters_affected": [
+        "PR_MULT_IMPL",
+        "PR_M_EXT_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-189",
+      "text": "MUL/MULH/MULHSU/MULHU latency 1 cycle khi PR_MULT_IMPL = 1",
+      "category": "timing",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_muldiv (U11)",
+        "rv32im_mult (U12)"
+      ],
+      "parameters_affected": [
+        "PR_MULT_IMPL",
+        "PR_M_EXT_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-190",
+      "text": "DIV/DIVU/REM/REMU latency 34 cycle khi PR_DIV_IMPL = 0",
+      "category": "timing",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.3",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_muldiv (U11)",
+        "rv32im_div (U13)"
+      ],
+      "parameters_affected": [
+        "PR_DIV_IMPL",
+        "PR_M_EXT_EN"
+      ]
+    },
+    {
+      "req_id": "REQ-191",
+      "text": "MULDIV special case (chia 0 / overflow) latency 1 cycle — early exit",
+      "category": "timing",
+      "ambiguity_score": 0.08,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "source_section": "§13.3 / §13.5",
+      "sva_hint": "property",
+      "rtl_modules": [
+        "rv32im_muldiv (U11)",
+        "rv32im_div (U13)"
+      ],
+      "parameters_affected": [
+        "PR_M_EXT_EN"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "name": "PR_BOOT_ADDR",
+      "type": "logic [PR_XLEN-1:0]",
+      "default": "32'h8000_0000",
+      "valid_range": "align 4",
+      "description": "PC sau reset",
+      "locked": false,
+      "req_ids": [
+        "REQ-020",
+        "REQ-046"
+      ],
+      "feature_ids": [
+        "F01",
+        "F05"
+      ],
+      "constraints": [
+        "C1"
+      ]
+    },
+    {
+      "name": "PR_MTVEC_RESET",
+      "type": "logic [PR_XLEN-1:0]",
+      "default": "32'h0000_0000",
+      "valid_range": "align 4",
+      "description": "Giá trị mtvec sau reset",
+      "locked": false,
+      "req_ids": [
+        "REQ-021",
+        "REQ-130"
+      ],
+      "feature_ids": [
+        "F11"
+      ],
+      "constraints": [
+        "C2"
+      ]
+    },
+    {
+      "name": "PR_HART_ID",
+      "type": "logic [PR_XLEN-1:0]",
+      "default": "32'h0",
+      "valid_range": "any",
+      "description": "Giá trị mhartid (read-only)",
+      "locked": false,
+      "req_ids": [
+        "REQ-130"
+      ],
+      "feature_ids": [
+        "F11"
+      ],
+      "constraints": []
+    },
+    {
+      "name": "PR_M_EXT_EN",
+      "type": "bit",
+      "default": "1",
+      "valid_range": "0 / 1",
+      "description": "0 → RV32I thuần, RV32M decode ra Illegal",
+      "locked": false,
+      "req_ids": [
+        "REQ-002",
+        "REQ-063",
+        "REQ-072",
+        "REQ-096",
+        "REQ-103",
+        "REQ-188",
+        "REQ-189",
+        "REQ-190",
+        "REQ-191"
+      ],
+      "feature_ids": [
+        "F02",
+        "F17"
+      ],
+      "constraints": []
+    },
+    {
+      "name": "PR_MULT_IMPL",
+      "type": "int unsigned",
+      "default": "0",
+      "valid_range": "0 / 1",
+      "description": "0=SEQ shift-add (33cy) · 1=COMB single-cycle (infer DSP)",
+      "locked": false,
+      "req_ids": [
+        "REQ-017",
+        "REQ-104",
+        "REQ-105",
+        "REQ-188",
+        "REQ-189"
+      ],
+      "feature_ids": [
+        "F17"
+      ],
+      "constraints": []
+    },
+    {
+      "name": "PR_DIV_IMPL",
+      "type": "int unsigned",
+      "default": "0",
+      "valid_range": "0",
+      "description": "0=SEQ non-restoring (34cy). Khoá ở 0 trong Phase 1",
+      "locked": true,
+      "req_ids": [
+        "REQ-017",
+        "REQ-025",
+        "REQ-106",
+        "REQ-190"
+      ],
+      "feature_ids": [
+        "F17"
+      ],
+      "constraints": [
+        "C6"
+      ]
+    },
+    {
+      "name": "PR_CSR_EN",
+      "type": "bit",
+      "default": "1",
+      "valid_range": "0 / 1",
+      "description": "0 → bỏ CSR file + trap. Chỉ dùng để bring-up M1–M4",
+      "locked": false,
+      "req_ids": [
+        "REQ-003",
+        "REQ-011",
+        "REQ-015",
+        "REQ-022",
+        "REQ-023",
+        "REQ-024",
+        "REQ-064",
+        "REQ-065",
+        "REQ-073",
+        "REQ-115",
+        "REQ-120",
+        "REQ-130",
+        "REQ-131",
+        "REQ-132"
+      ],
+      "feature_ids": [
+        "F03",
+        "F11",
+        "F15"
+      ],
+      "constraints": [
+        "C3",
+        "C4",
+        "C5"
+      ]
+    },
+    {
+      "name": "PR_IRQ_EN",
+      "type": "bit",
+      "default": "1",
+      "valid_range": "0 / 1",
+      "description": "0 → bỏ mie/mip, chỉ còn exception đồng bộ",
+      "locked": false,
+      "req_ids": [
+        "REQ-014",
+        "REQ-022",
+        "REQ-031",
+        "REQ-134",
+        "REQ-152",
+        "REQ-154",
+        "REQ-155",
+        "REQ-156",
+        "REQ-158"
+      ],
+      "feature_ids": [
+        "F14"
+      ],
+      "constraints": [
+        "C3"
+      ]
+    },
+    {
+      "name": "PR_COUNTER_EN",
+      "type": "bit",
+      "default": "1",
+      "valid_range": "0 / 1",
+      "description": "0 → mcycle/minstret đọc ra 0",
+      "locked": false,
+      "req_ids": [
+        "REQ-016",
+        "REQ-024",
+        "REQ-147",
+        "REQ-148",
+        "REQ-149",
+        "REQ-150"
+      ],
+      "feature_ids": [
+        "F16"
+      ],
+      "constraints": [
+        "C5"
+      ]
+    },
+    {
+      "name": "PR_MTVEC_VEC_EN",
+      "type": "bit",
+      "default": "0",
+      "valid_range": "0 / 1",
+      "description": "1 → hỗ trợ mtvec.MODE = 1 (Vectored)",
+      "locked": false,
+      "req_ids": [
+        "REQ-019",
+        "REQ-023",
+        "REQ-135",
+        "REQ-167"
+      ],
+      "feature_ids": [
+        "F19"
+      ],
+      "constraints": [
+        "C4"
+      ]
+    },
+    {
+      "name": "PR_FWD_EN",
+      "type": "bit",
+      "default": "1",
+      "valid_range": "0 / 1",
+      "description": "0 → bỏ forwarding, hazard chuyển sang stall-only (debug / so sánh IPC)",
+      "locked": false,
+      "req_ids": [
+        "REQ-006",
+        "REQ-084",
+        "REQ-171",
+        "REQ-172",
+        "REQ-173",
+        "REQ-187"
+      ],
+      "feature_ids": [
+        "F06"
+      ],
+      "constraints": []
+    },
+    {
+      "name": "PR_RF_RESET_EN",
+      "type": "bit",
+      "default": "1",
+      "valid_range": "0 / 1",
+      "description": "1 → reset regfile về 0 (sim deterministic)",
+      "locked": false,
+      "req_ids": [
+        "REQ-079",
+        "REQ-083"
+      ],
+      "feature_ids": [
+        "F09"
+      ],
+      "constraints": []
+    },
+    {
+      "name": "PR_RF_IMPL",
+      "type": "int unsigned",
+      "default": "0",
+      "valid_range": "0 / 1",
+      "description": "0=flop array · 1=LUTRAM async-read (distributed RAM, FPGA-only)",
+      "locked": false,
+      "req_ids": [
+        "REQ-009",
+        "REQ-027",
+        "REQ-080",
+        "REQ-081",
+        "REQ-082",
+        "REQ-083"
+      ],
+      "feature_ids": [
+        "F09"
+      ],
+      "constraints": [
+        "C8"
+      ]
+    },
+    {
+      "name": "PR_TRACE_EN",
+      "type": "bit",
+      "default": "0",
+      "valid_range": "0 / 1",
+      "description": "1 → xuất retire trace port",
+      "locked": false,
+      "req_ids": [
+        "REQ-018",
+        "REQ-032",
+        "REQ-123"
+      ],
+      "feature_ids": [
+        "F18"
+      ],
+      "constraints": []
+    },
+    {
+      "name": "PR_BUS_OUTSTANDING",
+      "type": "int unsigned",
+      "default": "1",
+      "valid_range": "1",
+      "description": "Phase 1 khoá ở 1. Có mặt để đánh dấu chỗ mở rộng",
+      "locked": true,
+      "req_ids": [
+        "REQ-026",
+        "REQ-037"
+      ],
+      "feature_ids": [
+        "F10"
+      ],
+      "constraints": [
+        "C7"
+      ]
+    }
+  ],
+  "style_constraints_source": "rtl_rule.md",
+  "ambiguity_flags": []
+}

@@ -1,0 +1,19 @@
+# Synthesis script — GF180MCU tt corner (tt_025C_1v80)
+# LUU Y 1: dung build/synopsys/*_full.lib. Thu muc liberty/ cua PDK chi chua
+#   header thu vien (5.7KB, 0 cell) nen dfflibmap that bai.
+# LUU Y 2: dung read_slang. Yosys read_verilog khong parse duoc
+#   'module X import pkg::*;' theo rtl_rule §3.1.
+plugin -i slang
+read_slang --top rv32im_core src/rtl/rv32im_pkg.sv src/rtl/rv32im_alu.sv src/rtl/rv32im_branch_unit.sv src/rtl/rv32im_imm_gen.sv src/rtl/rv32im_decoder.sv src/rtl/rv32im_lsu.sv src/rtl/rv32im_regfile.sv src/rtl/rv32im_mult.sv src/rtl/rv32im_div.sv src/rtl/rv32im_muldiv.sv src/rtl/rv32im_hazard_ctrl.sv src/rtl/rv32im_if_stage.sv src/rtl/rv32im_id_stage.sv src/rtl/rv32im_ex_stage.sv src/rtl/rv32im_csr_file.sv src/rtl/rv32im_trap_ctrl.sv src/rtl/rv32im_mem_stage.sv src/rtl/rv32im_core.sv 
+hierarchy -check -top rv32im_core
+proc
+opt -full
+memory
+opt -full
+techmap
+opt -fast
+dfflibmap -liberty /tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib
+abc -liberty /tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib -D 5000
+opt_clean -purge
+stat -liberty /tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib
+write_json src/rtl/synth_gf180_tt.json
