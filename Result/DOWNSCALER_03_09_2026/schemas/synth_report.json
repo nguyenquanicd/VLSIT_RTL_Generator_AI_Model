@@ -1,0 +1,14 @@
+{
+  "tool": "Yosys 0.58+35",
+  "pdk": "GF180MCU (gf180mcu_fd_sc_mcu7t5v0)",
+  "top_module": "axi_downscaler_top",
+  "note": "liberty/*.lib chỉ có header/template (không cell) — dùng build/synopsys/*_full.lib thay thế (229 cell, có DFF).",
+  "corners": {
+    "tt_025C_1v80": { "status": "pass", "log": "src/rtl/synth_tt.log" },
+    "ss_125C_1v62": { "status": "pass", "log": "src/rtl/synth_ss.log" }
+  },
+  "req_ids_tagged": 27,
+  "generated_at": "2026-09-03T00:12:58+07:00",
+  "regenerated_reason": "Phase 5: sửa axi_downscaler_width_split.sv để loại bỏ cast int'(...) dư thừa trong phép tính địa chỉ slice (thay bằng LP_ADDR_W đúng kích thước) — giúp tăng mutation score từ 75% lên 87.5% bằng cách loại bỏ dead logic thật, không phải chỉ thêm test.",
+  "caveat": "Target clock 800-1000MHz (stretch 2000MHz) theo spec REQ-013 KHÔNG được verify ở bước này — Yosys 'stat' chỉ báo cell count/area, không chạy STA. GF180MCU là process 180nm; tần số 800MHz-2GHz gần như chắc chắn không khả thi với 1 tầng combinational thuần túy trên node này. Cần review lại target frequency hoặc chạy STA (OpenSTA/opentimer) với SDC constraint ở bước sau để xác nhận."
+}

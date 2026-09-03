@@ -1,0 +1,1461 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.58+35 (git sha1 89f32a415, clang++ 18.1.8 -fPIC -O3)
+
+-- Executing script file `src/rtl/synth_gf180_tt.ys' --
+
+1. Executing Verilog-2005 frontend: src/rtl/axi_downscaler_fifo.sv
+Parsing SystemVerilog input from `src/rtl/axi_downscaler_fifo.sv' to AST representation.
+verilog frontend filename src/rtl/axi_downscaler_fifo.sv
+Generating RTLIL representation for module `\axi_downscaler_fifo'.
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: src/rtl/axi_downscaler_width_split.sv
+Parsing SystemVerilog input from `src/rtl/axi_downscaler_width_split.sv' to AST representation.
+verilog frontend filename src/rtl/axi_downscaler_width_split.sv
+Generating RTLIL representation for module `\axi_downscaler_width_split'.
+Successfully finished Verilog frontend.
+
+3. Executing Verilog-2005 frontend: src/rtl/axi_downscaler_m_axis_if.sv
+Parsing SystemVerilog input from `src/rtl/axi_downscaler_m_axis_if.sv' to AST representation.
+verilog frontend filename src/rtl/axi_downscaler_m_axis_if.sv
+Generating RTLIL representation for module `\axi_downscaler_m_axis_if'.
+Successfully finished Verilog frontend.
+
+4. Executing Verilog-2005 frontend: src/rtl/axi_downscaler_top.sv
+Parsing SystemVerilog input from `src/rtl/axi_downscaler_top.sv' to AST representation.
+verilog frontend filename src/rtl/axi_downscaler_top.sv
+Generating RTLIL representation for module `\axi_downscaler_top'.
+Successfully finished Verilog frontend.
+
+5. Executing HIERARCHY pass (managing design hierarchy).
+
+5.1. Analyzing design hierarchy..
+Top module:  \axi_downscaler_top
+Used module:     \axi_downscaler_m_axis_if
+Used module:     \axi_downscaler_fifo
+Used module:     \axi_downscaler_width_split
+Parameter \PR_WIDTH_OUT = 32
+
+5.2. Executing AST frontend in derive mode using pre-parsed AST for module `\axi_downscaler_m_axis_if'.
+Parameter \PR_WIDTH_OUT = 32
+Generating RTLIL representation for module `$paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000'.
+Parameter \PR_FIFO_DEPTH = 16
+Parameter \PR_FIFO_W = 37
+
+5.3. Executing AST frontend in derive mode using pre-parsed AST for module `\axi_downscaler_fifo'.
+Parameter \PR_FIFO_DEPTH = 16
+Parameter \PR_FIFO_W = 37
+Generating RTLIL representation for module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo'.
+Parameter \PR_WIDTH_IN = 64
+Parameter \PR_WIDTH_OUT = 32
+
+5.4. Executing AST frontend in derive mode using pre-parsed AST for module `\axi_downscaler_width_split'.
+Parameter \PR_WIDTH_IN = 64
+Parameter \PR_WIDTH_OUT = 32
+Generating RTLIL representation for module `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split'.
+
+5.5. Analyzing design hierarchy..
+Top module:  \axi_downscaler_top
+Used module:     $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000
+Used module:     $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo
+Used module:     $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split
+
+5.6. Analyzing design hierarchy..
+Top module:  \axi_downscaler_top
+Used module:     $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000
+Used module:     $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo
+Used module:     $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split
+Removing unused module `\axi_downscaler_m_axis_if'.
+Removing unused module `\axi_downscaler_width_split'.
+Removing unused module `\axi_downscaler_fifo'.
+Removed 3 unused modules.
+
+6. Executing PROC pass (convert processes to netlists).
+
+6.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+6.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 2 switch rules as full_case in process $proc$src/rtl/axi_downscaler_width_split.sv:117$128 in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+Removed 1 dead cases from process $proc$src/rtl/axi_downscaler_width_split.sv:96$124 in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+Marked 1 switch rules as full_case in process $proc$src/rtl/axi_downscaler_width_split.sv:96$124 in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+Marked 1 switch rules as full_case in process $proc$src/rtl/axi_downscaler_fifo.sv:67$96 in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+Marked 1 switch rules as full_case in process $proc$src/rtl/axi_downscaler_fifo.sv:62$91 in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+Marked 1 switch rules as full_case in process $proc$src/rtl/axi_downscaler_fifo.sv:57$86 in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+Marked 1 switch rules as full_case in process $proc$src/rtl/axi_downscaler_fifo.sv:53$79 in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+Removed a total of 1 dead cases.
+
+6.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 1 redundant assignment.
+Promoted 3 assignments to connections.
+
+6.4. Executing PROC_INIT pass (extract init attributes).
+
+6.5. Executing PROC_ARST pass (detect async resets in processes).
+Found async reset \i_resetn in `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:117$128'.
+Found async reset \i_resetn in `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:96$124'.
+Found async reset \i_resetn in `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:67$96'.
+Found async reset \i_resetn in `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:62$91'.
+Found async reset \i_resetn in `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:57$86'.
+
+6.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~10 debug messages>
+
+6.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:117$128'.
+     1/1: $0\reg_cnt[0:0]
+Creating decoders for process `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:109$127'.
+     1/3: $0\reg_tkeep[7:0]
+     2/3: $0\reg_tlast[0:0]
+     3/3: $0\reg_data[63:0]
+Creating decoders for process `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:96$124'.
+     1/1: $0\reg_state[0:0]
+Creating decoders for process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:67$96'.
+     1/1: $0\reg_count[4:0]
+Creating decoders for process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:62$91'.
+     1/1: $0\reg_rd_ptr[3:0]
+Creating decoders for process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:57$86'.
+     1/1: $0\reg_wr_ptr[3:0]
+Creating decoders for process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:53$79'.
+     1/3: $1$memwr$\reg_mem$src/rtl/axi_downscaler_fifo.sv:54$69_EN[36:0]$85
+     2/3: $1$memwr$\reg_mem$src/rtl/axi_downscaler_fifo.sv:54$69_DATA[36:0]$84
+     3/3: $1$memwr$\reg_mem$src/rtl/axi_downscaler_fifo.sv:54$69_ADDR[3:0]$83
+
+6.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+
+6.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.\reg_cnt' using process `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:117$128'.
+  created $adff cell `$procdff$171' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.\reg_data' using process `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:109$127'.
+  created $dff cell `$procdff$172' with positive edge clock.
+Creating register for signal `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.\reg_tlast' using process `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:109$127'.
+  created $dff cell `$procdff$173' with positive edge clock.
+Creating register for signal `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.\reg_tkeep' using process `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:109$127'.
+  created $dff cell `$procdff$174' with positive edge clock.
+Creating register for signal `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.\reg_state' using process `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:96$124'.
+  created $adff cell `$procdff$179' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.\reg_count' using process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:67$96'.
+  created $adff cell `$procdff$184' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.\reg_rd_ptr' using process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:62$91'.
+  created $adff cell `$procdff$189' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.\reg_wr_ptr' using process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:57$86'.
+  created $adff cell `$procdff$194' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$memwr$\reg_mem$src/rtl/axi_downscaler_fifo.sv:54$69_ADDR' using process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:53$79'.
+  created $dff cell `$procdff$195' with positive edge clock.
+Creating register for signal `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$memwr$\reg_mem$src/rtl/axi_downscaler_fifo.sv:54$69_DATA' using process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:53$79'.
+  created $dff cell `$procdff$196' with positive edge clock.
+Creating register for signal `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$memwr$\reg_mem$src/rtl/axi_downscaler_fifo.sv:54$69_EN' using process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:53$79'.
+  created $dff cell `$procdff$197' with positive edge clock.
+
+6.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+6.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 2 empty switches in `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:117$128'.
+Removing empty process `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:117$128'.
+Found and cleaned up 1 empty switch in `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:109$127'.
+Removing empty process `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:109$127'.
+Found and cleaned up 3 empty switches in `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:96$124'.
+Removing empty process `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.$proc$src/rtl/axi_downscaler_width_split.sv:96$124'.
+Found and cleaned up 1 empty switch in `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:67$96'.
+Removing empty process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:67$96'.
+Found and cleaned up 1 empty switch in `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:62$91'.
+Removing empty process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:62$91'.
+Found and cleaned up 1 empty switch in `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:57$86'.
+Removing empty process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:57$86'.
+Found and cleaned up 1 empty switch in `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:53$79'.
+Removing empty process `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.$proc$src/rtl/axi_downscaler_fifo.sv:53$79'.
+Cleaned up 10 empty switches.
+
+6.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module axi_downscaler_top.
+Optimizing module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+<suppressed ~10 debug messages>
+Optimizing module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+<suppressed ~7 debug messages>
+Optimizing module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+
+7. Executing OPT pass (performing simple optimizations).
+
+7.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module axi_downscaler_top.
+Optimizing module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+<suppressed ~7 debug messages>
+Optimizing module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+<suppressed ~2 debug messages>
+Optimizing module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+
+7.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\axi_downscaler_top'.
+Finding identical cells in module `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split'.
+<suppressed ~12 debug messages>
+Finding identical cells in module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo'.
+<suppressed ~12 debug messages>
+Finding identical cells in module `$paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000'.
+Removed a total of 8 cells.
+
+7.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \axi_downscaler_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+      Replacing known input bits on port A of cell $procmux$145: \reg_state -> 1'0
+      Replacing known input bits on port A of cell $procmux$143: \reg_state -> 1'1
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+<suppressed ~24 debug messages>
+
+7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \axi_downscaler_top.
+  Optimizing cells in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+    Consolidated identical input bits for $mux cell $ternary$src/rtl/axi_downscaler_width_split.sv:102$126:
+      Old ports: A=0, B=1, Y=$ternary$src/rtl/axi_downscaler_width_split.sv:102$126_Y
+      New ports: A=1'0, B=1'1, Y=$ternary$src/rtl/axi_downscaler_width_split.sv:102$126_Y [0]
+      New connections: $ternary$src/rtl/axi_downscaler_width_split.sv:102$126_Y [31:1] = 31'0000000000000000000000000000000
+  Optimizing cells in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+  Optimizing cells in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+    Consolidated identical input bits for $mux cell $procmux$159:
+      Old ports: A=37'0000000000000000000000000000000000000, B=37'1111111111111111111111111111111111111, Y=$procmux$159_Y
+      New ports: A=1'0, B=1'1, Y=$procmux$159_Y [0]
+      New connections: $procmux$159_Y [36:1] = { $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] $procmux$159_Y [0] }
+  Optimizing cells in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+  Optimizing cells in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+Performed a total of 2 changes.
+
+7.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\axi_downscaler_top'.
+Finding identical cells in module `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split'.
+Finding identical cells in module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo'.
+Finding identical cells in module `$paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000'.
+Removed a total of 0 cells.
+
+7.6. Executing OPT_SHARE pass.
+    Found cells that share an operand and can be merged by moving the $pmux $procmux$151 in front of them:
+        $sub$src/rtl/axi_downscaler_fifo.sv:73$99
+        $add$src/rtl/axi_downscaler_fifo.sv:72$98
+
+7.7. Executing OPT_DFF pass (perform DFF optimizations).
+Adding EN signal on $procdff$173 ($dff) from module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split (D = \i_s_axis_tlast, Q = \reg_tlast).
+Adding EN signal on $procdff$172 ($dff) from module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split (D = \i_s_axis_tdata, Q = \reg_data).
+Adding EN signal on $procdff$171 ($adff) from module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split (D = $procmux$135_Y, Q = \reg_cnt).
+Adding EN signal on $procdff$174 ($dff) from module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split (D = \i_s_axis_tkeep, Q = \reg_tkeep).
+Adding EN signal on $procdff$189 ($adff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = $ternary$src/rtl/axi_downscaler_fifo.sv:64$95_Y, Q = \reg_rd_ptr).
+Adding EN signal on $procdff$194 ($adff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = $ternary$src/rtl/axi_downscaler_fifo.sv:59$90_Y, Q = \reg_wr_ptr).
+Adding EN signal on $procdff$184 ($adff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = $procmux$151_Y, Q = \reg_count).
+
+7.8. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \axi_downscaler_top..
+Finding unused cells or wires in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+Finding unused cells or wires in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+Finding unused cells or wires in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+Removed 12 unused cells and 81 unused wires.
+<suppressed ~16 debug messages>
+
+7.9. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+<suppressed ~6 debug messages>
+Optimizing module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+<suppressed ~3 debug messages>
+Optimizing module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+Optimizing module axi_downscaler_top.
+
+7.10. Rerunning OPT passes. (Maybe there is more to do..)
+
+7.11. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \axi_downscaler_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+<suppressed ~12 debug messages>
+
+7.12. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+    Consolidated identical input bits for $mux cell $auto$opt_share.cc:246:merge_operators$202:
+      Old ports: A=5'11111, B=5'00001, Y=$auto$rtlil.cc:3272:Pmux$203
+      New ports: A=1'1, B=1'0, Y=$auto$rtlil.cc:3272:Pmux$203 [1]
+      New connections: { $auto$rtlil.cc:3272:Pmux$203 [4:2] $auto$rtlil.cc:3272:Pmux$203 [0] } = { $auto$rtlil.cc:3272:Pmux$203 [1] $auto$rtlil.cc:3272:Pmux$203 [1] $auto$rtlil.cc:3272:Pmux$203 [1] 1'1 }
+  Optimizing cells in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+  Optimizing cells in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+  Optimizing cells in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+  Optimizing cells in module \axi_downscaler_top.
+Performed a total of 1 changes.
+
+7.13. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo'.
+Finding identical cells in module `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split'.
+Finding identical cells in module `$paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000'.
+Finding identical cells in module `\axi_downscaler_top'.
+Removed a total of 0 cells.
+
+7.14. Executing OPT_SHARE pass.
+
+7.15. Executing OPT_DFF pass (perform DFF optimizations).
+
+7.16. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+Finding unused cells or wires in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+Finding unused cells or wires in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+Finding unused cells or wires in module \axi_downscaler_top..
+Removed 0 unused cells and 5 unused wires.
+<suppressed ~2 debug messages>
+
+7.17. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+<suppressed ~1 debug messages>
+Optimizing module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+Optimizing module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+Optimizing module axi_downscaler_top.
+
+7.18. Rerunning OPT passes. (Maybe there is more to do..)
+
+7.19. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \axi_downscaler_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+<suppressed ~10 debug messages>
+
+7.20. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+  Optimizing cells in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+  Optimizing cells in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+  Optimizing cells in module \axi_downscaler_top.
+Performed a total of 0 changes.
+
+7.21. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo'.
+Finding identical cells in module `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split'.
+Finding identical cells in module `$paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000'.
+Finding identical cells in module `\axi_downscaler_top'.
+Removed a total of 0 cells.
+
+7.22. Executing OPT_SHARE pass.
+
+7.23. Executing OPT_DFF pass (perform DFF optimizations).
+
+7.24. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+Finding unused cells or wires in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+Finding unused cells or wires in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+Finding unused cells or wires in module \axi_downscaler_top..
+
+7.25. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+Optimizing module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+Optimizing module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+Optimizing module axi_downscaler_top.
+
+7.26. Finished fast OPT passes. (There is nothing left to do.)
+
+8. Executing MEMORY pass.
+
+8.1. Executing OPT_MEM pass (optimize memories).
+Performed a total of 0 transformations.
+
+8.2. Executing OPT_MEM_PRIORITY pass (removing unnecessary memory write priority relations).
+Performed a total of 0 transformations.
+
+8.3. Executing OPT_MEM_FEEDBACK pass (finding memory read-to-write feedback paths).
+  Analyzing $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.reg_mem write port 0.
+
+8.4. Executing MEMORY_BMUX2ROM pass (converting muxes to ROMs).
+
+8.5. Executing MEMORY_DFF pass (merging $dff cells to $memrd).
+Checking read port `\reg_mem'[0] in module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo': no output FF found.
+Checking read port address `\reg_mem'[0] in module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo': address FF has async set and/or reset, not supported.
+
+8.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+Finding unused cells or wires in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+Finding unused cells or wires in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+Finding unused cells or wires in module \axi_downscaler_top..
+
+8.7. Executing MEMORY_SHARE pass (consolidating $memrd/$memwr cells).
+
+8.8. Executing OPT_MEM_WIDEN pass (optimize memories where all ports are wide).
+Performed a total of 0 transformations.
+
+8.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+Finding unused cells or wires in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+Finding unused cells or wires in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+Finding unused cells or wires in module \axi_downscaler_top..
+
+8.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+8.11. Executing MEMORY_MAP pass (converting memories to logic and flip-flops).
+Mapping memory \reg_mem in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo:
+  created 16 $dff cells and 0 static cells of width 37.
+  read interface: 0 $dff and 15 $mux cells.
+  write interface: 16 write mux blocks.
+
+9. Executing OPT pass (performing simple optimizations).
+
+9.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+<suppressed ~8 debug messages>
+Optimizing module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+Optimizing module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+Optimizing module axi_downscaler_top.
+
+9.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo'.
+Finding identical cells in module `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split'.
+Finding identical cells in module `$paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000'.
+Finding identical cells in module `\axi_downscaler_top'.
+Removed a total of 0 cells.
+
+9.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \axi_downscaler_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+<suppressed ~58 debug messages>
+
+9.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+  Optimizing cells in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+  Optimizing cells in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+  Optimizing cells in module \axi_downscaler_top.
+Performed a total of 0 changes.
+
+9.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo'.
+Finding identical cells in module `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split'.
+Finding identical cells in module `$paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000'.
+Finding identical cells in module `\axi_downscaler_top'.
+Removed a total of 0 cells.
+
+9.6. Executing OPT_SHARE pass.
+
+9.7. Executing OPT_DFF pass (perform DFF optimizations).
+
+9.8. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+Finding unused cells or wires in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+Finding unused cells or wires in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+Finding unused cells or wires in module \axi_downscaler_top..
+Removed 0 unused cells and 36 unused wires.
+<suppressed ~1 debug messages>
+
+9.9. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+Optimizing module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+Optimizing module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+Optimizing module axi_downscaler_top.
+
+9.10. Rerunning OPT passes. (Maybe there is more to do..)
+
+9.11. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \axi_downscaler_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+<suppressed ~58 debug messages>
+
+9.12. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+  Optimizing cells in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+  Optimizing cells in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+  Optimizing cells in module \axi_downscaler_top.
+Performed a total of 0 changes.
+
+9.13. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo'.
+Finding identical cells in module `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split'.
+Finding identical cells in module `$paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000'.
+Finding identical cells in module `\axi_downscaler_top'.
+Removed a total of 0 cells.
+
+9.14. Executing OPT_SHARE pass.
+
+9.15. Executing OPT_DFF pass (perform DFF optimizations).
+Adding EN signal on $memory\reg_mem[9]$235 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[9]).
+Adding EN signal on $memory\reg_mem[8]$233 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[8]).
+Adding EN signal on $memory\reg_mem[7]$231 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[7]).
+Adding EN signal on $memory\reg_mem[6]$229 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[6]).
+Adding EN signal on $memory\reg_mem[5]$227 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[5]).
+Adding EN signal on $memory\reg_mem[4]$225 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[4]).
+Adding EN signal on $memory\reg_mem[3]$223 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[3]).
+Adding EN signal on $memory\reg_mem[2]$221 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[2]).
+Adding EN signal on $memory\reg_mem[1]$219 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[1]).
+Adding EN signal on $memory\reg_mem[15]$247 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[15]).
+Adding EN signal on $memory\reg_mem[14]$245 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[14]).
+Adding EN signal on $memory\reg_mem[13]$243 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[13]).
+Adding EN signal on $memory\reg_mem[12]$241 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[12]).
+Adding EN signal on $memory\reg_mem[11]$239 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[11]).
+Adding EN signal on $memory\reg_mem[10]$237 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[10]).
+Adding EN signal on $memory\reg_mem[0]$217 ($dff) from module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo (D = \i_push_data, Q = \reg_mem[0]).
+
+9.16. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+Finding unused cells or wires in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+Finding unused cells or wires in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+Finding unused cells or wires in module \axi_downscaler_top..
+Removed 16 unused cells and 16 unused wires.
+<suppressed ~17 debug messages>
+
+9.17. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+Optimizing module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+Optimizing module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+Optimizing module axi_downscaler_top.
+
+9.18. Rerunning OPT passes. (Maybe there is more to do..)
+
+9.19. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \axi_downscaler_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+<suppressed ~26 debug messages>
+
+9.20. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+  Optimizing cells in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+  Optimizing cells in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+  Optimizing cells in module \axi_downscaler_top.
+Performed a total of 0 changes.
+
+9.21. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo'.
+Finding identical cells in module `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split'.
+Finding identical cells in module `$paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000'.
+Finding identical cells in module `\axi_downscaler_top'.
+Removed a total of 0 cells.
+
+9.22. Executing OPT_SHARE pass.
+
+9.23. Executing OPT_DFF pass (perform DFF optimizations).
+
+9.24. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+Finding unused cells or wires in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+Finding unused cells or wires in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+Finding unused cells or wires in module \axi_downscaler_top..
+
+9.25. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+Optimizing module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+Optimizing module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+Optimizing module axi_downscaler_top.
+
+9.26. Finished fast OPT passes. (There is nothing left to do.)
+
+10. Executing TECHMAP pass (map to technology primitives).
+
+10.1. Executing Verilog-2005 frontend: /tools/OSS/oss-cad-suite/lib/../share/yosys/techmap.v
+Parsing Verilog input from `/tools/OSS/oss-cad-suite/lib/../share/yosys/techmap.v' to AST representation.
+verilog frontend filename /tools/OSS/oss-cad-suite/lib/../share/yosys/techmap.v
+Generating RTLIL representation for module `\_90_simplemap_bool_ops'.
+Generating RTLIL representation for module `\_90_simplemap_reduce_ops'.
+Generating RTLIL representation for module `\_90_simplemap_logic_ops'.
+Generating RTLIL representation for module `\_90_simplemap_compare_ops'.
+Generating RTLIL representation for module `\_90_simplemap_various'.
+Generating RTLIL representation for module `\_90_simplemap_registers'.
+Generating RTLIL representation for module `\_90_shift_ops_shr_shl_sshl_sshr'.
+Generating RTLIL representation for module `\_90_shift_shiftx'.
+Generating RTLIL representation for module `\_90_fa'.
+Generating RTLIL representation for module `\_90_lcu_brent_kung'.
+Generating RTLIL representation for module `\_90_alu'.
+Generating RTLIL representation for module `\_90_macc'.
+Generating RTLIL representation for module `\_90_alumacc'.
+Generating RTLIL representation for module `\$__div_mod_u'.
+Generating RTLIL representation for module `\$__div_mod_trunc'.
+Generating RTLIL representation for module `\_90_div'.
+Generating RTLIL representation for module `\_90_mod'.
+Generating RTLIL representation for module `\$__div_mod_floor'.
+Generating RTLIL representation for module `\_90_divfloor'.
+Generating RTLIL representation for module `\_90_modfloor'.
+Generating RTLIL representation for module `\_90_pow'.
+Generating RTLIL representation for module `\_90_pmux'.
+Generating RTLIL representation for module `\_90_demux'.
+Generating RTLIL representation for module `\_90_lut'.
+Generating RTLIL representation for module `\$connect'.
+Generating RTLIL representation for module `\$input_port'.
+Successfully finished Verilog frontend.
+
+10.2. Continuing TECHMAP pass.
+Using extmapper simplemap for cells of type $logic_or.
+Using extmapper simplemap for cells of type $logic_not.
+Using extmapper simplemap for cells of type $logic_and.
+Using extmapper simplemap for cells of type $not.
+Using extmapper simplemap for cells of type $or.
+Using template $paramod$c5c783b17ab1d780abfad8cfe6563a0a7b47a3b0\_90_pmux for cells of type $pmux.
+Using extmapper simplemap for cells of type $adffe.
+Using extmapper simplemap for cells of type $mux.
+Using extmapper simplemap for cells of type $dffe.
+Using extmapper simplemap for cells of type $adff.
+Running "alumacc" on wrapper $extern:wrap:$add:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=6:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$add:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=6:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$add:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=6:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47.
+Running "alumacc" on wrapper $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=6:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=6:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=6:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47.
+Running "alumacc" on wrapper $extern:wrap:$add:A_SIGNED=0:A_WIDTH=32:B_SIGNED=0:B_WIDTH=32:Y_WIDTH=32:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$add:A_SIGNED=0:A_WIDTH=32:B_SIGNED=0:B_WIDTH=32:Y_WIDTH=32:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$add:A_SIGNED=0:A_WIDTH=32:B_SIGNED=0:B_WIDTH=32:Y_WIDTH=32:394426c56d1a028ba8fdd5469b163e04011def47.
+Running "alumacc" on wrapper $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=27:B_SIGNED=0:B_WIDTH=27:Y_WIDTH=27:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=27:B_SIGNED=0:B_WIDTH=27:Y_WIDTH=27:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=27:B_SIGNED=0:B_WIDTH=27:Y_WIDTH=27:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $paramod$constmap:f04382a4744a87a2cd4561acaa8b58bc09a7b2b9$paramod$750817dd181b639b5378295e8e860a12a4d185b1\_90_shift_shiftx for cells of type $shiftx.
+Running "alumacc" on wrapper $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=30:B_SIGNED=0:B_WIDTH=30:Y_WIDTH=30:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=30:B_SIGNED=0:B_WIDTH=30:Y_WIDTH=30:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=30:B_SIGNED=0:B_WIDTH=30:Y_WIDTH=30:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $paramod$constmap:a3adc0fb287ecf9b24f5f13b9e31f28a5cc80e20$paramod$5b6f054eed454635bfe348851f578a2e02f9e804\_90_shift_shiftx for cells of type $shiftx.
+Using extmapper simplemap for cells of type $reduce_bool.
+Running "alumacc" on wrapper $extern:wrap:$add:A_SIGNED=0:A_WIDTH=1:B_SIGNED=0:B_WIDTH=1:Y_WIDTH=1:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$add:A_SIGNED=0:A_WIDTH=1:B_SIGNED=0:B_WIDTH=1:Y_WIDTH=1:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$add:A_SIGNED=0:A_WIDTH=1:B_SIGNED=0:B_WIDTH=1:Y_WIDTH=1:394426c56d1a028ba8fdd5469b163e04011def47.
+Using extmapper simplemap for cells of type $reduce_or.
+Using extmapper simplemap for cells of type $and.
+Using template $paramod$00298f3f8094950cb9a5ff2fda48d0d8bde8806c\_90_alu for cells of type $alu.
+Using template $paramod$fbc7873bff55778c0b3173955b7e4bce1d9d6834\_90_alu for cells of type $alu.
+Using template $paramod$f02bbbf710bba6238f4bdfa41b3051acfe2064a8\_90_alu for cells of type $alu.
+Using template $paramod$403d07c18de10cda2ac652a859c56aea81aaf9b5\_90_alu for cells of type $alu.
+Using template $paramod$fc972a7a46956c1788f3cb5257b53c8f1df2d0cc\_90_alu for cells of type $alu.
+Using extmapper simplemap for cells of type $xor.
+Using extmapper simplemap for cells of type $pos.
+Using template $paramod\_90_fa\WIDTH=32'00000000000000000000000000000110 for cells of type $fa.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000110 for cells of type $lcu.
+Using template $paramod\_90_fa\WIDTH=32'00000000000000000000000000100000 for cells of type $fa.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000100000 for cells of type $lcu.
+Using template $paramod\_90_fa\WIDTH=32'00000000000000000000000000011011 for cells of type $fa.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000011011 for cells of type $lcu.
+Using template $paramod\_90_fa\WIDTH=32'00000000000000000000000000011110 for cells of type $fa.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000011110 for cells of type $lcu.
+Using template $paramod\_90_fa\WIDTH=32'00000000000000000000000000000001 for cells of type $fa.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000001 for cells of type $lcu.
+Using extmapper simplemap for cells of type $eq.
+Running "alumacc" on wrapper $extern:wrap:$add:A_SIGNED=0:A_WIDTH=4:B_SIGNED=0:B_WIDTH=4:Y_WIDTH=4:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$add:A_SIGNED=0:A_WIDTH=4:B_SIGNED=0:B_WIDTH=4:Y_WIDTH=4:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$add:A_SIGNED=0:A_WIDTH=4:B_SIGNED=0:B_WIDTH=4:Y_WIDTH=4:394426c56d1a028ba8fdd5469b163e04011def47.
+Running "alumacc" on wrapper $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=5:B_SIGNED=0:B_WIDTH=5:Y_WIDTH=5:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=5:B_SIGNED=0:B_WIDTH=5:Y_WIDTH=5:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=5:B_SIGNED=0:B_WIDTH=5:Y_WIDTH=5:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $paramod$740b056ede97228d3eae64ea2fdc81f0a33e0fe7\_90_alu for cells of type $alu.
+Using template $paramod$b18e16801adf491a64caa0542270798e5d4ac6b6\_90_alu for cells of type $alu.
+Using template $paramod\_90_fa\WIDTH=32'00000000000000000000000000000100 for cells of type $fa.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000100 for cells of type $lcu.
+Using template $paramod\_90_fa\WIDTH=32'00000000000000000000000000000101 for cells of type $fa.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000101 for cells of type $lcu.
+No more expansions possible.
+<suppressed ~2967 debug messages>
+
+11. Executing OPT pass (performing simple optimizations).
+
+11.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo.
+<suppressed ~129 debug messages>
+Optimizing module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split.
+<suppressed ~3403 debug messages>
+Optimizing module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000.
+Optimizing module axi_downscaler_top.
+
+11.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo'.
+<suppressed ~48 debug messages>
+Finding identical cells in module `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split'.
+<suppressed ~192 debug messages>
+Finding identical cells in module `$paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000'.
+Finding identical cells in module `\axi_downscaler_top'.
+Removed a total of 80 cells.
+
+11.3. Executing OPT_DFF pass (perform DFF optimizations).
+
+11.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+Finding unused cells or wires in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+Finding unused cells or wires in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+Finding unused cells or wires in module \axi_downscaler_top..
+Removed 422 unused cells and 1116 unused wires.
+<suppressed ~424 debug messages>
+
+11.5. Finished fast OPT passes.
+
+12. Executing DFFLIBMAP pass (mapping DFF cells to sequential cells from liberty file).
+  cell gf180mcu_fd_sc_mcu7t5v0__dffnq_1 (noninv, pins=3, area=65.86) is a direct match for cell type $_DFF_N_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffq_1 (noninv, pins=3, area=63.66) is a direct match for cell type $_DFF_P_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1 (noninv, pins=4, area=74.64) is a direct match for cell type $_DFF_NN0_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1 (noninv, pins=4, area=79.03) is a direct match for cell type $_DFF_NN1_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffrnq_1 (noninv, pins=4, area=74.64) is a direct match for cell type $_DFF_PN0_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffsnq_1 (noninv, pins=4, area=79.03) is a direct match for cell type $_DFF_PN1_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1 (noninv, pins=5, area=94.39) is a direct match for cell type $_DFFSR_NNN_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1 (noninv, pins=5, area=85.61) is a direct match for cell type $_DFFSR_PNN_.
+  final dff cell mappings:
+    \gf180mcu_fd_sc_mcu7t5v0__dffnq_1 _DFF_N_ (.CLKN( C), .D( D), .Q( Q));
+    \gf180mcu_fd_sc_mcu7t5v0__dffq_1 _DFF_P_ (.CLK( C), .D( D), .Q( Q));
+    \gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1 _DFF_NN0_ (.CLKN( C), .D( D), .Q( Q), .RN( R));
+    \gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1 _DFF_NN1_ (.CLKN( C), .D( D), .Q( Q), .SETN( R));
+    unmapped dff cell: $_DFF_NP0_
+    unmapped dff cell: $_DFF_NP1_
+    \gf180mcu_fd_sc_mcu7t5v0__dffrnq_1 _DFF_PN0_ (.CLK( C), .D( D), .Q( Q), .RN( R));
+    \gf180mcu_fd_sc_mcu7t5v0__dffsnq_1 _DFF_PN1_ (.CLK( C), .D( D), .Q( Q), .SETN( R));
+    unmapped dff cell: $_DFF_PP0_
+    unmapped dff cell: $_DFF_PP1_
+    unmapped dff cell: $_DFFE_NN_
+    unmapped dff cell: $_DFFE_NP_
+    unmapped dff cell: $_DFFE_PN_
+    unmapped dff cell: $_DFFE_PP_
+    \gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1 _DFFSR_NNN_ (.CLKN( C), .D( D), .Q( Q), .RN( R), .SETN( S));
+    unmapped dff cell: $_DFFSR_NNP_
+    unmapped dff cell: $_DFFSR_NPN_
+    unmapped dff cell: $_DFFSR_NPP_
+    \gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1 _DFFSR_PNN_ (.CLK( C), .D( D), .Q( Q), .RN( R), .SETN( S));
+    unmapped dff cell: $_DFFSR_PNP_
+    unmapped dff cell: $_DFFSR_PPN_
+    unmapped dff cell: $_DFFSR_PPP_
+
+12.1. Executing DFFLEGALIZE pass (convert FFs to types supported by the target).
+<suppressed ~12 debug messages>
+Mapping DFF cells in module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo':
+  mapped 13 $_DFF_PN0_ cells to \gf180mcu_fd_sc_mcu7t5v0__dffrnq_1 cells.
+  mapped 592 $_DFF_P_ cells to \gf180mcu_fd_sc_mcu7t5v0__dffq_1 cells.
+Mapping DFF cells in module `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split':
+  mapped 2 $_DFF_PN0_ cells to \gf180mcu_fd_sc_mcu7t5v0__dffrnq_1 cells.
+  mapped 73 $_DFF_P_ cells to \gf180mcu_fd_sc_mcu7t5v0__dffq_1 cells.
+Mapping DFF cells in module `$paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000':
+Mapping DFF cells in module `\axi_downscaler_top':
+
+13. Executing ABC pass (technology mapping using ABC).
+
+13.1. Extracting gate netlist of module `$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo' to `<abc-temp-dir>/input.blif'..
+
+13.1.1. Executed ABC.
+Extracted 1271 gates and 1916 wires to a netlist network with 644 inputs and 646 outputs.
+Running ABC script: <abc-temp-dir>/abc.script
+ABC: UC Berkeley, ABC 1.01 (compiled Oct  9 2025 02:26:17)
+ABC: abc 01> empty
+ABC: abc 01> source <abc-temp-dir>/abc.script
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_lib -w /tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib 
+ABC: Parsing finished successfully.  Parsing time =     0.12 sec
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__antenna" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_12".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_16".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_1".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_2".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_3".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_4".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_8".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__endcap" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_16" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_32" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_64" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_8" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_16" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_32" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_64" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_8" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__filltie" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__hold".
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtn_1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtn_2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtn_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtp_1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtp_2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtp_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_12".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_16".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_1".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_2".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_3".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_4".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_8".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffsnq_4".
+ABC: Library "gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80" from "/tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib" has 145 cells (84 skipped: 48 seq; 15 tri-state; 21 no func; 0 dont_use; 0 with 2 outputs; 0 with 3+ outputs).  Time =     0.20 sec
+ABC: Memory =   30.11 MB. Time =     0.20 sec
+ABC: Warning: Detected 6 multi-output cells (for example, "gf180mcu_fd_sc_mcu7t5v0__addf_1").
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
+ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
+ABC: + dc2 
+ABC: + dretime 
+ABC: + retime -o -D 5000 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf -D 5000 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+
+13.1.2. Re-integrating ABC results.
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__and2_1 cells:        4
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__and3_1 cells:        1
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__aoi21_1 cells:        2
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__clkinv_1 cells:        7
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__mux2_1 cells:      623
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__mux4_1 cells:      176
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__nand2_1 cells:       18
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__nand3_1 cells:        4
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__nor2_1 cells:       12
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__nor3_1 cells:        5
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__nor4_1 cells:        1
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__oai21_1 cells:        3
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__or4_1 cells:        1
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__xnor2_1 cells:        3
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__xor2_1 cells:        9
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__xor3_1 cells:        2
+ABC RESULTS:        internal signals:      626
+ABC RESULTS:           input signals:      644
+ABC RESULTS:          output signals:      646
+Removing temp directory.
+
+13.2. Extracting gate netlist of module `$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split' to `<abc-temp-dir>/input.blif'..
+Replacing 108 occurrences of constant undef bits with constant zero bits
+
+13.2.1. Executed ABC.
+Extracted 257 gates and 410 wires to a netlist network with 150 inputs and 115 outputs.
+Running ABC script: <abc-temp-dir>/abc.script
+ABC: UC Berkeley, ABC 1.01 (compiled Oct  9 2025 02:26:17)
+ABC: abc 01> empty
+ABC: abc 01> source <abc-temp-dir>/abc.script
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_lib -w /tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib 
+ABC: Parsing finished successfully.  Parsing time =     0.10 sec
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__antenna" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_12".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_16".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_1".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_2".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_3".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_4".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_8".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__endcap" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_16" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_32" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_64" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_8" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_16" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_32" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_64" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_8" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__filltie" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__hold".
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtn_1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtn_2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtn_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtp_1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtp_2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtp_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_12".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_16".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_1".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_2".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_3".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_4".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_8".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffsnq_4".
+ABC: Library "gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80" from "/tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib" has 145 cells (84 skipped: 48 seq; 15 tri-state; 21 no func; 0 dont_use; 0 with 2 outputs; 0 with 3+ outputs).  Time =     0.19 sec
+ABC: Memory =   30.11 MB. Time =     0.19 sec
+ABC: Warning: Detected 6 multi-output cells (for example, "gf180mcu_fd_sc_mcu7t5v0__addf_1").
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
+ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
+ABC: + dc2 
+ABC: + dretime 
+ABC: + retime -o -D 5000 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf -D 5000 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+
+13.2.2. Re-integrating ABC results.
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__and2_1 cells:        1
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__aoi211_1 cells:        1
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__aoi21_1 cells:        2
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__aoi22_1 cells:        1
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__clkinv_1 cells:        4
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__mux2_1 cells:      110
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__nand2_1 cells:        1
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__nor2_1 cells:        2
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__nor4_1 cells:        2
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__oai21_1 cells:        1
+ABC RESULTS:        internal signals:      145
+ABC RESULTS:           input signals:      150
+ABC RESULTS:          output signals:      115
+Removing temp directory.
+
+13.3. Extracting gate netlist of module `$paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000' to `<abc-temp-dir>/input.blif'..
+
+13.3.1. Executed ABC.
+Extracted 2 gates and 4 wires to a netlist network with 2 inputs and 2 outputs.
+Running ABC script: <abc-temp-dir>/abc.script
+ABC: UC Berkeley, ABC 1.01 (compiled Oct  9 2025 02:26:17)
+ABC: abc 01> empty
+ABC: abc 01> source <abc-temp-dir>/abc.script
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_lib -w /tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib 
+ABC: Parsing finished successfully.  Parsing time =     0.10 sec
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__antenna" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_12".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_16".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_1".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_2".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_3".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_4".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_8".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__endcap" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_16" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_32" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_64" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_8" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_16" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_32" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_64" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_8" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__filltie" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__hold".
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtn_1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtn_2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtn_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtp_1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtp_2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtp_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_12".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_16".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_1".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_2".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_3".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_4".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_8".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffsnq_4".
+ABC: Library "gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80" from "/tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib" has 145 cells (84 skipped: 48 seq; 15 tri-state; 21 no func; 0 dont_use; 0 with 2 outputs; 0 with 3+ outputs).  Time =     0.19 sec
+ABC: Memory =   30.11 MB. Time =     0.19 sec
+ABC: Warning: Detected 6 multi-output cells (for example, "gf180mcu_fd_sc_mcu7t5v0__addf_1").
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
+ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
+ABC: + dc2 
+ABC: + dretime 
+ABC: + retime -o -D 5000 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf -D 5000 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+
+13.3.2. Re-integrating ABC results.
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__and2_1 cells:        1
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__clkinv_1 cells:        1
+ABC RESULTS:        internal signals:        0
+ABC RESULTS:           input signals:        2
+ABC RESULTS:          output signals:        2
+Removing temp directory.
+
+13.4. Extracting gate netlist of module `\axi_downscaler_top' to `<abc-temp-dir>/input.blif'..
+
+13.4.1. Executed ABC.
+Extracted 1 gates and 3 wires to a netlist network with 2 inputs and 1 outputs.
+Running ABC script: <abc-temp-dir>/abc.script
+ABC: UC Berkeley, ABC 1.01 (compiled Oct  9 2025 02:26:17)
+ABC: abc 01> empty
+ABC: abc 01> source <abc-temp-dir>/abc.script
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_lib -w /tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib 
+ABC: Parsing finished successfully.  Parsing time =     0.13 sec
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__antenna" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_12".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_16".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_1".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_2".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_3".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_4".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__bufz_8".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffnsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__dffsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__endcap" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_16" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_32" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_64" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fill_8" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_16" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_32" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_64" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__fillcap_8" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__filltie" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__hold".
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtn_1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtn_2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtn_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtp_1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtp_2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "gf180mcu_fd_sc_mcu7t5v0__icgtp_4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_12".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_16".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_1".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_2".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_3".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_4".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "gf180mcu_fd_sc_mcu7t5v0__invz_8".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__latsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_4".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffsnq_1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffsnq_2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "gf180mcu_fd_sc_mcu7t5v0__sdffsnq_4".
+ABC: Library "gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80" from "/tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib" has 145 cells (84 skipped: 48 seq; 15 tri-state; 21 no func; 0 dont_use; 0 with 2 outputs; 0 with 3+ outputs).  Time =     0.21 sec
+ABC: Memory =   30.11 MB. Time =     0.21 sec
+ABC: Warning: Detected 6 multi-output cells (for example, "gf180mcu_fd_sc_mcu7t5v0__addf_1").
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
+ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
+ABC: + dc2 
+ABC: + dretime 
+ABC: + retime -o -D 5000 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf -D 5000 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+
+13.4.2. Re-integrating ABC results.
+ABC RESULTS:   gf180mcu_fd_sc_mcu7t5v0__or2_1 cells:        1
+ABC RESULTS:        internal signals:        0
+ABC RESULTS:           input signals:        2
+ABC RESULTS:          output signals:        1
+Removing temp directory.
+Removing global temp directory.
+
+14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo..
+Finding unused cells or wires in module $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split..
+Finding unused cells or wires in module $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000..
+Finding unused cells or wires in module \axi_downscaler_top..
+Removed 0 unused cells and 1690 unused wires.
+<suppressed ~16 debug messages>
+
+15. Printing statistics.
+
+=== $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      859        - wires
+     1517        - wire bits
+       29        - public wires
+      687        - public wire bits
+       10        - ports
+       82        - port bits
+     1476    7E+04 cells
+        4   70.246   gf180mcu_fd_sc_mcu7t5v0__and2_1
+        1   21.952   gf180mcu_fd_sc_mcu7t5v0__and3_1
+        2   35.123   gf180mcu_fd_sc_mcu7t5v0__aoi21_1
+        7   61.466   gf180mcu_fd_sc_mcu7t5v0__clkinv_1
+      592 3.77E+04   gf180mcu_fd_sc_mcu7t5v0__dffq_1
+       13  970.278   gf180mcu_fd_sc_mcu7t5v0__dffrnq_1
+      623 1.78E+04   gf180mcu_fd_sc_mcu7t5v0__mux2_1
+      176 1.24E+04   gf180mcu_fd_sc_mcu7t5v0__mux4_1
+       18  197.568   gf180mcu_fd_sc_mcu7t5v0__nand2_1
+        4   61.466   gf180mcu_fd_sc_mcu7t5v0__nand3_1
+       12  158.054   gf180mcu_fd_sc_mcu7t5v0__nor2_1
+        5   87.808   gf180mcu_fd_sc_mcu7t5v0__nor3_1
+        1   21.952   gf180mcu_fd_sc_mcu7t5v0__nor4_1
+        3   52.685   gf180mcu_fd_sc_mcu7t5v0__oai21_1
+        1   26.342   gf180mcu_fd_sc_mcu7t5v0__or4_1
+        3   85.613   gf180mcu_fd_sc_mcu7t5v0__xnor2_1
+        9  237.082   gf180mcu_fd_sc_mcu7t5v0__xor2_1
+        2  100.979   gf180mcu_fd_sc_mcu7t5v0__xor3_1
+
+   Chip area for module '$paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo': 70018.099200
+     of which used for sequential elements: 38657.472000 (55.21%)
+
+=== $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      101        - wires
+      277        - wire bits
+       16        - public wires
+      192        - public wire bits
+       11        - ports
+      117        - port bits
+      200 8.16E+03 cells
+        1   17.562   gf180mcu_fd_sc_mcu7t5v0__and2_1
+        1   21.952   gf180mcu_fd_sc_mcu7t5v0__aoi211_1
+        2   35.123   gf180mcu_fd_sc_mcu7t5v0__aoi21_1
+        1   19.757   gf180mcu_fd_sc_mcu7t5v0__aoi22_1
+        4   35.123   gf180mcu_fd_sc_mcu7t5v0__clkinv_1
+       73 4.65E+03   gf180mcu_fd_sc_mcu7t5v0__dffq_1
+        2  149.274   gf180mcu_fd_sc_mcu7t5v0__dffrnq_1
+      110 3.14E+03   gf180mcu_fd_sc_mcu7t5v0__mux2_1
+        1   10.976   gf180mcu_fd_sc_mcu7t5v0__nand2_1
+        2   26.342   gf180mcu_fd_sc_mcu7t5v0__nor2_1
+        2   43.904   gf180mcu_fd_sc_mcu7t5v0__nor4_1
+        1   17.562   gf180mcu_fd_sc_mcu7t5v0__oai21_1
+
+   Chip area for module '$paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split': 8163.948800
+     of which used for sequential elements: 4796.512000 (58.75%)
+
+=== $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+        8        - wires
+       78        - wire bits
+        8        - public wires
+       78        - public wire bits
+        8        - ports
+       78        - port bits
+        2   26.342 cells
+        1   17.562   gf180mcu_fd_sc_mcu7t5v0__and2_1
+        1    8.781   gf180mcu_fd_sc_mcu7t5v0__clkinv_1
+
+   Chip area for module '$paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000': 26.342400
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== axi_downscaler_top ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       22        - wires
+      198        - wire bits
+       22        - public wires
+      198        - public wire bits
+       14        - ports
+      118        - port bits
+        1   17.562 cells
+        1   17.562   gf180mcu_fd_sc_mcu7t5v0__or2_1
+        3        - submodules
+        1        -   $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo
+        1        -   $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split
+        1        -   $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000
+
+   Chip area for module '\axi_downscaler_top': 17.561600
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        |        +-Area including submodules.
+        |        | 
+     1679 7.82E+04 axi_downscaler_top
+     1476    7E+04 $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo
+      200 8.16E+03 $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split
+        2   26.342 $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000
+
+        +----------Count including submodules.
+        |        +-Area including submodules.
+        |        | 
+      990        - wires
+     2070        - wire bits
+       75        - public wires
+     1155        - public wire bits
+       43        - ports
+      395        - port bits
+        -        - memories
+        -        - memory bits
+        -        - processes
+     1679 7.82E+04 cells
+        6   105.37   gf180mcu_fd_sc_mcu7t5v0__and2_1
+        1   21.952   gf180mcu_fd_sc_mcu7t5v0__and3_1
+        1   21.952   gf180mcu_fd_sc_mcu7t5v0__aoi211_1
+        4   70.246   gf180mcu_fd_sc_mcu7t5v0__aoi21_1
+        1   19.757   gf180mcu_fd_sc_mcu7t5v0__aoi22_1
+       12   105.37   gf180mcu_fd_sc_mcu7t5v0__clkinv_1
+      665 4.23E+04   gf180mcu_fd_sc_mcu7t5v0__dffq_1
+       15 1.12E+03   gf180mcu_fd_sc_mcu7t5v0__dffrnq_1
+      733 2.09E+04   gf180mcu_fd_sc_mcu7t5v0__mux2_1
+      176 1.24E+04   gf180mcu_fd_sc_mcu7t5v0__mux4_1
+       19  208.544   gf180mcu_fd_sc_mcu7t5v0__nand2_1
+        4   61.466   gf180mcu_fd_sc_mcu7t5v0__nand3_1
+       14  184.397   gf180mcu_fd_sc_mcu7t5v0__nor2_1
+        5   87.808   gf180mcu_fd_sc_mcu7t5v0__nor3_1
+        3   65.856   gf180mcu_fd_sc_mcu7t5v0__nor4_1
+        4   70.246   gf180mcu_fd_sc_mcu7t5v0__oai21_1
+        1   17.562   gf180mcu_fd_sc_mcu7t5v0__or2_1
+        1   26.342   gf180mcu_fd_sc_mcu7t5v0__or4_1
+        3   85.613   gf180mcu_fd_sc_mcu7t5v0__xnor2_1
+        9  237.082   gf180mcu_fd_sc_mcu7t5v0__xor2_1
+        2  100.979   gf180mcu_fd_sc_mcu7t5v0__xor3_1
+        3 7.82E+04 submodules
+        1    7E+04   $paramod$a6e130de60c4a861d48c2a64a4ca401e94e7211c\axi_downscaler_fifo
+        1 8.16E+03   $paramod$cd9ef2db53b3d4670740bb950a0592e36c3967d7\axi_downscaler_width_split
+        1   26.342   $paramod\axi_downscaler_m_axis_if\PR_WIDTH_OUT=32'00000000000000000000000000100000
+
+   Chip area for top module '\axi_downscaler_top': 78225.952000
+     of which used for sequential elements: 43453.984000 (55.55%)
+
+16. Executing JSON backend.
+
+End of script. Logfile hash: 1a10005ced, CPU: user 0.59s system 0.03s, MEM: 63.53 MB peak
+Yosys 0.58+35 (git sha1 89f32a415, clang++ 18.1.8 -fPIC -O3)
+Time spent: 70% 1x abc (1 sec), 6% 1x stat (0 sec), ...

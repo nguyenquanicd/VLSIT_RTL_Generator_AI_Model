@@ -1,0 +1,32 @@
+{
+  "ip_name": "axi_downscaler",
+  "spec_ref": "spec/axi_downscaler_spec.md",
+  "structured_spec_ref": "schemas/structured_spec.json",
+  "gate_2_approved": true,
+  "approved_at": "2026-09-02T22:35:28+07:00",
+  "approved_by": "auto-signed (autoflow Phase 2, no error found)",
+  "parameters": {
+    "WIDTH_IN":   { "value": 64, "default": 64, "changed": false },
+    "WIDTH_OUT":  { "value": 32, "default": 32, "changed": false },
+    "FIFO_DEPTH": { "value": 16, "default": 16, "changed": false }
+  },
+  "constraints": {
+    "WIDTH_IN_multiple_of_WIDTH_OUT": {
+      "expression": "WIDTH_IN % WIDTH_OUT == 0",
+      "status": "PASS",
+      "note": "64 % 32 == 0"
+    }
+  },
+  "naming_decisions": {
+    "port_prefix": "i_/o_ theo rtl_rule.md §1.1, kết hợp s_/m_ để phân biệt AXI slave/master side (ví dụ i_s_axis_tdata, o_m_axis_tdata)",
+    "reset_scheme": "active-low, asynchronous assert / synchronous deassert (i_resetn), theo rtl_rule.md §4.2"
+  },
+  "style_constraints": {
+    "source": "rtl_rule.md",
+    "additional_rules": []
+  },
+  "features_enabled": {
+    "mandatory": ["REQ-001","REQ-002","REQ-003","REQ-004","REQ-005","REQ-006","REQ-007","REQ-008","REQ-009","REQ-010","REQ-011","REQ-012","REQ-013","REQ-014","REQ-016"],
+    "soft_guideline_no_sva": ["REQ-015"]
+  }
+}

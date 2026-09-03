@@ -1,0 +1,296 @@
+{
+  "ip_name": "axi_downscaler",
+  "source_spec": "spec/axi_downscaler_spec.md",
+  "gate_1_approved": true,
+  "parameters": {
+    "WIDTH_IN": {
+      "type": "int",
+      "default": 64,
+      "description": "Input data width (bit), S_AXIS side"
+    },
+    "WIDTH_OUT": {
+      "type": "int",
+      "default": 32,
+      "description": "Output data width (bit), M_AXIS side. Must be an integer divisor of WIDTH_IN"
+    },
+    "FIFO_DEPTH": {
+      "type": "int",
+      "default": 16,
+      "description": "Depth of internal buffering FIFO"
+    }
+  },
+  "rtl_modules": {
+    "U01": "axi_downscaler_top",
+    "U02": "axi_downscaler_width_split",
+    "U03": "axi_downscaler_fifo",
+    "U04": "axi_downscaler_m_axis_if"
+  },
+  "requirements": [
+    {
+      "req_id": "REQ-001",
+      "category": "functional",
+      "text": "IP chuyển đổi 1 transaction WIDTH_IN-bit ở S_AXIS thành N = WIDTH_IN / WIDTH_OUT beat WIDTH_OUT-bit tuần tự ở M_AXIS.",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "property",
+      "parameters_affected": [
+        "WIDTH_IN",
+        "WIDTH_OUT"
+      ],
+      "rtl_modules": [
+        "U02"
+      ]
+    },
+    {
+      "req_id": "REQ-002",
+      "category": "functional",
+      "text": "Thứ tự phát output beat khi split là LSB-first: byte/bit thấp nhất của s_axis_tdata phát ở output beat đầu tiên, byte/bit cao nhất phát ở beat cuối cùng.",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "property",
+      "parameters_affected": [
+        "WIDTH_IN",
+        "WIDTH_OUT"
+      ],
+      "rtl_modules": [
+        "U02"
+      ]
+    },
+    {
+      "req_id": "REQ-003",
+      "category": "functional",
+      "text": "TLAST của input beat cuối cùng của 1 transaction được gán vào output beat cuối cùng tương ứng (beat thứ N) của transaction đó.",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "property",
+      "parameters_affected": [
+        "WIDTH_IN",
+        "WIDTH_OUT"
+      ],
+      "rtl_modules": [
+        "U02"
+      ]
+    },
+    {
+      "req_id": "REQ-004",
+      "category": "functional",
+      "text": "IP có FIFO nội bộ (độ sâu FIFO_DEPTH) để buffer dữ liệu phía output. Khi FIFO đầy, s_axis_tready phải deassert (backpressure) để dừng nhận dữ liệu mới ở phía slave.",
+      "ambiguity_score": 0.15,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "property",
+      "parameters_affected": [
+        "FIFO_DEPTH"
+      ],
+      "rtl_modules": [
+        "U03",
+        "U02"
+      ]
+    },
+    {
+      "req_id": "REQ-005",
+      "category": "functional",
+      "text": "o_err_fifo phát pulse 1 chu kỳ clock khi xảy ra FIFO overflow (ghi khi FIFO đầy) hoặc FIFO underflow (đọc khi FIFO rỗng). Không sticky, không cần clear.",
+      "ambiguity_score": 0.15,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "property",
+      "parameters_affected": [
+        "FIFO_DEPTH"
+      ],
+      "rtl_modules": [
+        "U03"
+      ]
+    },
+    {
+      "req_id": "REQ-006",
+      "category": "functional",
+      "text": "o_err_protocol phát pulse 1 chu kỳ clock khi phát hiện i_s_axis_tkeep == 0 trong khi i_s_axis_tvalid == 1 (beat rỗng nhưng được đánh dấu valid). Không sticky, không cần clear.",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "property",
+      "parameters_affected": [
+        "WIDTH_IN"
+      ],
+      "rtl_modules": [
+        "U02"
+      ],
+      "resolution_history": [
+        {
+          "round": 1,
+          "question": "Điều kiện trigger err_protocol_o cụ thể là gì?",
+          "answer": "A: chỉ check tkeep=0 khi tvalid=1"
+        }
+      ]
+    },
+    {
+      "req_id": "REQ-007",
+      "category": "interface",
+      "text": "IP tuân thủ chuẩn AMBA AXI4-Stream handshake (ARM IHI 0051) trên cả S_AXIS (i_s_axis_*) và M_AXIS (o_m_axis_*/i_m_axis_tready): (1) tdata/tkeep/tlast phải giữ ổn định kể từ khi tvalid được assert cho tới khi handshake xảy ra (tvalid=1 & tready=1); (2) tvalid không được assert phụ thuộc tổ hợp vào tready (không chờ tready mới assert valid); (3) một khi tvalid đã assert, phải giữ nguyên cho tới khi handshake hoàn tất.",
+      "ambiguity_score": 0.15,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "property",
+      "parameters_affected": [],
+      "rtl_modules": [
+        "U02",
+        "U04",
+        "U01"
+      ],
+      "resolution_history": [
+        {
+          "round": 1,
+          "question": "Requirement suy ra từ chuẩn AXI4-Stream (không viết tường minh trong spec) — giữ, xoá, hay tách?",
+          "answer": "Giữ, xác nhận theo tài liệu chính thức AMBA AXI4-Stream Protocol Specification (ARM IHI 0051)"
+        }
+      ]
+    },
+    {
+      "req_id": "REQ-008",
+      "category": "interface",
+      "text": "S_AXIS port set: i_s_axis_tdata[WIDTH_IN-1:0] (in), i_s_axis_tvalid (in), o_s_axis_tready (out), i_s_axis_tlast (in), i_s_axis_tkeep[WIDTH_IN/8-1:0] (in). Naming theo rtl_rule.md §1.1 (i_/o_ prefix + s_ cho slave side).",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "static",
+      "parameters_affected": [
+        "WIDTH_IN"
+      ],
+      "rtl_modules": [
+        "U02",
+        "U01"
+      ]
+    },
+    {
+      "req_id": "REQ-009",
+      "category": "interface",
+      "text": "M_AXIS port set: o_m_axis_tdata[WIDTH_OUT-1:0] (out), o_m_axis_tvalid (out), i_m_axis_tready (in), o_m_axis_tlast (out), o_m_axis_tkeep[WIDTH_OUT/8-1:0] (out). Naming theo rtl_rule.md §1.1 (i_/o_ prefix + m_ cho master side).",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "static",
+      "parameters_affected": [
+        "WIDTH_OUT"
+      ],
+      "rtl_modules": [
+        "U04",
+        "U01"
+      ]
+    },
+    {
+      "req_id": "REQ-010",
+      "category": "interface",
+      "text": "Error port set: o_err_fifo (out, 1-bit), o_err_protocol (out, 1-bit).",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "static",
+      "parameters_affected": [],
+      "rtl_modules": [
+        "U03",
+        "U02",
+        "U01"
+      ]
+    },
+    {
+      "req_id": "REQ-011",
+      "category": "interface",
+      "text": "Clock & reset: 1 clock domain duy nhất (i_clk) dùng chung cho S_AXIS và M_AXIS (không cần CDC); i_resetn active-low, asynchronous assert / synchronous deassert theo rtl_rule.md §4.2.",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "property",
+      "parameters_affected": [],
+      "rtl_modules": [
+        "U01"
+      ]
+    },
+    {
+      "req_id": "REQ-012",
+      "category": "interface",
+      "text": "IP không implement các sideband signal TSTRB, TUSER, TID, TDEST của AXI4-Stream — chỉ dùng bộ tín hiệu cơ bản (TDATA/TVALID/TREADY/TLAST/TKEEP).",
+      "ambiguity_score": 0.05,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "static",
+      "parameters_affected": [],
+      "rtl_modules": [
+        "U02",
+        "U04",
+        "U01"
+      ]
+    },
+    {
+      "req_id": "REQ-013",
+      "category": "timing",
+      "text": "Target clock frequency: 800-1000 MHz. 2000 MHz là stretch goal, không phải giá trị committed.",
+      "ambiguity_score": 0.2,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "none",
+      "parameters_affected": [],
+      "rtl_modules": [
+        "U01"
+      ]
+    },
+    {
+      "req_id": "REQ-014",
+      "category": "timing",
+      "text": "Throughput: sustained 1 output beat/cycle khi m_axis_tready luôn high và input liên tục (không backpressure) — full-rate streaming, không giới hạn nhân tạo.",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "property",
+      "parameters_affected": [],
+      "rtl_modules": [
+        "U02",
+        "U03",
+        "U04"
+      ]
+    },
+    {
+      "req_id": "REQ-015",
+      "category": "timing",
+      "text": "Latency mục tiêu (guideline mềm, không phải hard-check): ~2-4 cycle từ khi nhận beat input đầu tiên của transaction đến khi phát beat output đầu tiên tương ứng.",
+      "ambiguity_score": 0.15,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "none",
+      "parameters_affected": [],
+      "rtl_modules": [
+        "U02",
+        "U03",
+        "U04"
+      ],
+      "notes": "Soft guideline only — không sinh SVA assert cứng theo quyết định của user.",
+      "resolution_history": [
+        {
+          "round": 1,
+          "question": "Latency 2-4 cycle nên là guideline mềm, hard constraint (SVA assert), hay xoá?",
+          "answer": "A: guideline mềm, sva_hint: none"
+        }
+      ]
+    },
+    {
+      "req_id": "REQ-016",
+      "category": "constraint",
+      "text": "WIDTH_IN phải bằng N × WIDTH_OUT (N là số nguyên dương). RTL KHÔNG implement compile-time/elaboration check cho ràng buộc này theo quyết định thiết kế — đây là trách nhiệm của DV team: testplan/testcase phải cover các cặp WIDTH_IN/WIDTH_OUT hợp lệ.",
+      "ambiguity_score": 0.1,
+      "needs_review": false,
+      "needs_human_decision": false,
+      "sva_hint": "cover",
+      "parameters_affected": [
+        "WIDTH_IN",
+        "WIDTH_OUT"
+      ],
+      "rtl_modules": [
+        "U01"
+      ],
+      "notes": "no_rtl_elaboration_check: true — DV-only responsibility, theo quyết định của user."
+    }
+  ]
+}

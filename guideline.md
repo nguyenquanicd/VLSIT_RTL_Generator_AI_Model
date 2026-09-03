@@ -174,7 +174,8 @@ VLSIT_RTL_Generator_AI_Model/   ← git root
 │   │   ├── src/tb/             ← TB top + 24 TCs
 │   │   ├── schemas/            ← 5 gate artifacts
 │   │   └── spec_parser.md
-│   └── RISCV_23_08_2026/       ← spec v0.4 | 191 REQ | Gate 1–3b hoàn tất
+│   ├── RISCV_23_08_2026/       ← spec v0.4 | 191 REQ | Gate 1–3b hoàn tất
+│   └── DOWNSCALER_03_09_2026/  ← AXI Downscaler 64b→32b | 12/16 REQ s/o | Gate 1–5 hoàn tất
 │       ├── src/rtl/            ← 18 modules (12731 cells, 371k µm²)
 │       ├── src/sva/            ← 181 properties
 │       ├── schemas/            ← structured_spec + config + rtm
@@ -216,3 +217,16 @@ VLSIT_RTL_Generator_AI_Model/   ← git root
 | Test cases | 24 |
 | Simulation | **24/24 PASS** |
 | Mutation sign-off | 8/23 REQ-IDs |
+
+## Kết quả tham khảo (axi_downscaler, 2026-09-03)
+
+| Metric | Value |
+|--------|-------|
+| IP | AXI Downscaler 64b→32b |
+| RTL modules | 4 |
+| Lint warnings | 0 |
+| Synthesis (GF180) | 2 corners PASS |
+| SVA assertions | 19 |
+| Test cases | 12 (11 PASS, 1 N/A-STA) |
+| Mutation (all modules) | fifo=100% · m_axis=100% · top=91.7% · width_split=87.5% |
+| Sign-off | **12/16 REQ-IDs** |

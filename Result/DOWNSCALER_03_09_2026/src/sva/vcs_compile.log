@@ -1,0 +1,45 @@
+                         Chronologic VCS (TM)
+         Version X-2025.06_Full64 -- Wed Sep  2 23:07:55 2026
+
+                    Copyright (c) 1991 - 2025 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+   or distribution of this software is strictly prohibited.  Licensed Products
+     communicate with Synopsys servers for the purpose of providing software
+    updates, detecting software piracy and verifying that customers are using
+    Licensed Products in conformity with the applicable License Key for such
+  Licensed Products. Synopsys will use information gathered in connection with
+    this process to deliver software updates and pursue software pirates and
+                                   infringers.
+
+ Inclusivity & Diversity - Visit SolvNetPlus to read the "Synopsys Statement on
+            Inclusivity and Diversity" (Refer to article 000036315 at
+                        https://solvnetplus.synopsys.com)
+
+
+Warning-[SVAA-UNF] Invalid compile time argument to -assert
+  Invalid compile time argument 'svaext_bind' to -assert option. Ignoring 
+  svaext_bind.
+
+Parsing design file 'src/rtl/axi_downscaler_fifo.sv'
+Parsing design file 'src/rtl/axi_downscaler_width_split.sv'
+Parsing design file 'src/rtl/axi_downscaler_m_axis_if.sv'
+Parsing design file 'src/rtl/axi_downscaler_top.sv'
+Parsing design file 'src/sva/axi_downscaler_sva_pkg.sv'
+Parsing design file 'src/sva/axi_downscaler_width_split_sva.sv'
+Parsing design file 'src/sva/axi_downscaler_fifo_sva.sv'
+Parsing design file 'src/sva/axi_downscaler_m_axis_sva.sv'
+Parsing design file 'src/sva/axi_downscaler_top_sva.sv'
+Parsing design file 'src/sva/axi_downscaler_top_bind.sv'
+Top Level Modules:
+       axi_downscaler_top
+No TimeScale specified
+Starting vcs inline pass...
+1 module and 0 UDP read.
+recompiling module axi_downscaler_top
+rm -f _cuarc*.so _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
+if [ -x /tmp/axi_downscaler_sva_check ]; then chmod a-x /tmp/axi_downscaler_sva_check; fi
+g++  -o /tmp/axi_downscaler_sva_check   -no-pie    -rdynamic  -Wl,-rpath='$ORIGIN'/axi_downscaler_sva_check.daidir -Wl,-rpath=./axi_downscaler_sva_check.daidir -Wl,-rpath=/tools/Synopsys/vcs/X-2025.06/linux64/lib -L/tools/Synopsys/vcs/X-2025.06/linux64/lib  -Wl,-rpath-link=./ -Wl,--no-as-needed   objs/amcQw_d.o  _1152321_archive_1.so  SIM_l.o       rmapats_mop.o rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o rmar_llvm_0_0.o            -lvirsim -lerrorinf -lsnpsmalloc -lvfs      -lvcsnew -lsimprofile -lreader_common /tools/Synopsys/vcs/X-2025.06/linux64/lib/libBA.a -luclinative /tools/Synopsys/vcs/X-2025.06/linux64/lib/vcs_tls.o   -Wl,-whole-archive  -lvcsucli    -Wl,-no-whole-archive          /tools/Synopsys/vcs/X-2025.06/linux64/lib/vcs_save_restore_new.o -ldl  -lc -lm -lpthread -ldl 
+/tmp/axi_downscaler_sva_check up to date
+CPU time: .554 seconds to compile + .302 seconds to elab + .230 seconds to link

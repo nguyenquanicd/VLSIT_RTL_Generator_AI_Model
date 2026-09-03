@@ -1,0 +1,626 @@
+{
+  "metadata": {
+    "ip_name": "axi_downscaler",
+    "gate_3_approved": true,
+    "approved_at": "2026-09-03T00:38:29+07:00",
+    "vcs_compile": "pass",
+    "vcs_run_with_tb": "pass — 0 assertion failures, 2 cover properties matched (26, 22 hits)",
+    "phase": 5,
+    "gate_5_approved": true,
+    "vcs_sim_run_with_tb": "pass — 12/12 TC, 0 SVA violations, 2 cover matched",
+    "updated_at": "2026-09-03T20:35:57+07:00",
+    "update_note": "Bổ sung SVA cho REQ-008 (S_AXIS no-X check) và REQ-009 (M_AXIS no-X check) theo yêu cầu người dùng — REQ-012 không thể có SVA (không thể assert 'port không tồn tại')."
+  },
+  "assertions": [
+    {
+      "req_id": "REQ-004",
+      "assertion_label": "a_ws_tready_gated_by_full",
+      "file": "src/sva/axi_downscaler_width_split_sva.sv",
+      "nl_description": "o_s_axis_tready chỉ high khi FIFO không đầy",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-006",
+      "assertion_label": "a_ws_err_protocol_equiv",
+      "file": "src/sva/axi_downscaler_width_split_sva.sv",
+      "nl_description": "o_err_protocol == (tvalid && tkeep==0), khớp chính xác",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-001",
+      "assertion_label": "a_ws_cnt_in_range",
+      "file": "src/sva/axi_downscaler_width_split_sva.sv",
+      "nl_description": "reg_cnt luôn < N",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-002",
+      "assertion_label": "a_ws_slice_lsb_first",
+      "file": "src/sva/axi_downscaler_width_split_sva.sv",
+      "nl_description": "Slice push ra khớp đúng vị trí LSB-first",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-003",
+      "assertion_label": "a_ws_tlast_only_last_slice",
+      "file": "src/sva/axi_downscaler_width_split_sva.sv",
+      "nl_description": "TLAST=0 trên slice không phải cuối",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-003",
+      "assertion_label": "a_ws_tlast_matches_on_last_slice",
+      "file": "src/sva/axi_downscaler_width_split_sva.sv",
+      "nl_description": "TLAST khớp reg_tlast trên slice cuối",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-007",
+      "assertion_label": "a_ws_s_axis_stable_when_stalled",
+      "file": "src/sva/axi_downscaler_width_split_sva.sv",
+      "nl_description": "Input S_AXIS ổn định khi valid=1,ready=0",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-001",
+      "assertion_label": "c_ws_full_split_completes",
+      "file": "src/sva/axi_downscaler_width_split_sva.sv",
+      "nl_description": "Reachability: hoàn tất split N-slice",
+      "confirmed": true,
+      "status": "active",
+      "type": "coverage_only"
+    },
+    {
+      "req_id": "REQ-004",
+      "assertion_label": "a_fifo_count_in_range",
+      "file": "src/sva/axi_downscaler_fifo_sva.sv",
+      "nl_description": "reg_count <= FIFO_DEPTH",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-004",
+      "assertion_label": "a_fifo_full_equiv",
+      "file": "src/sva/axi_downscaler_fifo_sva.sv",
+      "nl_description": "o_full == (count==DEPTH)",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-004",
+      "assertion_label": "a_fifo_empty_equiv",
+      "file": "src/sva/axi_downscaler_fifo_sva.sv",
+      "nl_description": "o_empty == (count==0)",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-005",
+      "assertion_label": "a_fifo_err_overflow_equiv",
+      "file": "src/sva/axi_downscaler_fifo_sva.sv",
+      "nl_description": "o_err_overflow == (push && full)",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-005",
+      "assertion_label": "a_fifo_err_underflow_equiv",
+      "file": "src/sva/axi_downscaler_fifo_sva.sv",
+      "nl_description": "o_err_underflow == (pop && empty)",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-007",
+      "assertion_label": "a_m_axis_stable_when_stalled",
+      "file": "src/sva/axi_downscaler_m_axis_sva.sv",
+      "nl_description": "M_AXIS payload ổn định + tvalid giữ nguyên khi tready=0",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-014",
+      "assertion_label": "c_m_axis_back_to_back",
+      "file": "src/sva/axi_downscaler_m_axis_sva.sv",
+      "nl_description": "Reachability: 2 cycle liên tiếp tvalid&&tready (full-rate)",
+      "confirmed": true,
+      "status": "active",
+      "type": "coverage_only"
+    },
+    {
+      "req_id": "REQ-010",
+      "assertion_label": "a_top_err_fifo_no_x",
+      "file": "src/sva/axi_downscaler_top_sva.sv",
+      "nl_description": "o_err_fifo không bao giờ X/Z",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-010",
+      "assertion_label": "a_top_err_protocol_no_x",
+      "file": "src/sva/axi_downscaler_top_sva.sv",
+      "nl_description": "o_err_protocol không bao giờ X/Z",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-011",
+      "assertion_label": "a_top_errors_clear_on_reset",
+      "file": "src/sva/axi_downscaler_top_sva.sv",
+      "nl_description": "Không còn error treo ngay sau reset",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-011",
+      "assertion_label": "a_top_ready_after_reset",
+      "file": "src/sva/axi_downscaler_top_sva.sv",
+      "nl_description": "s_axis_tready=1 ngay sau reset",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-008",
+      "assertion_label": "a_ws_s_axis_payload_no_x_when_valid",
+      "file": "src/sva/axi_downscaler_width_split_sva.sv",
+      "nl_description": "S_AXIS payload (tdata/tkeep/tlast) không X/Z khi tvalid=1",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-008",
+      "assertion_label": "a_ws_s_axis_tready_no_x",
+      "file": "src/sva/axi_downscaler_width_split_sva.sv",
+      "nl_description": "o_s_axis_tready không bao giờ X/Z",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-009",
+      "assertion_label": "a_m_axis_payload_no_x_when_valid",
+      "file": "src/sva/axi_downscaler_m_axis_sva.sv",
+      "nl_description": "M_AXIS payload (tdata/tkeep/tlast) không X/Z khi tvalid=1",
+      "confirmed": true,
+      "status": "active"
+    },
+    {
+      "req_id": "REQ-009",
+      "assertion_label": "a_m_axis_tvalid_no_x",
+      "file": "src/sva/axi_downscaler_m_axis_sva.sv",
+      "nl_description": "o_m_axis_tvalid không bao giờ X/Z",
+      "confirmed": true,
+      "status": "active"
+    }
+  ],
+  "no_assertion_req_ids": [
+    {
+      "req_id": "REQ-012",
+      "reason": "structural — loại trừ TSTRB/TUSER/TID/TDEST, không có port để assert"
+    },
+    {
+      "req_id": "REQ-013",
+      "reason": "cần Static Timing Analysis, ngoài phạm vi SVA/sim — có info-note trong axi_downscaler_top_sva.sv"
+    },
+    {
+      "req_id": "REQ-015",
+      "reason": "soft guideline, sva_hint=none theo quyết định Gate 1 — không sinh SVA assert cứng"
+    },
+    {
+      "req_id": "REQ-016",
+      "reason": "DV-only theo quyết định Gate 1, RTL/SVA không implement elaboration check — có info-note trong axi_downscaler_top_sva.sv"
+    }
+  ],
+  "req_id_coverage": {
+    "total": 16,
+    "covered_by_assertion": 12,
+    "no_assertion_with_reason": 4,
+    "skipped": 0
+  },
+  "requirements": [
+    {
+      "req_id": "REQ-001",
+      "text": "IP chuyển đổi 1 transaction WIDTH_IN-bit ở S_AXIS thành N = WIDTH_IN / WIDTH_OUT beat WIDTH_OUT-bit tuần tự ở M_AXIS.",
+      "rtl_traced": true,
+      "rtl_files": [
+        "src/rtl/axi_downscaler_width_split.sv"
+      ],
+      "sva_traced": true,
+      "sva_assertions": [
+        "a_ws_cnt_in_range",
+        "c_ws_full_split_completes"
+      ],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-002",
+        "TC-003",
+        "TC-012"
+      ],
+      "sim_pass": true,
+      "mutation_score": 0.875,
+      "mutation_modules": [
+        "axi_downscaler_width_split"
+      ],
+      "eligible_for_signoff": true,
+      "signed_off": true,
+      "sign_off_note": ""
+    },
+    {
+      "req_id": "REQ-002",
+      "text": "Thứ tự phát output beat khi split là LSB-first: byte/bit thấp nhất của s_axis_tdata phát ở output beat đầu tiên, byte/bit cao nhất phát ở beat cuối cùng.",
+      "rtl_traced": true,
+      "rtl_files": [
+        "src/rtl/axi_downscaler_width_split.sv"
+      ],
+      "sva_traced": true,
+      "sva_assertions": [
+        "a_ws_slice_lsb_first"
+      ],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-002",
+        "TC-012"
+      ],
+      "sim_pass": true,
+      "mutation_score": 0.875,
+      "mutation_modules": [
+        "axi_downscaler_width_split"
+      ],
+      "eligible_for_signoff": true,
+      "signed_off": true,
+      "sign_off_note": ""
+    },
+    {
+      "req_id": "REQ-003",
+      "text": "TLAST của input beat cuối cùng của 1 transaction được gán vào output beat cuối cùng tương ứng (beat thứ N) của transaction đó.",
+      "rtl_traced": true,
+      "rtl_files": [
+        "src/rtl/axi_downscaler_width_split.sv"
+      ],
+      "sva_traced": true,
+      "sva_assertions": [
+        "a_ws_tlast_only_last_slice",
+        "a_ws_tlast_matches_on_last_slice"
+      ],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-002",
+        "TC-012"
+      ],
+      "sim_pass": true,
+      "mutation_score": 0.875,
+      "mutation_modules": [
+        "axi_downscaler_width_split"
+      ],
+      "eligible_for_signoff": true,
+      "signed_off": true,
+      "sign_off_note": ""
+    },
+    {
+      "req_id": "REQ-004",
+      "text": "IP có FIFO nội bộ (độ sâu FIFO_DEPTH) để buffer dữ liệu phía output. Khi FIFO đầy, s_axis_tready phải deassert (backpressure) để dừng nhận dữ liệu mới ở phía slave.",
+      "rtl_traced": true,
+      "rtl_files": [
+        "src/rtl/axi_downscaler_width_split.sv",
+        "src/rtl/axi_downscaler_fifo.sv"
+      ],
+      "sva_traced": true,
+      "sva_assertions": [
+        "a_ws_tready_gated_by_full",
+        "a_fifo_count_in_range",
+        "a_fifo_full_equiv",
+        "a_fifo_empty_equiv"
+      ],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-005"
+      ],
+      "sim_pass": true,
+      "mutation_score": 0.875,
+      "mutation_modules": [
+        "axi_downscaler_width_split",
+        "axi_downscaler_fifo"
+      ],
+      "eligible_for_signoff": true,
+      "signed_off": true,
+      "sign_off_note": ""
+    },
+    {
+      "req_id": "REQ-005",
+      "text": "o_err_fifo phát pulse 1 chu kỳ clock khi xảy ra FIFO overflow (ghi khi FIFO đầy) hoặc FIFO underflow (đọc khi FIFO rỗng). Không sticky, không cần clear.",
+      "rtl_traced": true,
+      "rtl_files": [
+        "src/rtl/axi_downscaler_fifo.sv"
+      ],
+      "sva_traced": true,
+      "sva_assertions": [
+        "a_fifo_err_overflow_equiv",
+        "a_fifo_err_underflow_equiv"
+      ],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-006"
+      ],
+      "sim_pass": true,
+      "mutation_score": 1.0,
+      "mutation_modules": [
+        "axi_downscaler_fifo"
+      ],
+      "eligible_for_signoff": true,
+      "signed_off": true,
+      "sign_off_note": ""
+    },
+    {
+      "req_id": "REQ-006",
+      "text": "o_err_protocol phát pulse 1 chu kỳ clock khi phát hiện i_s_axis_tkeep == 0 trong khi i_s_axis_tvalid == 1 (beat rỗng nhưng được đánh dấu valid). Không sticky, không cần clear.",
+      "rtl_traced": true,
+      "rtl_files": [
+        "src/rtl/axi_downscaler_width_split.sv"
+      ],
+      "sva_traced": true,
+      "sva_assertions": [
+        "a_ws_err_protocol_equiv"
+      ],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-007"
+      ],
+      "sim_pass": true,
+      "mutation_score": 0.875,
+      "mutation_modules": [
+        "axi_downscaler_width_split"
+      ],
+      "eligible_for_signoff": true,
+      "signed_off": true,
+      "sign_off_note": ""
+    },
+    {
+      "req_id": "REQ-007",
+      "text": "IP tuân thủ chuẩn AMBA AXI4-Stream handshake (ARM IHI 0051) trên cả S_AXIS (i_s_axis_*) và M_AXIS (o_m_axis_*/i_m_axis_tready): (1) tdata/tkeep/tlast phải giữ ổn định kể từ khi tvalid được assert cho tới khi handshake xảy ra (tvalid=1 & tready=1); (2) tvalid không được assert phụ thuộc tổ hợp vào tready (không chờ tready mới assert valid); (3) một khi tvalid đã assert, phải giữ nguyên cho tới khi handshake hoàn tất.",
+      "rtl_traced": true,
+      "rtl_files": [
+        "src/rtl/axi_downscaler_width_split.sv",
+        "src/rtl/axi_downscaler_m_axis_if.sv"
+      ],
+      "sva_traced": true,
+      "sva_assertions": [
+        "a_ws_s_axis_stable_when_stalled",
+        "a_m_axis_stable_when_stalled"
+      ],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-004"
+      ],
+      "sim_pass": true,
+      "mutation_score": 0.875,
+      "mutation_modules": [
+        "axi_downscaler_width_split",
+        "axi_downscaler_m_axis_if"
+      ],
+      "eligible_for_signoff": true,
+      "signed_off": true,
+      "sign_off_note": ""
+    },
+    {
+      "req_id": "REQ-008",
+      "text": "S_AXIS port set: i_s_axis_tdata[WIDTH_IN-1:0] (in), i_s_axis_tvalid (in), o_s_axis_tready (out), i_s_axis_tlast (in), i_s_axis_tkeep[WIDTH_IN/8-1:0] (in). Naming theo rtl_rule.md §1.1 (i_/o_ prefix + s_ cho slave side).",
+      "rtl_traced": true,
+      "rtl_files": [
+        "src/rtl/axi_downscaler_width_split.sv",
+        "src/rtl/axi_downscaler_top.sv"
+      ],
+      "sva_traced": true,
+      "sva_assertions": [
+        "a_ws_s_axis_payload_no_x_when_valid",
+        "a_ws_s_axis_tready_no_x"
+      ],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-002"
+      ],
+      "sim_pass": true,
+      "mutation_score": 0.875,
+      "mutation_modules": [
+        "axi_downscaler_width_split",
+        "axi_downscaler_top"
+      ],
+      "eligible_for_signoff": true,
+      "signed_off": true,
+      "sign_off_note": "structural — S_AXIS port list, không có behavior runtime để assert"
+    },
+    {
+      "req_id": "REQ-009",
+      "text": "M_AXIS port set: o_m_axis_tdata[WIDTH_OUT-1:0] (out), o_m_axis_tvalid (out), i_m_axis_tready (in), o_m_axis_tlast (out), o_m_axis_tkeep[WIDTH_OUT/8-1:0] (out). Naming theo rtl_rule.md §1.1 (i_/o_ prefix + m_ cho master side).",
+      "rtl_traced": true,
+      "rtl_files": [
+        "src/rtl/axi_downscaler_m_axis_if.sv",
+        "src/rtl/axi_downscaler_top.sv"
+      ],
+      "sva_traced": true,
+      "sva_assertions": [
+        "a_m_axis_payload_no_x_when_valid",
+        "a_m_axis_tvalid_no_x"
+      ],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-002"
+      ],
+      "sim_pass": true,
+      "mutation_score": 0.917,
+      "mutation_modules": [
+        "axi_downscaler_m_axis_if",
+        "axi_downscaler_top"
+      ],
+      "eligible_for_signoff": true,
+      "signed_off": true,
+      "sign_off_note": "structural — M_AXIS port list, không có behavior runtime để assert"
+    },
+    {
+      "req_id": "REQ-010",
+      "text": "Error port set: o_err_fifo (out, 1-bit), o_err_protocol (out, 1-bit).",
+      "rtl_traced": true,
+      "rtl_files": [
+        "src/rtl/axi_downscaler_top.sv"
+      ],
+      "sva_traced": true,
+      "sva_assertions": [
+        "a_top_err_fifo_no_x",
+        "a_top_err_protocol_no_x"
+      ],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-006",
+        "TC-007"
+      ],
+      "sim_pass": true,
+      "mutation_score": 0.917,
+      "mutation_modules": [
+        "axi_downscaler_top"
+      ],
+      "eligible_for_signoff": true,
+      "signed_off": true,
+      "sign_off_note": ""
+    },
+    {
+      "req_id": "REQ-011",
+      "text": "Clock & reset: 1 clock domain duy nhất (i_clk) dùng chung cho S_AXIS và M_AXIS (không cần CDC); i_resetn active-low, asynchronous assert / synchronous deassert theo rtl_rule.md §4.2.",
+      "rtl_traced": true,
+      "rtl_files": [
+        "src/rtl/axi_downscaler_width_split.sv",
+        "src/rtl/axi_downscaler_top.sv"
+      ],
+      "sva_traced": true,
+      "sva_assertions": [
+        "a_top_errors_clear_on_reset",
+        "a_top_ready_after_reset"
+      ],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-001"
+      ],
+      "sim_pass": true,
+      "mutation_score": 0.875,
+      "mutation_modules": [
+        "axi_downscaler_width_split",
+        "axi_downscaler_top"
+      ],
+      "eligible_for_signoff": true,
+      "signed_off": true,
+      "sign_off_note": ""
+    },
+    {
+      "req_id": "REQ-012",
+      "text": "IP không implement các sideband signal TSTRB, TUSER, TID, TDEST của AXI4-Stream — chỉ dùng bộ tín hiệu cơ bản (TDATA/TVALID/TREADY/TLAST/TKEEP).",
+      "rtl_traced": true,
+      "rtl_files": [
+        "src/rtl/axi_downscaler_top.sv"
+      ],
+      "sva_traced": false,
+      "sva_assertions": [],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-008"
+      ],
+      "sim_pass": true,
+      "mutation_score": 0.917,
+      "mutation_modules": [
+        "axi_downscaler_top"
+      ],
+      "eligible_for_signoff": false,
+      "signed_off": false,
+      "sign_off_note": "structural — loại trừ TSTRB/TUSER/TID/TDEST, không có port để assert"
+    },
+    {
+      "req_id": "REQ-013",
+      "text": "Target clock frequency: 800-1000 MHz. 2000 MHz là stretch goal, không phải giá trị committed.",
+      "rtl_traced": false,
+      "rtl_files": [],
+      "sva_traced": false,
+      "sva_assertions": [],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-009"
+      ],
+      "sim_pass": null,
+      "mutation_score": "N/A",
+      "mutation_modules": [],
+      "eligible_for_signoff": false,
+      "signed_off": false,
+      "sign_off_note": "cần Static Timing Analysis, ngoài phạm vi SVA/sim"
+    },
+    {
+      "req_id": "REQ-014",
+      "text": "Throughput: sustained 1 output beat/cycle khi m_axis_tready luôn high và input liên tục (không backpressure) — full-rate streaming, không giới hạn nhân tạo.",
+      "rtl_traced": true,
+      "rtl_files": [
+        "src/rtl/axi_downscaler_width_split.sv",
+        "src/rtl/axi_downscaler_m_axis_if.sv"
+      ],
+      "sva_traced": true,
+      "sva_assertions": [
+        "c_m_axis_back_to_back"
+      ],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-003"
+      ],
+      "sim_pass": true,
+      "mutation_score": 0.875,
+      "mutation_modules": [
+        "axi_downscaler_width_split",
+        "axi_downscaler_m_axis_if"
+      ],
+      "eligible_for_signoff": true,
+      "signed_off": true,
+      "sign_off_note": ""
+    },
+    {
+      "req_id": "REQ-015",
+      "text": "Latency mục tiêu (guideline mềm, không phải hard-check): ~2-4 cycle từ khi nhận beat input đầu tiên của transaction đến khi phát beat output đầu tiên tương ứng.",
+      "rtl_traced": false,
+      "rtl_files": [],
+      "sva_traced": false,
+      "sva_assertions": [],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-010"
+      ],
+      "sim_pass": true,
+      "mutation_score": "N/A",
+      "mutation_modules": [],
+      "eligible_for_signoff": false,
+      "signed_off": false,
+      "sign_off_note": "soft guideline, sva_hint=none theo quyết định Gate 1"
+    },
+    {
+      "req_id": "REQ-016",
+      "text": "WIDTH_IN phải bằng N × WIDTH_OUT (N là số nguyên dương). RTL KHÔNG implement compile-time/elaboration check cho ràng buộc này theo quyết định thiết kế — đây là trách nhiệm của DV team: testplan/testcase phải cover các cặp WIDTH_IN/WIDTH_OUT hợp lệ.",
+      "rtl_traced": false,
+      "rtl_files": [],
+      "sva_traced": false,
+      "sva_assertions": [],
+      "tc_traced": true,
+      "tc_ids": [
+        "TC-011"
+      ],
+      "sim_pass": true,
+      "mutation_score": "N/A",
+      "mutation_modules": [],
+      "eligible_for_signoff": false,
+      "signed_off": false,
+      "sign_off_note": "DV-only theo quyết định Gate 1, RTL/SVA không implement elaboration check"
+    }
+  ],
+  "rtm_summary": {
+    "total_req_ids": 16,
+    "signed_off": 12,
+    "pending": 0,
+    "locked": 4
+  }
+}

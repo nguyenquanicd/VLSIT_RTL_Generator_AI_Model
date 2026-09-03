@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "phase": 5,
+    "ip_name": "axi_downscaler",
+    "gate_5_approved": true,
+    "approved_at": "2026-09-03T00:38:29+07:00",
+    "updated_at": "2026-09-03T20:35:57+07:00",
+    "update_note": "Bổ sung SVA cho REQ-008/009 (no-X check) — cả 2 giờ eligible for sign-off, chờ user xác nhận."
+  },
+  "sim_summary": {
+    "total_tc": 12,
+    "pass": 11,
+    "fail": 0,
+    "na": 1,
+    "sva_violations": 0,
+    "compile_log": "work/compile.log",
+    "note": "TC-009 = N/A (cần STA, không có runtime check). 11 TC còn lại PASS thật qua VCS simulation, bao gồm cả SVA bound (0 violation)."
+  },
+  "mutation_summary": {
+    "total_modules_tested": 4,
+    "module_scores": {
+      "axi_downscaler_fifo": 1.0,
+      "axi_downscaler_m_axis_if": 1.0,
+      "axi_downscaler_top": 0.917,
+      "axi_downscaler_width_split": 0.875
+    },
+    "above_threshold": 4,
+    "below_threshold": 0,
+    "na": 0,
+    "threshold": 0.85,
+    "note": "Mutation testing chạy theo MODULE (4 module RTL), không theo per-REQ-ID (khác template RV32IM 18-module gốc). axi_downscaler_width_split.sv ban đầu chỉ 75% — đã cải thiện lên 87.5% bằng cách: (1) thêm TC-012 với data pattern đa dạng + case tlast=0 (bắt được 2 gap test thật: stuck-at bit20/29, thiếu coverage tlast=0), (2) sửa RTL loại bỏ cast int'(...) dư thừa trong phép tính địa chỉ slice (loại bỏ dead logic thật). 3 mutation còn sống được xác định là equivalent mutant (logic FSM 1-bit không thể kích hoạt với N=2)."
+  },
+  "rtm_summary": {
+    "total_req_ids": 16,
+    "signed_off": 12,
+    "pending": 0,
+    "locked": 4,
+    "locked_req_ids": [
+      "REQ-012",
+      "REQ-013",
+      "REQ-015",
+      "REQ-016"
+    ],
+    "locked_reason_summary": "REQ-012 structural (không thể assert 'port không tồn tại'); REQ-013 cần STA; REQ-015/016 theo quyết định Gate 1 (soft guideline / DV-only)."
+  },
+  "tool_versions": {
+    "vcs": "X-2025.06",
+    "yosys": "0.58+35",
+    "verilator": "5.041",
+    "pdk": "GF180MCU TT 025C 1v80 / SS 125C 1v62",
+    "pdk_lib_full": "/tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/build/synopsys/gf180mcu_fd_sc_mcu7t5v0__{tt_025C_1v80,ss_125C_1v62}_full.lib"
+  },
+  "known_caveats": [
+    "REQ-013 (target clock 800MHz-2GHz) chưa được verify bằng STA — chỉ mới qua Yosys cell-mapping/synthesis, không có timing closure check. GF180MCU 180nm khó khả thi ở tần số này với logic hiện tại, cần review lại target hoặc redesign pipeline.",
+    "REQ-016 (WIDTH_IN=N*WIDTH_OUT) chỉ verify với N=2 (default config WIDTH_IN=64/WIDTH_OUT=32) trong suite này — các tỷ lệ N khác cần regression riêng ngoài phạm vi Phase 4/5 hiện tại."
+  ]
+}

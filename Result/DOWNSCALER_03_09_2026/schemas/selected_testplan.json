@@ -1,0 +1,45 @@
+{
+  "metadata": {
+    "phase": 4,
+    "ip_name": "axi_downscaler",
+    "gate_4_approved": true,
+    "approved_at": "2026-09-02T23:04:39+07:00"
+  },
+  "test_cases": [
+    { "tc_id": "TC-001", "name": "reset_default_state",       "req_ids": ["REQ-011"],                                   "selected": true, "conditional_param": null, "file": "src/tb/tests/tc_001_reset_default_state.sv",       "compile_status": "pass", "sim_status": "PASS" },
+    { "tc_id": "TC-002", "name": "basic_downscale_transfer",   "req_ids": ["REQ-001","REQ-002","REQ-003","REQ-008","REQ-009"], "selected": true, "conditional_param": null, "file": "src/tb/tests/tc_002_basic_downscale_transfer.sv",  "compile_status": "pass", "sim_status": "PASS" },
+    { "tc_id": "TC-003", "name": "back_to_back_throughput",    "req_ids": ["REQ-001","REQ-014"],                         "selected": true, "conditional_param": null, "file": "src/tb/tests/tc_003_back_to_back_throughput.sv",   "compile_status": "pass", "sim_status": "PASS", "note": "Ban đầu FAIL, phát hiện gap-cycle bug trong axi_downscaler_width_split.sv FSM (REQ-014 vi phạm) — đã sửa RTL (chained-accept) và re-synth, giờ PASS." },
+    { "tc_id": "TC-004", "name": "m_axis_handshake_stall",     "req_ids": ["REQ-007"],                                   "selected": true, "conditional_param": null, "file": "src/tb/tests/tc_004_m_axis_handshake_stall.sv",    "compile_status": "pass", "sim_status": "PASS" },
+    { "tc_id": "TC-005", "name": "fifo_backpressure",          "req_ids": ["REQ-004"],                                   "selected": true, "conditional_param": null, "file": "src/tb/tests/tc_005_fifo_backpressure.sv",         "compile_status": "pass", "sim_status": "PASS" },
+    { "tc_id": "TC-006", "name": "no_spurious_err_fifo",       "req_ids": ["REQ-005","REQ-010"],                         "selected": true, "conditional_param": null, "file": "src/tb/tests/tc_006_no_spurious_err_fifo.sv",      "compile_status": "pass", "sim_status": "PASS" },
+    { "tc_id": "TC-007", "name": "protocol_error_detect",      "req_ids": ["REQ-006","REQ-010"],                         "selected": true, "conditional_param": null, "file": "src/tb/tests/tc_007_protocol_error_detect.sv",     "compile_status": "pass", "sim_status": "PASS" },
+    { "tc_id": "TC-008", "name": "excluded_sideband_signals",  "req_ids": ["REQ-012"],                                   "selected": true, "conditional_param": null, "file": "src/tb/tests/tc_008_excluded_sideband_signals.sv", "compile_status": "pass", "sim_status": "PASS", "note": "Structural only — verified via DUT elaboration, no runtime signal check." },
+    { "tc_id": "TC-009", "name": "clock_freq_target",          "req_ids": ["REQ-013"],                                   "selected": true, "conditional_param": null, "file": "src/tb/tests/tc_009_clock_freq_target.sv",         "compile_status": "pass", "sim_status": "N/A", "note": "Requires STA against synthesized netlist — out of scope for functional simulation." },
+    { "tc_id": "TC-010", "name": "latency_measurement",        "req_ids": ["REQ-015"],                                   "selected": true, "conditional_param": null, "file": "src/tb/tests/tc_010_latency_measurement.sv",       "compile_status": "pass", "sim_status": "PASS", "note": "Soft guideline, log-only (no SVA per Gate 1 decision). Measured 2.0 cycles, within 2-4 cycle target." },
+    { "tc_id": "TC-011", "name": "width_ratio_default",        "req_ids": ["REQ-016"],                                   "selected": true, "conditional_param": null, "file": "src/tb/tests/tc_011_width_ratio_default.sv",       "compile_status": "pass", "sim_status": "PASS", "note": "Partial — only default ratio N=2 (WIDTH_IN=64/WIDTH_OUT=32) covered by this build. Other ratios need a separate parameterized regression." },
+    { "tc_id": "TC-012", "name": "bit_toggle_coverage",        "req_ids": ["REQ-001","REQ-002","REQ-003"],               "selected": true, "conditional_param": null, "file": "src/tb/tests/tc_012_bit_toggle_coverage.sv",       "compile_status": "pass", "sim_status": "PASS", "note": "Bổ sung ở Phase 5 để tăng mutation score của axi_downscaler_width_split.sv (75%→79.2%): data pattern đa dạng (all-0, all-1, walking-bit tại bit20/29) + case tlast=0." }
+  ],
+  "coverage": {
+    "total_req_ids": 16,
+    "covered_req_ids": ["REQ-001","REQ-002","REQ-003","REQ-004","REQ-005","REQ-006","REQ-007","REQ-008","REQ-009","REQ-010","REQ-011","REQ-012","REQ-013","REQ-014","REQ-015","REQ-016"],
+    "uncovered_req_ids": [],
+    "coverage_pct": 100.0,
+    "caveats": {
+      "REQ-013": "N/A trong functional sim — cần STA riêng.",
+      "REQ-015": "Soft guideline, không có hard pass/fail SVA (quyết định Gate 1).",
+      "REQ-016": "Partial — chỉ N=2 (default config); các tỷ lệ N khác cần regression riêng."
+    }
+  },
+  "compile_check": {
+    "tool": "VCS X-2025.06",
+    "status": "pass",
+    "error_count": 0
+  },
+  "simulation_check": {
+    "total_tc_run": 12,
+    "pass": 11,
+    "fail": 0,
+    "na": 1,
+    "note": "TC-009 counted as pass/N-A placeholder (không có runtime check); tất cả TC còn lại thực sự PASS qua VCS simulation."
+  }
+}
