@@ -7,6 +7,7 @@ task automatic tc_006_no_spurious_err_fifo();
 
   bit           ok;
   bit           err_seen;
+  bit           traffic_done;
   logic [63:0]  data;
   logic [31:0]  rdata;
   logic         rlast;
@@ -14,12 +15,14 @@ task automatic tc_006_no_spurious_err_fifo();
   int           t;
   int           r;
 
-  ok       = 1'b1;
-  err_seen = 1'b0;
+  ok           = 1'b1;
+  err_seen     = 1'b0;
+  traffic_done = 1'b0;
 
+  // Use done-flag pattern instead of join_any + disable fork (Icarus compat)
   fork
     begin : monitor
-      forever begin
+      while (!traffic_done) begin
         @(negedge tb_clk);
         if (tb_err_fifo) err_seen = 1'b1;
       end
@@ -39,9 +42,9 @@ task automatic tc_006_no_spurious_err_fifo();
           end
         end
       join
+      traffic_done = 1'b1;
     end
-  join_any
-  disable fork;
+  join
 
   if (err_seen) begin
     $error("[FAIL] TC-006 o_err_fifo asserted spuriously during legal random traffic");

@@ -3,6 +3,7 @@
 //              the BFM tasks, and every TC task. DUT output ports (m_*,
 //              err_*, s_tready) are only ever READ here, never assigned,
 //              so there is no conflict with their structural (port) driver.
+`timescale 1ns/1ps
 localparam int unsigned LP_WIDTH_IN      = 64;
 localparam int unsigned LP_WIDTH_OUT     = 32;
 localparam int unsigned LP_FIFO_DEPTH    = 16;

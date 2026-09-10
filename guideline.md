@@ -130,15 +130,23 @@ Sinh `src/tb/` (TB top + models + TC files). Output: `schemas/selected_testplan.
 
 ### Thủ công nếu cần:
 
-**Bước 1 — Compile TB:**
+**Bước 1 — Compile TB + Run (Icarus Verilog — open-source):**
+```bash
+source /etc/profile.d/modules.sh && module load oss-cad-suite
+cd $PROJECT_ROOT
+bash src/tb/run_icarus_sim.sh       # PHẢI chạy từ PROJECT_ROOT
+# Binary: sim/axi_downscaler_tb  |  Log: sim/sim.log
+```
+
+**Hoặc dùng VCS (nếu có):**
 ```bash
 source sourceme.sh
 cd $PROJECT_ROOT
-bash src/tb/run_vcs_compile.sh          # PHẢI chạy từ PROJECT_ROOT
-# Binary: sim/rv32im_tb
+bash src/tb/run_vcs_compile.sh      # PHẢI chạy từ PROJECT_ROOT
+# Binary: sim/simv (hoặc work/simv tuỳ script)
 ```
 
-**Bước 2 — Run sim:**
+**Bước 2 — Run sim (VCS only — Icarus đã chạy trong script trên):**
 ```bash
 cd $PROJECT_ROOT/sim
 ./rv32im_tb -suppress=ASLR_DETECTED_INFO 2>&1 | tee sim.log
@@ -146,8 +154,8 @@ cd $PROJECT_ROOT/sim
 
 **Bước 3 — Kiểm tra:**
 ```bash
-grep -E "(PASS|FAIL|Total)" sim.log
-# Target: N/N PASS, Total errors: 0
+grep -E "\[PASS\]|\[FAIL\]|\[N/A\]|TESTBENCH SUMMARY" sim/sim.log
+# Target: TESTBENCH SUMMARY: N PASS, 0 FAIL
 ```
 
 Output: `schemas/verification_report.json` (Gate 5).
@@ -202,6 +210,10 @@ VLSIT_RTL_Generator_AI_Model/   ← git root
 | Sky130 không có trên server | Dùng GF180MCU cho synthesis |
 | `structured_spec.json` thiếu khi chạy `/tb_generator` | TB dùng REQ-IDs từ `rtm.json` thay thế |
 | Slash command không nhận diện | Kiểm tra `.claude/commands/*.md` có đúng tên không |
+| Icarus: `$realtime` trong CU-scope task → crash VPI type=600 | Thay bằng `longint'($time)` — Icarus 13.0 devel bug |
+| Icarus: `disable fork` trong `automatic` task → assertion fail | Dùng done-flag `fork...join` pattern thay `join_any` |
+| Icarus: `#(real_param)` delay trong CU-scope task → hang | Dùng literal delay hoặc `@(posedge clk)` |
+| Icarus: TB signals file thiếu timescale → VCD crash | Thêm `` `timescale 1ns/1ps `` vào đầu file TB signals |
 
 ---
 
@@ -228,5 +240,6 @@ VLSIT_RTL_Generator_AI_Model/   ← git root
 | Synthesis (GF180) | 2 corners PASS |
 | SVA assertions | 19 |
 | Test cases | 12 (11 PASS, 1 N/A-STA) |
+| Simulation (Icarus Verilog 13.0) | **12/12 PASS** |
 | Mutation (all modules) | fifo=100% · m_axis=100% · top=91.7% · width_split=87.5% |
 | Sign-off | **12/16 REQ-IDs** |

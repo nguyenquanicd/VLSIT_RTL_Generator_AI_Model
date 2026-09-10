@@ -35,16 +35,34 @@ Thiếu file nào → dừng, thông báo rõ.
 
 **1.2 Kiểm tra tool:**
 
+Thử VCS trước; nếu không có thì dùng Icarus Verilog:
+
 ```bash
-module load synopsys/vcs/X-2025.06 && vcs -ID 2>&1 | head -1
+# Thử VCS
+if module load synopsys/vcs/X-2025.06 2>/dev/null && vcs -ID 2>&1 | head -1; then
+    sim_tool="vcs"
+elif source /etc/profile.d/modules.sh && module load oss-cad-suite 2>/dev/null && iverilog -V 2>&1 | head -1; then
+    sim_tool="icarus"
+else
+    echo "Không tìm thấy VCS hoặc Icarus Verilog. Dừng."
+    exit 1
+fi
+echo "sim_tool=$sim_tool"
 ```
-Nếu fail → dừng: _"VCS không load được. Kiểm tra `module avail synopsys/vcs`."_
+
+Nếu cả hai đều fail → dừng: _"Không có simulator nào khả dụng. Kiểm tra `module avail`."_
 
 ```bash
 module load oss-cad-suite && yosys --version
 ```
 Nếu fail → cảnh báo: _"oss-cad-suite không load được — bước mutation sẽ bị skip."_
 Ghi nhận `mutation_available: false` để xử lý ở Bước 4.
+
+> **Icarus 13.0 known limitations (ghi nhận để tránh khi generate TB):**
+> - Tránh `$realtime` trong compilation-unit-scope tasks — dùng `longint'($time)` thay thế (VPI type=600 bug)
+> - Tránh `disable fork` trong `automatic` tasks — dùng done-flag `fork...join` pattern
+> - Tránh `#<param_expr>` (delay dùng real param) trong CU-scope tasks — dùng literal hoặc `@(posedge clk)`
+> - File TB signals phải có `` `timescale 1ns/1ps `` (RTL files không cần)
 
 **1.3 Chuẩn bị thư mục:**
 
@@ -65,6 +83,8 @@ Pre-flight OK:
 
 ## Bước 2 — Full compile check (RTL + SVA + TB)
 
+**Nếu `sim_tool == "vcs"`:**
+
 ```bash
 module load synopsys/vcs/X-2025.06
 vcs -sverilog -timescale=1ns/1ps \
@@ -76,9 +96,23 @@ vcs -sverilog -timescale=1ns/1ps \
     -o work/simv 2>&1 | tee work/compile.log
 ```
 
+**Nếu `sim_tool == "icarus"`:**
+
+```bash
+source /etc/profile.d/modules.sh && module load oss-cad-suite
+mkdir -p sim work
+iverilog -g2012 -o sim/simv \
+    $(grep -v "^//" src/rtl/filelist.f) \
+    $(grep -v "^-f\|^//" src/tb/filelist_tb.f) \
+    src/tb/tests/tc_*.sv \
+    2>&1 | tee work/compile.log
+```
+
+> SVA (filelist_sva.f) không được Icarus Verilog hỗ trợ — bỏ qua trong Icarus mode.
+
 Parse `work/compile.log`:
-- Tìm `Error` hoặc exit code ≠ 0 → **FAIL**
-- Tìm `Warning` → ghi nhận nhưng không block
+- Tìm `error:` hoặc exit code ≠ 0 → **FAIL**
+- Tìm `warning:` → ghi nhận nhưng không block
 
 Nếu **FAIL**:
 1. Hiển thị 20 dòng lỗi đầu tiên từ `work/compile.log`
@@ -103,6 +137,7 @@ Tạo `work/sim_results.json` rỗng:
 
 **Với mỗi TC**, chạy:
 
+_Nếu `sim_tool == "vcs"`:_
 ```bash
 work/simv \
     +TC=<tc_id> \
@@ -111,11 +146,19 @@ work/simv \
     2>&1 | tee work/sim_<tc_id>.log
 ```
 
-Parse `work/sim_<tc_id>.log`:
+_Nếu `sim_tool == "icarus"`:_
+```bash
+# Icarus chạy tất cả TC trong một binary — không chạy từng TC riêng lẻ
+vvp sim/simv 2>&1 | tee work/sim_all.log
+```
+
+Parse output:
 - `[PASS]` → status = `pass`
 - `[FAIL]` → status = `fail`
-- `Assertion FAILED` → status = `sva_violation` (cũng là fail)
-- Không thấy [PASS] sau TIMEOUT cycle → status = `timeout`
+- `[N/A]` → status = `na` (không block sign-off)
+- `Assertion FAILED` → status = `sva_violation` (cũng là fail, chỉ VCS mode)
+- `TESTBENCH SUMMARY: X PASS, Y FAIL` → dùng làm tổng kết
+- Không có SUMMARY sau timeout → status = `timeout`
 
 Hiển thị progress sau mỗi TC:
 ```

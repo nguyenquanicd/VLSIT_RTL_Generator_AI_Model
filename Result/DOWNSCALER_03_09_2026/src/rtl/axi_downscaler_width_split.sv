@@ -99,7 +99,7 @@ module axi_downscaler_width_split #(
     end else begin
       unique case (reg_state)
         ST_IDLE : if (w_accept)    reg_state <= ST_BUSY;
-        ST_BUSY : if (w_finishing) reg_state <= w_accept ? ST_BUSY : ST_IDLE;
+        ST_BUSY : if (w_finishing) reg_state <= split_state_t'(w_accept ? ST_BUSY : ST_IDLE);
         default : reg_state <= ST_IDLE;
       endcase
     end

@@ -12,21 +12,24 @@ task automatic tc_007_protocol_error_detect();
   ok = 1'b1;
 
   // ---- Case 1: tkeep=0 & tvalid=1 must assert err_protocol ----
+  // Drive at negedge so the signal is stable when we check below (same delta)
   @(negedge tb_clk);
   tb_s_tdata  = 64'h1111_2222_3333_4444;
   tb_s_tkeep  = 8'h00;
   tb_s_tlast  = 1'b1;
   tb_s_tvalid = 1'b1;
-  #1;
+
+  // err_protocol is purely combinational; check at next negedge after signal settles
+  @(negedge tb_clk);
   if (tb_err_protocol !== 1'b1) begin
     $error("[FAIL] TC-007 expected o_err_protocol=1 when tkeep=0 & tvalid=1, got %0b", tb_err_protocol);
     ok = 1'b0;
   end
 
-  @(negedge tb_clk);
+  // Deassert tvalid
   tb_s_tvalid = 1'b0;
   tb_s_tkeep  = 8'hFF;
-  #1;
+  @(negedge tb_clk);
   if (tb_err_protocol !== 1'b0) begin
     $error("[FAIL] TC-007 expected o_err_protocol=0 once tvalid deasserted, got %0b", tb_err_protocol);
     ok = 1'b0;
