@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Autoflow — Mermaid Diagram</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 32px 24px;
+    min-height: 100vh;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 0.82rem;
+    color: #94a3b8;
+    margin-bottom: 32px;
+  }
+  .mermaid {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 32px;
+    border: 1px solid #334155;
+  }
+  .note {
+    max-width: 700px;
+    margin: 24px auto 0;
+    font-size: 0.72rem;
+    color: #64748b;
+    text-align: center;
+    line-height: 1.8;
+  }
+  .note strong { color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<h1>AUTOFLOW — Mermaid Flow</h1>
+<p class="subtitle">
+  8 Skills &nbsp;·&nbsp; chạy <strong style="color:#f87171">tuần tự</strong> &nbsp;·&nbsp;
+  tối đa <strong style="color:#d8b4fe">2 agents đồng thời</strong> chỉ tại Phase 3a + 4
+</p>
+
+<div class="mermaid">
+flowchart TD
+    START(["/autoflow"]) --> MODE{Mode B?\nmô tả design}
+
+    MODE -->|"Có"| A1["Skill 1 · spec_writer\n⟨tuỳ chọn — Mode B⟩"]
+    MODE -->|"Không\nMode A"| PRE
+
+    A1 --> PRE[Pre-flight checks\nspec file · schemas/ · tools]
+    PRE --> A2
+
+    A2["Skill 2 · spec_parser\nPhase 1\n─────────────────\nPhân tích spec · REQ-IDs\nMap modules · Ambiguity"] --> G1
+
+    G1{"⏸ GATE 1\nHuman Review"}
+    G1 -->|"yes"| A3
+    G1 -->|"no"| STOP1(["Stop\nfix spec + chạy lại"])
+
+    A3["Skill 3 · config_ui\nPhase 2\n─────────────────\nLock parameters\nfinal_config.json"] --> G2
+
+    G2(["✓ GATE 2\nAuto-sign"]) --> FORK[ ]
+
+    subgraph PAR["🔀  Có thể gọi 2 agents đồng thời  "]
+        direction LR
+        A4["Skill 4 · rtl_generator\nPhase 3a\n──────────────────\nSinh RTL · Lint 0 warn\nSynthesis nếu có tool"]
+        A5["Skill 5 · tb_generator\nPhase 4\n──────────────────\nSinh TB · BFM tasks\n12 TC tasks · testplan"]
+    end
+
+    FORK --> PAR
+    PAR --> JOIN[ ]
+
+    JOIN --> G4
+    G4(["✓ GATE 4\nAuto-sign"]) --> A6
+
+    A6["Skill 6 · sva_generator\nPhase 3b\n─────────────────\nSVA properties\nGATE3_REVIEW.md"] --> G3b
+
+    G3b{"⏸ GATE 3b\nHuman Review"}
+    G3b -->|"yes"| A7
+    G3b -->|"no"| STOP3(["Stop"])
+
+    A7["Skill 7 · verification\nPhase 5\n─────────────────\nCompile + Sim\nMutation · REQ sign-off"] --> G5
+
+    G5{"⏸ GATE 5\nHuman Review"}
+    G5 -->|"yes\n0 TC FAIL"| A8
+    G5 -->|"no / TC FAIL"| STOP5(["Stop\nfix failing TCs"])
+
+    A8["Skill 8 · spec_pdf_generator\nPhase 6\n─────────────────\nTổng hợp outputs\nRender PDF"] --> DONE
+
+    DONE(["🏁 FLOW COMPLETE\nRTL · SVA · TB · PDF · Sign-off"])
+
+    %% invisible fork/join nodes
+    style FORK fill:none,stroke:none,width:0px,height:0px
+    style JOIN fill:none,stroke:none,width:0px,height:0px
+
+    %% colour classes
+    classDef opt      fill:#1e3a5f,stroke:#3b4f7a,color:#93c5fd
+    classDef skill    fill:#0f2537,stroke:#1e4d6b,color:#7dd3fc
+    classDef par      fill:#1a1040,stroke:#7c3aed,color:#d8b4fe
+    classDef gateH    fill:#92400e,stroke:#b45309,color:#fef3c7,font-weight:bold
+    classDef gateA    fill:#065f46,stroke:#059669,color:#d1fae5,font-weight:bold
+    classDef stop     fill:#1f2937,stroke:#374151,color:#6b7280
+    classDef done     fill:#166534,stroke:#16a34a,color:#dcfce7,font-weight:bold
+    classDef neutral  fill:#1e293b,stroke:#334155,color:#cbd5e1
+
+    class A1 opt
+    class A2,A3,A6,A7,A8 skill
+    class A4,A5 par
+    class G1,G3b,G5 gateH
+    class G2,G4 gateA
+    class STOP1,STOP3,STOP5 stop
+    class DONE done
+    class START,PRE,MODE neutral
+</div>
+
+<div class="note">
+  <strong>Ghi chú:</strong><br>
+  Tại mọi thời điểm khác ngoài Phase 3a+4, chỉ có đúng <strong>1 agent hoạt động</strong>.<br>
+  Gates ⏸ là điểm dừng hoàn toàn — flow không tiếp tục cho đến khi user gõ <code>yes</code>.<br>
+  Nếu autoflow dùng <code>Agent(fork)</code> cho 3a+4 thì 2 agents chạy thật sự song song; hiện tại implementation chạy tuần tự (3a → 4).
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      background: '#1e293b',
+      primaryColor: '#0f2537',
+      primaryTextColor: '#7dd3fc',
+      primaryBorderColor: '#1e4d6b',
+      lineColor: '#475569',
+      secondaryColor: '#1a1040',
+      tertiaryColor: '#0a2218',
+      edgeLabelBackground: '#1e293b',
+      clusterBkg: '#0d0820',
+      clusterBorder: '#4c1d95',
+      titleColor: '#e2e8f0',
+    }
+  });
+</script>
+</body>
+</html>

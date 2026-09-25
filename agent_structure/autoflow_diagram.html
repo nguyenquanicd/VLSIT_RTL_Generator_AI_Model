@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Autoflow — Cấu trúc Agent Flow</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 32px 24px;
+    min-height: 100vh;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #f8fafc;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 0.82rem;
+    color: #94a3b8;
+    margin-bottom: 36px;
+  }
+
+  .flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* ── connector ── */
+  .conn {
+    width: 2px;
+    height: 20px;
+    background: #334155;
+    flex-shrink: 0;
+  }
+  .conn-dashed {
+    width: 2px;
+    height: 20px;
+    background: repeating-linear-gradient(to bottom, #475569 0 4px, transparent 4px 8px);
+  }
+
+  /* ── generic card ── */
+  .card {
+    border-radius: 10px;
+    padding: 14px 22px;
+    width: 560px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    position: relative;
+    border: 1.5px solid transparent;
+  }
+  .card-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .card-body { flex: 1; }
+  .card-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 0.76rem;
+    color: #94a3b8;
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+  .badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    padding: 2px 7px;
+    border-radius: 99px;
+    position: absolute;
+    top: 10px;
+    right: 14px;
+  }
+
+  /* phase colours */
+  .c-start   { background: #1e293b; border-color: #334155; }
+  .c-opt     { background: #1a2340; border-color: #3b4f7a; }
+  .c-skill   { background: #0f2537; border-color: #1e4d6b; }
+  .c-gate-h  { background: #2d1a00; border-color: #92400e; }
+  .c-gate-a  { background: #0a2218; border-color: #065f46; }
+  .c-parallel { background: #1a1040; border-color: #4c1d95; }
+  .c-done    { background: #0f2a1a; border-color: #166534; }
+
+  .badge-opt  { background: #1e3a5f; color: #93c5fd; }
+  .badge-auto { background: #064e3b; color: #6ee7b7; }
+  .badge-human{ background: #78350f; color: #fcd34d; }
+  .badge-skill{ background: #1e3a5f; color: #7dd3fc; }
+  .badge-par  { background: #3b0764; color: #d8b4fe; }
+
+  /* gate diamond */
+  .gate-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .gate-diamond {
+    width: 200px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-align: center;
+  }
+  .gate-human { background: #92400e; color: #fef3c7; }
+  .gate-auto  { background: #065f46; color: #d1fae5; }
+
+  .gate-label {
+    font-size: 0.7rem;
+    margin-top: 4px;
+    color: #94a3b8;
+    text-align: center;
+  }
+
+  /* parallel block */
+  .parallel-block {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    position: relative;
+    padding: 20px 24px;
+    border: 1.5px dashed #4c1d95;
+    border-radius: 12px;
+    background: #0d0820;
+    width: 620px;
+  }
+  .parallel-label {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #4c1d95;
+    color: #ede9fe;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 2px 12px;
+    border-radius: 99px;
+  }
+  .parallel-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .card-sm {
+    border-radius: 8px;
+    padding: 10px 14px;
+    width: 100%;
+    border: 1.5px solid transparent;
+  }
+  .card-sm .card-title { font-size: 0.82rem; }
+  .card-sm .card-desc  { font-size: 0.7rem; }
+
+  /* legend */
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 36px;
+    font-size: 0.72rem;
+    color: #94a3b8;
+  }
+  .leg-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .leg-dot {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* agent count bar */
+  .agent-bar {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 28px auto 0;
+    max-width: 700px;
+  }
+  .agent-chip {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 99px;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .n-chip { background:#1e293b; border-color:#334155; color:#cbd5e1; font-size:0.65rem; font-weight:700; }
+
+  .divider {
+    width: 560px;
+    height: 1px;
+    background: repeating-linear-gradient(to right, #1e293b 0 6px, transparent 6px 12px);
+    margin: 4px 0;
+  }
+
+  /* output row */
+  .output-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .out-tag {
+    font-size: 0.62rem;
+    font-weight: 600;
+    padding: 1px 7px;
+    border-radius: 4px;
+    background: #1e293b;
+    color: #7dd3fc;
+    border: 1px solid #1e4d6b;
+  }
+</style>
+</head>
+<body>
+
+<h1>AUTOFLOW — Cấu trúc Agent Flow</h1>
+<p class="subtitle">8 Skills · chạy <strong style="color:#f87171">tuần tự</strong> · tối đa <strong style="color:#d8b4fe">2 agents đồng thời</strong> (chỉ tại Phase 3a+4) · 3 gates chờ human · 2 gates tự ký</p>
+
+<div class="flow">
+
+  <!-- START -->
+  <div class="card c-start">
+    <div class="card-icon">⌨️</div>
+    <div class="card-body">
+      <div class="card-title">Người dùng gọi <code>/autoflow</code></div>
+      <div class="card-desc">Mode A: cung cấp spec file · Mode B: mô tả design → agent tạo spec tự động</div>
+    </div>
+  </div>
+
+  <div class="conn"></div>
+
+  <!-- OPTIONAL: spec_writer -->
+  <div class="card c-opt" style="border-style:dashed">
+    <div class="card-icon">✏️</div>
+    <div class="card-body">
+      <div class="card-title">Skill 1 — <strong>spec_writer</strong> <span style="color:#64748b;font-weight:400">(Mode B only)</span></div>
+      <div class="card-desc">Hỏi user về design, tự tạo file spec đầu vào cho Phase 1</div>
+      <div class="output-row"><span class="out-tag">spec/&lt;name&gt;.md</span></div>
+    </div>
+    <span class="badge badge-opt">TUỲ CHỌN</span>
+  </div>
+
+  <div class="conn"></div>
+
+  <!-- Phase 1: spec_parser -->
+  <div class="card c-skill">
+    <div class="card-icon">📄</div>
+    <div class="card-body">
+      <div class="card-title">Skill 2 — <strong>spec_parser</strong> &nbsp;·&nbsp; Phase 1</div>
+      <div class="card-desc">Phân tích spec · Trích xuất REQ-IDs · Map module · Phát hiện ambiguity</div>
+      <div class="output-row">
+        <span class="out-tag">structured_spec.json</span>
+        <span class="out-tag">REQ-IDs</span>
+      </div>
+    </div>
+    <span class="badge badge-skill">SKILL</span>
+  </div>
+
+  <div class="conn"></div>
+
+  <!-- GATE 1 -->
+  <div class="gate-wrap">
+    <div class="gate-diamond gate-human">GATE 1<br>Human Review</div>
+    <div class="gate-label">Dừng · Chờ "yes" từ user · Reject → chỉnh spec + chạy lại</div>
+  </div>
+
+  <div class="conn"></div>
+
+  <!-- Phase 2: config_ui -->
+  <div class="card c-skill">
+    <div class="card-icon">⚙️</div>
+    <div class="card-body">
+      <div class="card-title">Skill 3 — <strong>config_ui</strong> &nbsp;·&nbsp; Phase 2</div>
+      <div class="card-desc">Lock các parameter design · Dùng default nếu không có override</div>
+      <div class="output-row"><span class="out-tag">final_config.json</span></div>
+    </div>
+    <span class="badge badge-skill">SKILL</span>
+  </div>
+
+  <div class="conn"></div>
+
+  <!-- GATE 2 AUTO -->
+  <div class="gate-wrap">
+    <div class="gate-diamond gate-auto">GATE 2<br>Auto-sign ✓</div>
+    <div class="gate-label">Tự ký nếu không có lỗi · Không hỏi user</div>
+  </div>
+
+  <div class="conn"></div>
+
+  <!-- PARALLEL BLOCK -->
+  <div class="parallel-block">
+    <div class="parallel-label">PARALLEL — có thể gọi 2 agents đồng thời</div>
+
+    <!-- Col 3a -->
+    <div class="parallel-col">
+      <div class="card-sm c-parallel" style="border-color:#7c3aed">
+        <div class="card-icon" style="font-size:1rem">🔧</div>
+        <div class="card-body">
+          <div class="card-title">Skill 4 — <strong>rtl_generator</strong></div>
+          <div class="card-desc">Sinh RTL SV · Lint 0 warnings · Synthesis (nếu có tool)</div>
+          <div class="output-row">
+            <span class="out-tag">src/rtl/*.sv</span>
+            <span class="out-tag">lint OK</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Col 4 -->
+    <div class="parallel-col">
+      <div class="card-sm c-parallel" style="border-color:#7c3aed">
+        <div class="card-icon" style="font-size:1rem">🧪</div>
+        <div class="card-body">
+          <div class="card-title">Skill 5 — <strong>tb_generator</strong></div>
+          <div class="card-desc">Sinh TB SV · BFM tasks · 12 TC tasks · Testplan</div>
+          <div class="output-row">
+            <span class="out-tag">src/tb/*.sv</span>
+            <span class="out-tag">testplan.md</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn"></div>
+
+  <!-- GATE 4 AUTO -->
+  <div class="gate-wrap">
+    <div class="gate-diamond gate-auto">GATE 4<br>Auto-sign ✓</div>
+    <div class="gate-label">Tự ký nếu TB compile pass · Không hỏi user</div>
+  </div>
+
+  <div class="conn"></div>
+
+  <!-- Phase 3b: sva_generator -->
+  <div class="card c-skill">
+    <div class="card-icon">🔍</div>
+    <div class="card-body">
+      <div class="card-title">Skill 6 — <strong>sva_generator</strong> &nbsp;·&nbsp; Phase 3b</div>
+      <div class="card-desc">Sinh SVA properties · Smoke check vacuous · Compile check · Tạo GATE3_REVIEW.md</div>
+      <div class="output-row">
+        <span class="out-tag">src/sva/*.sv</span>
+        <span class="out-tag">GATE3_REVIEW.md</span>
+      </div>
+    </div>
+    <span class="badge badge-skill">SKILL</span>
+  </div>
+
+  <div class="conn"></div>
+
+  <!-- GATE 3b HUMAN -->
+  <div class="gate-wrap">
+    <div class="gate-diamond gate-human">GATE 3b<br>Human Review</div>
+    <div class="gate-label">Dừng · User đọc GATE3_REVIEW.md · Chờ "yes"</div>
+  </div>
+
+  <div class="conn"></div>
+
+  <!-- Phase 5: verification -->
+  <div class="card c-skill">
+    <div class="card-icon">✅</div>
+    <div class="card-body">
+      <div class="card-title">Skill 7 — <strong>verification</strong> &nbsp;·&nbsp; Phase 5</div>
+      <div class="card-desc">Compile + Run sim · Icarus / VCS · Mutation testing (Yosys) · Sign-off REQ-IDs</div>
+      <div class="output-row">
+        <span class="out-tag">N/N PASS</span>
+        <span class="out-tag">verification_report.json</span>
+        <span class="out-tag">REQ sign-off</span>
+      </div>
+    </div>
+    <span class="badge badge-skill">SKILL</span>
+  </div>
+
+  <div class="conn"></div>
+
+  <!-- GATE 5 HUMAN -->
+  <div class="gate-wrap">
+    <div class="gate-diamond gate-human">GATE 5<br>Human Review</div>
+    <div class="gate-label">Dừng · Nếu TC FAIL → không cho phép ký · Chờ "yes"</div>
+  </div>
+
+  <div class="conn"></div>
+
+  <!-- Phase 6: spec_pdf -->
+  <div class="card c-skill">
+    <div class="card-icon">📋</div>
+    <div class="card-body">
+      <div class="card-title">Skill 8 — <strong>spec_pdf_generator</strong> &nbsp;·&nbsp; Phase 6</div>
+      <div class="card-desc">Tổng hợp tất cả outputs · Render PDF specification · Flow complete</div>
+      <div class="output-row"><span class="out-tag">docs/specification.pdf</span></div>
+    </div>
+    <span class="badge badge-skill">SKILL</span>
+  </div>
+
+  <div class="conn"></div>
+
+  <!-- DONE -->
+  <div class="card c-done">
+    <div class="card-icon">🏁</div>
+    <div class="card-body">
+      <div class="card-title">FLOW COMPLETE</div>
+      <div class="card-desc">RTL · SVA · TB · Sim results · PDF đầy đủ · REQ-IDs sign-off</div>
+    </div>
+  </div>
+
+</div><!-- end .flow -->
+
+<!-- Execution timeline -->
+<div style="max-width:700px;margin:28px auto 0;">
+  <div style="font-size:0.72rem;color:#64748b;text-align:center;margin-bottom:10px;letter-spacing:0.08em;">THỨ TỰ THỰC THI — mỗi hàng = 1 thời điểm</div>
+  <div style="display:flex;flex-direction:column;gap:6px;">
+    <div style="display:flex;gap:6px;align-items:center;">
+      <div style="font-size:0.62rem;color:#475569;width:28px;text-align:right;flex-shrink:0">T1</div>
+      <div class="agent-chip" style="background:#1a2340;border-color:#3b4f7a;color:#93c5fd;font-size:0.7rem">✏️ spec_writer <span class="n-chip">optional</span></div>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <div style="font-size:0.62rem;color:#475569;width:28px;text-align:right;flex-shrink:0">T2</div>
+      <div class="agent-chip" style="background:#0f2537;border-color:#1e4d6b;color:#7dd3fc;font-size:0.7rem">📄 spec_parser</div>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <div style="font-size:0.62rem;color:#475569;width:28px;text-align:right;flex-shrink:0">T3</div>
+      <div class="agent-chip" style="background:#0f2537;border-color:#1e4d6b;color:#7dd3fc;font-size:0.7rem">⚙️ config_ui</div>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <div style="font-size:0.62rem;color:#475569;width:28px;text-align:right;flex-shrink:0">T4</div>
+      <div class="agent-chip" style="background:#1a1040;border-color:#7c3aed;color:#d8b4fe;font-size:0.7rem">🔧 rtl_generator</div>
+      <div class="agent-chip" style="background:#1a1040;border-color:#7c3aed;color:#d8b4fe;font-size:0.7rem">🧪 tb_generator</div>
+      <div style="font-size:0.65rem;color:#7c3aed;margin-left:4px">← tối đa 2 đồng thời</div>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <div style="font-size:0.62rem;color:#475569;width:28px;text-align:right;flex-shrink:0">T5</div>
+      <div class="agent-chip" style="background:#0f2537;border-color:#1e4d6b;color:#7dd3fc;font-size:0.7rem">🔍 sva_generator</div>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <div style="font-size:0.62rem;color:#475569;width:28px;text-align:right;flex-shrink:0">T6</div>
+      <div class="agent-chip" style="background:#0f2537;border-color:#1e4d6b;color:#7dd3fc;font-size:0.7rem">✅ verification</div>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <div style="font-size:0.62rem;color:#475569;width:28px;text-align:right;flex-shrink:0">T7</div>
+      <div class="agent-chip" style="background:#0f2537;border-color:#1e4d6b;color:#7dd3fc;font-size:0.7rem">📋 spec_pdf_generator</div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:0.68rem;color:#475569;text-align:center;">Gates chờ human (⏸) xảy ra giữa T2→T3, T5→T6, T6→T7 — flow dừng hoàn toàn tại đó</div>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#92400e"></div>Gate — Human review (dừng chờ)</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#065f46"></div>Gate — Auto-sign (không hỏi)</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#1e4d6b"></div>Skill / Agent</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#4c1d95"></div>Song song (parallel)</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#3b4f7a;border:1px dashed #6b82ba"></div>Tuỳ chọn (optional)</div>
+</div>
+
+</body>
+</html>
