@@ -1,4 +1,4 @@
-# Hướng dẫn sử dụng VLSIT RTL Design & Verification Flow
+# Hướng dẫn sử dụng VLSIT RTL Design & Verification Flow 
 
 Hướng dẫn thống nhất cho chế độ **tự động** và **từng bước**, tổng hợp từ `guideline.md` và `master_guideline.md`, có đối chiếu với các prompt và script đi kèm repository.
 
