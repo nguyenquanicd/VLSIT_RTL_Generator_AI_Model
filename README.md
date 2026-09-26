@@ -4,6 +4,10 @@
 
 > **Trạng thái:** Engineering prototype · Claude Code workflow · SystemVerilog RTL & verification
 
+## Reference
+
+[Hướng dẫn sử dụng — tự động và từng bước](https://github.com/nguyenquanicd/VLSIT_RTL_Generator_AI_Model/blob/main/guideline.md)
+
 ## Overview
 
 VLSIT tổ chức quy trình từ **hardware specification → requirements → configuration → RTL → assertions/testbench → verification → documentation**. Các prompt dạng slash command hướng dẫn Claude Code tạo artifact, gọi công cụ EDA và tổng hợp kết quả để kỹ sư review.
