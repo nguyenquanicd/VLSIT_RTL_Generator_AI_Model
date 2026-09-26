@@ -133,7 +133,7 @@ Tên thư mục là nhãn snapshot, không biểu thị thứ tự nâng cấp: 
 | Verilator | RTL lint. |
 | Yosys; slang plugin cho nguồn RISC-V tương ứng | Synthesis và hỗ trợ mutation workflow. |
 | GF180MCU Liberty libraries | Technology mapping tại TT/SS corners. |
-| Synopsys VCS | Compile/simulation với SVA trong flow gốc; cần cài đặt và license riêng. |
+| Synopsys VCS hoặc 1 công cụ mô phỏng bất kỳ mà bạn có | Compile/simulation với SVA trong flow gốc; cần cài đặt và license riêng. |
 | Icarus Verilog | Simulation thay thế trong một số đường chạy; đường chạy Icarus hiện bỏ qua SVA. |
 | Python 3 + Matplotlib | Chạy script PDF đi kèm. |
 
