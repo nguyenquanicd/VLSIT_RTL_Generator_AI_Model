@@ -428,14 +428,14 @@ Synchronous exceptions take priority over interrupts. Within synchronous excepti
 Frontend: `read_slang` Yosys plugin (required because `module X import pkg::*;` syntax is not parsed by stock `read_verilog`).
 
 Lint check: Verilator 5.041 `-Wall` → **PASS, 0 warnings**  
-Elaboration check: VCS X-2025.06 → **PASS, 0 errors, 0 warnings**
+Elaboration check: VCS ${VCS_VERSION} → **PASS, 0 errors, 0 warnings**
 
 ### Tool Versions
 
 | Tool       | Version                          |
 |------------|----------------------------------|
 | Yosys      | 0.58+35 (git sha1 89f32a415)    |
-| VCS        | X-2025.06                        |
+| VCS        | ${VCS_VERSION}                        |
 | Verilator  | 5.041                            |
 | PDK        | GF180MCU (globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0) |
 | Liberty TT | gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80_full.lib |

@@ -21,7 +21,7 @@
     "tool_versions": {
       "type": "object",
       "properties": {
-        "vcs":     { "type": "string", "description": "VCS version, ví dụ 'X-2025.06'" },
+        "vcs":     { "type": "string", "description": "VCS version, ví dụ '${VCS_VERSION}'" },
         "yosys":   { "type": "string", "description": "Yosys version" },
         "pdk":     { "type": "string", "description": "PDK đã dùng, ví dụ 'GF180MCU TT 25C 1.8V'" },
         "riscv_gcc": { "type": "string", "description": "RISC-V GCC version dùng compile test firmware" }

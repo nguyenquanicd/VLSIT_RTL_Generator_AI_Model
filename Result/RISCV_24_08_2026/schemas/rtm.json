@@ -6,7 +6,7 @@
     "gate_3_approved": true,
     "gate_5_approved": true,
     "approved_at": "2026-08-24T21:56:44+07:00",
-    "vcs_tool": "VCS X-2025.06",
+    "vcs_tool": "VCS ${VCS_VERSION}",
     "sim_result": "24/24 PASS"
   },
   "assertions": [

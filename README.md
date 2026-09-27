@@ -142,7 +142,7 @@ Theo prompt verification, eligibility được tính từ traceability RTL/SVA/T
 | Icarus Verilog | Simulation thay thế trong một số đường chạy; đường chạy Icarus hiện bỏ qua SVA. |
 | Python 3 + Matplotlib | Chạy script PDF đi kèm. |
 
-Các phiên bản được ghi trong artifact gồm Verilator 5.041, Yosys 0.58/0.58+35, VCS X-2025.06 và Icarus 13.0. Đây là thông tin môi trường đã sử dụng, không phải compatibility matrix đã kiểm thử.
+Các phiên bản được ghi trong artifact gồm Verilator 5.041, Yosys 0.58/0.58+35, VCS và Icarus 13.0. Đây là thông tin môi trường đã sử dụng, không phải compatibility matrix đã kiểm thử.
 
 `sourceme.sh` còn nạp toolchain và liệt kê các công cụ trong OSS CAD Suite. Cần điều chỉnh toolchain theo IP đích. Sự hiện diện của SymbiYosys/cocotb trong setup không có nghĩa repository đã cung cấp formal hoặc cocotb flow hoàn chỉnh.
 

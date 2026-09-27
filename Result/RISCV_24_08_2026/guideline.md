@@ -14,7 +14,7 @@ source sourceme.sh          # load tools + set $PROJECT_ROOT
 ```
 
 `sourceme.sh` tự động load:
-- `synopsys/vcs/X-2025.06` — simulation
+- `synopsys/vcs/${VCS_VERSION}` — simulation
 - `oss-cad-suite` — Yosys 0.58 + Verilator 5.041
 - `riscv` — riscv-gcc 14.2.0
 - export `$PROJECT_ROOT` = git repo root

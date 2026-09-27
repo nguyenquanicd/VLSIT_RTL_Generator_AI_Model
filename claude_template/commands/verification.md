@@ -36,7 +36,7 @@ Thiếu file nào → dừng, thông báo rõ.
 **1.2 Kiểm tra tool:**
 
 ```bash
-module load synopsys/vcs/X-2025.06 && vcs -ID 2>&1 | head -1
+module load synopsys/vcs/${VCS_VERSION} && vcs -ID 2>&1 | head -1
 ```
 Nếu fail → dừng: _"VCS không load được. Kiểm tra `module avail synopsys/vcs`."_
 
@@ -56,7 +56,7 @@ Thông báo pre-flight:
 ```
 Pre-flight OK:
   Gate 2/3/4: approved
-  VCS: X-2025.06 ✓
+  VCS: ${VCS_VERSION} ✓
   Yosys: 0.58 ✓  (hoặc ✗ nếu không load được)
   Schemas: all present ✓
 ```
@@ -66,7 +66,7 @@ Pre-flight OK:
 ## Bước 2 — Full compile check (RTL + SVA + TB)
 
 ```bash
-module load synopsys/vcs/X-2025.06
+module load synopsys/vcs/${VCS_VERSION}
 vcs -sverilog -timescale=1ns/1ps \
     -f src/rtl/filelist.f \
     -f src/sva/filelist_sva.f \
@@ -384,7 +384,7 @@ Hỏi: **"Ký Gate 5 (đóng phase Verification)? Các REQ-ID pending/locked v�
     "locked": 0
   },
   "tool_versions": {
-    "vcs": "X-2025.06",
+    "vcs": "${VCS_VERSION}",
     "yosys": "0.58",
     "pdk": "GF180MCU TT 025C 1v80",
     "pdk_lib": "/tools/PDK/GF180/globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0/liberty/gf180mcu_fd_sc_mcu7t5v0__tt_025C_1v80.lib"
@@ -417,7 +417,7 @@ REQ-IDs pending/locked có thể ký bổ sung bằng cách chạy lại /verifi
 | Gate 2/3/4 chưa ký | Dừng, chỉ rõ gate nào thiếu và command cần chạy |
 | VCS compile fail | Dừng, hiển thị 20 dòng lỗi đầu, gợi ý file cần fix |
 | TC simulation timeout | Mark `timeout` (không phải pass), tiếp tục TC khác |
-| VCS binary không tìm thấy | Dừng với hướng dẫn `module load synopsys/vcs/X-2025.06` |
+| VCS binary không tìm thấy | Dừng với hướng dẫn `module load synopsys/vcs/${VCS_VERSION}` |
 | oss-cad-suite không load | Skip toàn bộ mutation, mark tất cả `mutation_score: "N/A"` |
 | Yosys mutant compile fail | Skip mutation đó, không tính vào total (chỉ ghi log warning) |
 | Yosys generate 0 mutations | Mark REQ-ID `mutation_score: "N/A"`, không block sign-off |

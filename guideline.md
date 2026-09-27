@@ -23,7 +23,7 @@ source sourceme.sh
 Script thiết lập `PROJECT_ROOT` theo vị trí của chính nó, nạp các module EDA/toolchain được khai báo và thiết lập đường dẫn PDK. **Bản hiện tại không tự nạp VCS.** Nếu dùng VCS trên môi trường gốc:
 
 ```bash
-module load synopsys/vcs/X-2025.06
+module load synopsys/vcs/${VCS_VERSION}
 ```
 
 Tên module và đường dẫn `/tools/PDK` cần điều chỉnh theo máy thực tế. Trên Windows, sử dụng môi trường Linux phù hợp như WSL hoặc máy chủ EDA; các lệnh Bash không chạy trực tiếp trong PowerShell.

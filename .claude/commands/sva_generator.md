@@ -30,7 +30,7 @@ chạy VCS compile check, sau đó thực hiện Gate 3 (Property Review) với 
 6. Tạo `src/sva/` nếu chưa tồn tại.
 7. Kiểm tra VCS:
    ```bash
-   module load synopsys/vcs/X-2025.06 && vcs -ID 2>&1 | head -2
+   module load synopsys/vcs/${VCS_VERSION} && vcs -ID 2>&1 | head -2
    ```
    Nếu fail → cảnh báo: _"VCS không khả dụng — sẽ bỏ qua VCS compile check."_
 
@@ -377,7 +377,7 @@ src/sva/rv32im_top_bind.sv
 ## Bước 7 — VCS Compile Check
 
 ```bash
-module load synopsys/vcs/X-2025.06
+module load synopsys/vcs/${VCS_VERSION}
 
 vcs -full64 -sverilog \
     -f src/rtl/filelist.f \

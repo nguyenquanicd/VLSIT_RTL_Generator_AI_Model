@@ -291,7 +291,7 @@ status: "Released"
 | PASS         | <N>   |
 | FAIL         | <0>   |
 | SVA violations | 0  |
-| Tool         | VCS X-2025.06 |
+| Tool         | VCS ${VCS_VERSION} |
 
 ### Test Coverage
 | REQ-ID Group | Total | Covered | % |
@@ -334,7 +334,7 @@ status: "Released"
 | Tool     | Version    |
 |----------|------------|
 | Yosys    | 0.58       |
-| VCS      | X-2025.06  |
+| VCS      | ${VCS_VERSION}  |
 | Verilator| 5.041      |
 ```
 

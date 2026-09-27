@@ -7,7 +7,7 @@
 > Ký Gate 3 xác nhận property **đúng ý định**, không xác nhận đã được **thử**.
 > 83 property vẫn `vacuous` — tạo stimulus là việc của Phase 4/5.
 
-Sinh bởi Phase 3b (`/sva_generator`). Spec rev 0.4. VCS X-2025.06: compile 0 Error, sim 0 assertion fail.
+Sinh bởi Phase 3b (`/sva_generator`). Spec rev 0.4. VCS ${VCS_VERSION}: compile 0 Error, sim 0 assertion fail.
 
 ## Cách đọc
 

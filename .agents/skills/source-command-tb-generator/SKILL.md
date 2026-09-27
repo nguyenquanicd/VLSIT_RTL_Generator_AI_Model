@@ -205,7 +205,7 @@ src/tb/tests/tc_001_reset_boot_addr.sv
 
 Chạy VCS compile check:
 ```bash
-module load synopsys/vcs/X-2025.06
+module load synopsys/vcs/${VCS_VERSION}
 vcs -sverilog -timescale=1ns/1ps \
     -f src/tb/filelist_tb.f \
     -assert svaext_bind \
@@ -267,7 +267,7 @@ Cấu trúc:
     "coverage_pct": 0.0
   },
   "compile_check": {
-    "tool": "vcs X-2025.06",
+    "tool": "vcs ${VCS_VERSION}",
     "status": "pass",
     "error_count": 0
   }

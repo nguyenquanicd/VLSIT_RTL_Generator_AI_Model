@@ -253,7 +253,7 @@ trong testplan (REQ-016).
 | N/A (cần STA)    | 1 (TC-009) |
 | FAIL             | 0     |
 | SVA violations   | 0     |
-| Tool             | VCS X-2025.06 |
+| Tool             | VCS ${VCS_VERSION} |
 
 ### Test Coverage (theo category REQ-ID)
 
@@ -326,7 +326,7 @@ target frequency hoặc chạy STA (OpenSTA) với SDC constraint ở bước ti
 | Tool       | Version    |
 |------------|------------|
 | Yosys      | 0.58+35    |
-| VCS        | X-2025.06  |
+| VCS        | ${VCS_VERSION}  |
 | Verilator  | 5.041      |
 
 ---

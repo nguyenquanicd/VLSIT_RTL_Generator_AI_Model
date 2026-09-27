@@ -44,7 +44,7 @@
     "locked_reason_summary": "REQ-012 structural (không thể assert 'port không tồn tại'); REQ-013 cần STA; REQ-015/016 theo quyết định Gate 1 (soft guideline / DV-only)."
   },
   "tool_versions": {
-    "vcs": "X-2025.06",
+    "vcs": "${VCS_VERSION}",
     "yosys": "0.58+35",
     "verilator": "5.041",
     "pdk": "GF180MCU TT 025C 1v80 / SS 125C 1v62",

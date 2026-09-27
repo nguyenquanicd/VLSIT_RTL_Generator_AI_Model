@@ -6,7 +6,7 @@
     "gate_5_approved": false,
     "phase_reached": 3,
     "vcs_compile": "pass",
-    "vcs_version": "X-2025.06",
+    "vcs_version": "${VCS_VERSION}",
     "sim_assertion_failures": 0,
     "review_document": "src/sva/GATE3_REVIEW.md",
     "review_mode": "offline_document",

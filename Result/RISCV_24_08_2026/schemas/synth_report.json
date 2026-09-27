@@ -5,7 +5,7 @@
     "phase": "3a",
     "tool": "Yosys 0.58+35",
     "pdk_note": "Generic technology (GF180MCU liberty stub has no cells — used Yosys native gate library)",
-    "elaboration_check": "VCS X-2025.06 elaborate — PASS (0 errors, 0 warnings)",
+    "elaboration_check": "VCS ${VCS_VERSION} elaborate — PASS (0 errors, 0 warnings)",
     "lint_check": "Verilator 5.041 -Wall — PASS (0 warnings)",
     "parameters": "all default"
   },

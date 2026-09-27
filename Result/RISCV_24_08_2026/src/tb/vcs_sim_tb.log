@@ -1,7 +1,7 @@
 Command: /home/ltthinh/.claude/jobs/8f84e74f/tmp/rv32im_tb_check -l src/tb/vcs_sim_tb.log
 Chronologic VCS simulator copyright 1991-2025
 Contains Synopsys proprietary information.
-Compiler version X-2025.06_Full64; Runtime version X-2025.06_Full64;  Aug 18 21:59 2026
+Compiler version ${VCS_VERSION}_Full64; Runtime version ${VCS_VERSION}_Full64;  Aug 18 21:59 2026
 === rv32im_core Phase 4 Simulation ===
 [FAIL] TC-001_reset_boot_addr: timeout (200 cyc) waiting for x1 writeback
 $finish called from file "/home/ltthinh/CLAUDE_PRO/src/tb/rv32im_tb_top.sv", line 215.

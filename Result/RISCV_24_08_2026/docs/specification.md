@@ -375,7 +375,7 @@ Interrupts are only taken when `mstatus.MIE=1` and the corresponding enable bit 
 | FAIL            | 0             |
 | SVA violations  | 0             |
 | Timeout         | 0             |
-| Simulator       | VCS X-2025.06 |
+| Simulator       | VCS ${VCS_VERSION} |
 
 ### Test Coverage
 
@@ -457,7 +457,7 @@ Interrupts are only taken when `mstatus.MIE=1` and the corresponding enable bit 
 | Tool       | Version                         |
 |------------|---------------------------------|
 | Yosys      | 0.58+35 (git sha1 89f32a415)   |
-| VCS        | X-2025.06                       |
+| VCS        | ${VCS_VERSION}                       |
 | Verilator  | 5.041                           |
 | PDK        | GF180MCU (globalfoundries-pdk-libs-gf180mcu_fd_sc_mcu7t5v0) |
 

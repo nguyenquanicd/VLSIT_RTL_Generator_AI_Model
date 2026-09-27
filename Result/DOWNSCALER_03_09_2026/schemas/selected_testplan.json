@@ -31,7 +31,7 @@
     }
   },
   "compile_check": {
-    "tool": "VCS X-2025.06",
+    "tool": "VCS ${VCS_VERSION}",
     "status": "pass",
     "error_count": 0
   },

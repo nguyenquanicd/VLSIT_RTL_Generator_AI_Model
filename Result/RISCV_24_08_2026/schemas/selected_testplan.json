@@ -41,7 +41,7 @@
     "coverage_pct": 71.4
   },
   "compile_check": {
-    "tool": "vcs X-2025.06",
+    "tool": "vcs ${VCS_VERSION}",
     "status": "pass",
     "error_count": 0
   }
