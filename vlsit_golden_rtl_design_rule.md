@@ -29,12 +29,15 @@ Use lowercase snake_case for name portions unless the table says uppercase.
 | Bidirectional port (pad wrapper only) | `io_<name>` | `io_data` |
 | Clock input | `i_clk_<domain>` | `i_clk_core` |
 | Active-low reset input | `i_rst_n_<domain>` | `i_rst_n_core` |
-| Sequential state (any flop/register) | `reg_<name>` | `reg_state` |
+| Sequential state (any flop or register) | `reg_<name>` | `reg_state` |
 | Combinational / interconnect signal | `w_<name>` | `w_result` |
 | Module parameter | `PARA_<UPPERCASE>` | `PARA_DATA_W` |
 | Localparam | `LPARA_<UPPERCASE>` | `LPARA_COUNT_W` |
 | Type name | `<name>_type_def` | `alu_op_type_def` |
 | Enum member | `ENUM_<FUNCTION>_<VALUE>` uppercase | `ENUM_ALU_OP_ADD` |
+| FSM current state | `reg_fsm_<function>_current_state` | `reg_fsm_ctrl_current_state` |
+| FSM next state | `w_fsm_<function>_nxt_state` | `w_fsm_ctrl_nxt_state` |
+| FSM state enum member | `ENUM_ST_<FUNCTION>` uppercase | `ENUM_ST_IDLE` |
 | Instance, single | `u_<function>` (module name without `m_`) | `m_decode` → `u_decode` |
 | Instance, repeated in one parent | `u_<function>_<index>` | `u_lane_0`, `u_lane_1` |
 | Generate block | `gen_<function>` | `gen_lane` |
@@ -44,9 +47,34 @@ Use lowercase snake_case for name portions unless the table says uppercase.
 - **NAM-01** Every replicated name, signal, array, instance, or generated structure uses a zero-based index (`_0`, `_1`, …), local to the parent module and object group. Packed ranges include bit 0 (`[PARA_DATA_W-1:0]`).
 - **NAM-02** Values and identifiers fixed by an external protocol or the spec keep their external form.
 - **NAM-03** `reg_` means sequential state, not the Verilog `reg` type. Declare such signals as `logic` (or a logic-based enum).
-- **NAM-04** Use documented, consistently applied abbreviations. Prefer clear names over undocumented shorthand.
+- **NAM-04** Use abbreviations only from the NAM-08 table, consistently. Prefer clear names over undocumented shorthand.
 - **NAM-05** `[NEW]` Any other active-low signal (not a reset) ends in `_n` (for example `o_irq_n`). The `_n` goes before any index suffix only if the spec does not fix the name.
 - **NAM-06** `[NEW]` Every port used for DFT is named `i_dft_<name>` (input) or `o_dft_<name>` (output). A port used for scan mode is named `i_dft_scan_<name>` or `o_dft_scan_<name>`. These prefixes take precedence over the generic `i_`/`o_` forms, including for DFT clocks and resets. Scan chains replicated per NAM-01, for example `i_dft_scan_in_0`, `o_dft_scan_out_0`.
+- **NAM-07** `[NEW]` Every name defined in RTL code MUST NOT exceed 30 characters, counting its prefix and suffix. This covers module, port, signal, parameter, localparam, type, enum member, instance, generate block, and process label names. Shorten the `<function>` or `<name>` part using abbreviations per NAM-04.
+- **NAM-08** `[NEW]` When a word or phrase in the table below appears in a name, write its abbreviation. Match the longest phrase first (`output enable` before `enable`). A word not in the table is written in full. `int` and `config` are SystemVerilog reserved words: they appear only inside a longer name, never as a complete identifier.
+
+| Word or phrase | Abbreviation | Word or phrase | Abbreviation |
+|---|---|---|---|
+| address | `addr` | data | `data` (keep in full) |
+| next | `nxt` | interrupt | `int` |
+| counter | `cnt` | configuration, configure | `config` |
+| enable | `en` | output enable | `oe` |
+| clock | `clk` | reset | `rst` |
+| request | `req` | acknowledge | `ack` |
+| response | `resp` | command | `cmd` |
+| select | `sel` | control | `ctrl` |
+| status | `sts` | write / read | `wr` / `rd` |
+| transmit / receive | `tx` / `rx` | buffer | `buf` |
+| pointer | `ptr` | index | `idx` |
+| length | `len` | source / destination | `src` / `dst` |
+| error | `err` | frequency | `freq` |
+| divider | `div` | threshold | `thr` |
+| arbiter | `arb` | grant | `gnt` |
+| priority | `prio` | multiplexer | `mux` |
+| decoder / encoder | `dec` / `enc` | maximum / minimum | `max` / `min` |
+| number | `num` | parity | `par` |
+
+Keep in full, never abbreviate: `data`, `valid`, `ready`, `mode`, `depth`, `done`, `busy`, and any name fixed by an external protocol (NAM-02).
 
 ## 3. Declarations and data types
 
@@ -85,7 +113,7 @@ parameter logic [31:0] PARA_DATA_W = 32,
 ### 3.3 Enums (finite-state machines and coded fields)
 
 - **ENM-01** Define enum types inside the owning module, logic-based, with explicit member values, named `<name>_type_def`, members `ENUM_<FUNCTION>_<VALUE>`.
-- **ENM-02** Use enums for FSM state when it helps readability and frontend encoding analysis. State signals are `reg_<name>` of the enum type.
+- **ENM-02** Every FSM MUST define its states as an enum (ENM-05), which keeps the code readable and lets the synthesis frontend analyze the state encoding. FSM state signals are named per ENM-04 and have the enum type.
 
 ```systemverilog
 typedef enum logic [1:0] {
@@ -98,6 +126,24 @@ alu_op_type_def reg_alu_op;
 ```
 
 - **ENM-03** `[NEW]` Every FSM MUST define behavior for unused encodings (safe recovery state) unless the spec states they are unreachable and the project accepts don't-care per COM-04.
+- **ENM-04** `[NEW]` An FSM (Finite State Machine) uses these state signal names. `<function>` identifies the FSM and follows the NAM-08 abbreviations.
+  - Current state: `reg_fsm_<function>_current_state`.
+  - Next state: `w_fsm_<function>_nxt_state`.
+  - To satisfy NAM-07, `<function>` is at most 8 characters.
+- **ENM-05** `[NEW]` Define FSM states as a logic-based enum (ENM-01). Every state member is named `ENUM_ST_<FUNCTION>`, uppercase, with an explicit value, for example `ENUM_ST_IDLE`. This is ENM-01 with the function part `ST`; `<FUNCTION>` is the state name.
+
+```systemverilog
+// FSM states: idle until a request arrives, then run, then done.
+// Unused encoding 2'b11 recovers to ENUM_ST_IDLE.
+typedef enum logic [1:0] {
+  ENUM_ST_IDLE = 2'b00,
+  ENUM_ST_RUN  = 2'b01,
+  ENUM_ST_DONE = 2'b10
+} ctrl_state_type_def;
+
+ctrl_state_type_def reg_fsm_ctrl_current_state;
+ctrl_state_type_def w_fsm_ctrl_nxt_state;
+```
 
 ## 4. Combinational logic
 
@@ -137,7 +183,7 @@ end
 ### 6.1 Flip-flops
 
 - **SEQ-01** Model state with `always_ff` and nonblocking assignments. One process updates a given state element. Each process uses one explicit clock; every clock domain is named and documented.
-- **SEQ-02** Do not mix sequential and combinational responsibilities in one process. Compute next-state in `always_comb` (`w_*_next`), register it in `always_ff`.
+- **SEQ-02** Do not mix sequential and combinational responsibilities in one process. Compute next-state in `always_comb` (`w_*_nxt`), register it in `always_ff`.
 - **SEQ-03** Prefer clock-enable logic for conditional state updates over clock gating.
 - **SEQ-04** Reset is a design decision from the spec; not every flop needs reset. Control state and validity state MUST be reset. Payload/datapath registers MAY be resetless only when consumers ignore them until an associated valid or initialization state is set; document that condition.
 
@@ -145,7 +191,7 @@ end
 // Payload capture: stores the next payload.
 // Validity state controls when this resetless value is consumed.
 always_ff @(posedge i_clk_core) begin : p_ff_payload
-  reg_payload <= w_payload_next;
+  reg_payload <= w_payload_nxt;
 end
 
 // Validity control: asynchronously clears the valid state.
@@ -154,7 +200,7 @@ always_ff @(posedge i_clk_core, negedge i_rst_n_core) begin : p_ff_control
   if (!i_rst_n_core)
     reg_valid <= 1'b0;
   else
-    reg_valid <= w_valid_next;
+    reg_valid <= w_valid_nxt;
 end
 ```
 
