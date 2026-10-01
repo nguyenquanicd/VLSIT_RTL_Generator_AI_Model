@@ -24,6 +24,8 @@ Use lowercase snake_case for name portions unless the table says uppercase.
 | Input port | `i_<name>` | `i_valid` |
 | Output port | `o_<name>` | `o_ready` |
 | Input / output interrupt | `i_int_<name>` / `o_int_<name>` | `i_int_timer` |
+| DFT input / output | `i_dft_<name>` / `o_dft_<name>` | `i_dft_test_en` |
+| DFT scan-mode input / output | `i_dft_scan_<name>` / `o_dft_scan_<name>` | `i_dft_scan_en`, `o_dft_scan_out` |
 | Bidirectional port (pad wrapper only) | `io_<name>` | `io_data` |
 | Clock input | `i_clk_<domain>` | `i_clk_core` |
 | Active-low reset input | `i_rst_n_<domain>` | `i_rst_n_core` |
@@ -44,6 +46,7 @@ Use lowercase snake_case for name portions unless the table says uppercase.
 - **NAM-03** `reg_` means sequential state, not the Verilog `reg` type. Declare such signals as `logic` (or a logic-based enum).
 - **NAM-04** Use documented, consistently applied abbreviations. Prefer clear names over undocumented shorthand.
 - **NAM-05** `[NEW]` Any other active-low signal (not a reset) ends in `_n` (for example `o_irq_n`). The `_n` goes before any index suffix only if the spec does not fix the name.
+- **NAM-06** `[NEW]` Every port used for DFT is named `i_dft_<name>` (input) or `o_dft_<name>` (output). A port used for scan mode is named `i_dft_scan_<name>` or `o_dft_scan_<name>`. These prefixes take precedence over the generic `i_`/`o_` forms, including for DFT clocks and resets. Scan chains replicated per NAM-01, for example `i_dft_scan_in_0`, `o_dft_scan_out_0`.
 
 ## 3. Declarations and data types
 
@@ -160,13 +163,13 @@ end
 - **RST-01** Use the reset style the spec and methodology select (asynchronous active-low as above, or synchronous). Do not mix styles within one process.
 - **RST-02** An asynchronous reset source is synchronized for each receiving clock domain: asynchronous assertion, synchronous deassertion, in a dedicated reset-synchronizer module per domain.
 - **RST-03** Reset behavior MUST map to cells in the target library and reset methodology.
-- **RST-04** `[NEW]` Resets used by flops MUST be controllable in test mode (scan): any reset override or mux for test lives in the wrapper/reset-controller module, not inside functional leaf logic.
+- **RST-04** `[NEW]` Resets used by flops MUST be controllable in test mode (scan): any reset override or mux for test lives in the wrapper/reset-controller module, not inside functional leaf logic. Test controls are DFT ports named per NAM-06.
 
 ### 6.3 Clock domains and clock gating
 
 - **CLK-01** A clock-domain crossing uses a project-approved structure in a dedicated module (for example a 2-flop synchronizer for single-bit level, handshake or async FIFO with Gray pointers for multi-bit). Crossing sources are registered in their own domain; no combinational logic between the launch flop and the synchronizer.
 - **CLK-02** `[NEW]` Synchronizer and clock-gating cells are instantiated in dedicated modules (`m_*_sync`, `m_clk_gate`) so constraints and `dont_touch` apply cleanly.
-- **CLK-03** Clock gating MAY be used only with the project-approved integrated clock-gating cell inside a dedicated module. `[NEW]` The module has a test-enable input so gated clocks are forced on in scan mode.
+- **CLK-03** Clock gating MAY be used only with the project-approved integrated clock-gating cell inside a dedicated module. `[NEW]` The module has a test-enable input (named per NAM-06) so gated clocks are forced on in scan mode.
 - **CLK-04** Clock generation, dividers, and exceptions are defined by the architecture and constraints; use the edge convention of the domain (see P16).
 
 ## 7. Hierarchy, instances, generate, memories
